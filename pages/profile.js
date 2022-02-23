@@ -1,29 +1,29 @@
+import withRouter from 'next/dist/client/with-router'
 import Head from 'next/head'
 import { Component } from 'react'
-import withRouter from 'next/dist/client/with-router'
 import { FrontendController } from '../controller'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Profile.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
-import DevChatLogo from '../public/Dev-Chat.png'
 
 /**
  * @class Home Component Class
  * @component
  */
-class Home extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props)
     this.state = {
       isLoggedIn: undefined,
       currentToken: "",
+      currentUser: undefined,
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
+    this.setState({ currentUser: await FrontendController.getIUserFromToken(FrontendController.getUserToken()) });
   }
 
   componentWillUnmount() {
@@ -47,9 +47,10 @@ class Home extends Component {
   async updateLoginState() {
     let currentToken = FrontendController.getUserToken();
     if (await FrontendController.verifyUserByToken(currentToken)) {
-      this.setState({isLoggedIn: true, currentToken: currentToken});
+      this.setState({isLoggedIn: true, currentToken: currentToken})
     } else {
-      this.setState({isLoggedIn: false})
+      const { router } = this.props
+      router.push("/login")
     }
   }
 
@@ -58,17 +59,14 @@ class Home extends Component {
    * @returns JSX Output
    */
   render() {
-
-    const { router } = this.props
-
     if (this.state.isLoggedIn === undefined) {
       return (
         <div>
           <Head>
-            <title>Welcome</title>
-            <meta name="description" content="Welcome page." />
-            <link rel="icon" href="/favicon.ico" />
-          </Head>
+          <title>Profile</title>
+          <meta name="description" content="Profile page." />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
           <header>
             <Header username={""} hideLogin={true} hideLogout={true} />
@@ -76,11 +74,23 @@ class Home extends Component {
         </div>
       )
     } else {
+
+      let getAccessString = (accessLevel) => {
+        switch (accessLevel) {
+          case 0:
+            return "User";
+          case 1:
+            return "Admin";
+          default:
+            return "unavailable";
+        }
+      }
+
       return (
         <div>
           <Head>
-            <title>Welcome</title>
-            <meta name="description" content="Welcome page." />
+            <title>Profile</title>
+            <meta name="description" content="Profile page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
@@ -89,21 +99,23 @@ class Home extends Component {
           </header>
 
           <main>
-            <div className={styles.contentOne}>
-              <div>
-                <h1>Home</h1>
-              </div>
-              <div>
-                <Image 
-                  src={DevChatLogo} 
-                  objectFit='contain'
-                  sizes='fitContent'
-                  height={100}
-                  width={100}
-                  alt='Dev-Chat Logo'
-                  onClick={() => { router.push("https://dev-chat.me")}}
-                />
-              </div>
+            <div className={styles.content}>
+              <h1>User: {FrontendController.getUsernameFromToken(FrontendController.getUserToken())}</h1>
+              <h2>Information</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <td>ID:</td> 
+                    <td>{this.state.currentUser?.id || "unavailable"}</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Access Level:</td>
+                    <td>{getAccessString(this.state.currentUser?.accessLevel)}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </main>
 
@@ -116,4 +128,4 @@ class Home extends Component {
   }
 }
 
-export default withRouter(Home)
+export default withRouter(Profile)

@@ -1,0 +1,27 @@
+.footer {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  column-gap: 9rem;
+  display: grid;
+  padding: 20pt 10% 40pt 10%;
+  background-color: #2A2A2A;
+  border-top: solid;
+  border-color: #00D0FF;
+}
+
+.footer h4 {
+  font-size: 20pt;
+  margin: 0 0 20pt 0;
+}
+
+.socialMedia {
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: auto;
+  display: grid;
+  margin: 0 auto;
+  justify-items: start;
+}
+
+.socialMedia a:hover {
+  opacity: 80%;
+  transition: 0.3s;
+}

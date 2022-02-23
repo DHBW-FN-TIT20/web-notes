@@ -1,0 +1,19 @@
+.content {
+  padding-left: 10pt;
+}
+
+.content p {
+  color: #AAAAAA;
+}
+
+.content table, .content table td{
+  border: hidden;
+  border-width: 0.5pt;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.content table td {
+  overflow: hidden;
+  padding: 2pt 10pt 2pt 0;
+}

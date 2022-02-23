@@ -1,18 +1,15 @@
 import Head from 'next/head'
 import { Component } from 'react'
-import withRouter from 'next/dist/client/with-router'
 import { FrontendController } from '../controller'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Impressum.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
-import DevChatLogo from '../public/Dev-Chat.png'
 
 /**
  * @class Home Component Class
  * @component
  */
-class Home extends Component {
+class Impressum extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -47,10 +44,10 @@ class Home extends Component {
   async updateLoginState() {
     let currentToken = FrontendController.getUserToken();
     if (await FrontendController.verifyUserByToken(currentToken)) {
-      this.setState({isLoggedIn: true, currentToken: currentToken});
-    } else {
-      this.setState({isLoggedIn: false})
+      this.setState({isLoggedIn: true, currentToken: currentToken})
+      return
     }
+    this.setState({isLoggedIn: false})
   }
 
   /**
@@ -58,17 +55,14 @@ class Home extends Component {
    * @returns JSX Output
    */
   render() {
-
-    const { router } = this.props
-
     if (this.state.isLoggedIn === undefined) {
       return (
         <div>
           <Head>
-            <title>Welcome</title>
-            <meta name="description" content="Welcome page." />
-            <link rel="icon" href="/favicon.ico" />
-          </Head>
+          <title>Impressum</title>
+          <meta name="description" content="Impressum page." />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
           <header>
             <Header username={""} hideLogin={true} hideLogout={true} />
@@ -79,8 +73,8 @@ class Home extends Component {
       return (
         <div>
           <Head>
-            <title>Welcome</title>
-            <meta name="description" content="Welcome page." />
+            <title>Impressum</title>
+            <meta name="description" content="Impressum page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
@@ -89,21 +83,19 @@ class Home extends Component {
           </header>
 
           <main>
-            <div className={styles.contentOne}>
-              <div>
-                <h1>Home</h1>
-              </div>
-              <div>
-                <Image 
-                  src={DevChatLogo} 
-                  objectFit='contain'
-                  sizes='fitContent'
-                  height={100}
-                  width={100}
-                  alt='Dev-Chat Logo'
-                  onClick={() => { router.push("https://dev-chat.me")}}
-                />
-              </div>
+            <div className={styles.content}>
+              <h1>Impressum</h1>
+              <h2>Verantwortlich</h2>
+              <p>Dummy</p>
+              <h2>Kontakt</h2>
+              <p>
+                Dummy <br />
+                Fallenbrunnen 2 <br />
+                Friedrichshafen <br />
+                <br />
+                Telefon: &#43;49 1234 56789 <br />
+                E-Mail: test&#64;outlook.de <br />
+              </p>
             </div>
           </main>
 
@@ -116,4 +108,4 @@ class Home extends Component {
   }
 }
 
-export default withRouter(Home)
+export default Impressum
