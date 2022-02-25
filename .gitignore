@@ -15,6 +15,9 @@
 # production
 /build
 
+# custom editor node_modules
+/components/custom_editor/node_modules
+
 # misc
 .DS_Store
 *.pem

@@ -13,6 +13,7 @@ import DevChatLogo from '../public/Dev-Chat.png'
  * @component
  */
 class Home extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
@@ -24,6 +25,8 @@ class Home extends Component {
   componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
+
+    this.setupEditor();
   }
 
   componentWillUnmount() {
@@ -47,17 +50,57 @@ class Home extends Component {
   async updateLoginState() {
     let currentToken = FrontendController.getUserToken();
     if (await FrontendController.verifyUserByToken(currentToken)) {
-      this.setState({isLoggedIn: true, currentToken: currentToken});
+      this.setState({ isLoggedIn: true, currentToken: currentToken });
     } else {
-      this.setState({isLoggedIn: false})
+      this.setState({ isLoggedIn: false })
     }
   }
+
+  Editor = () => {
+    return (
+      <div>
+        Loading...
+      </div>
+    )
+  }
+
+  setupEditor() {
+    if (window !== undefined) {
+      console.log("Loading Editor...");
+
+      let CKEditor = require("@ckeditor/ckeditor5-react").CKEditor
+      let CustomEditor = require("../components/custom_editor")
+
+      this.Editor = () => {
+        return (
+          <div className={styles.ckEditor}>
+            <CKEditor
+              type=""
+              name="editor1"
+              editor={CustomEditor}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                console.log({ event, editor, data })
+              }}
+              key="ckeditor"
+
+            />
+          </div>
+        )
+      }
+      this.editorIsLoaded = true;
+    }
+  }
+
+
 
   /**
    * Generates the JSX Output for the Client
    * @returns JSX Output
    */
   render() {
+
+    console.log(this.editorIsLoaded);
 
     const { router } = this.props
 
@@ -94,16 +137,17 @@ class Home extends Component {
                 <h1>Home</h1>
               </div>
               <div>
-                <Image 
-                  src={DevChatLogo} 
+                <Image
+                  src={DevChatLogo}
                   objectFit='contain'
                   sizes='fitContent'
                   height={100}
                   width={100}
                   alt='Dev-Chat Logo'
-                  onClick={() => { router.push("https://dev-chat.me")}}
+                  onClick={() => { router.push("https://dev-chat.me") }}
                 />
               </div>
+              <this.Editor />
             </div>
           </main>
 
