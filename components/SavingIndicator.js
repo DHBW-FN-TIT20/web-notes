@@ -23,7 +23,7 @@ class SavingIndicator extends Component {
             return (
                 <div className={styles.container}>
                     <ClipLoader
-                        size={26}
+                        size={20}
                         color={"#fffff"}
                         loading={true}
                     />
@@ -38,7 +38,7 @@ class SavingIndicator extends Component {
         } else {
             return (
                 <div className={styles.container}>
-                    <p>ERROR</p>
+                    <p>Not Saved!</p>
                 </div>
             )
         }

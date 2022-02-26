@@ -207,6 +207,7 @@ class Home extends Component {
         this.autoSave.start();
       }
       this.autoSave.dataWasChanged = true;
+      this.setState({ isSaved: false });
     }
   }
 }
