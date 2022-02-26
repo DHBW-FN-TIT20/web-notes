@@ -1,0 +1,13 @@
+/*
+You do not need to worry about .error {} colliding with any other `.css` or
+`.module.css` files!
+*/
+.error {
+    color: white;
+    background-color: red;
+}
+
+.container {
+    min-height: 10;
+    max-height: 10;
+}

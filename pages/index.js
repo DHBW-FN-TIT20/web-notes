@@ -7,18 +7,22 @@ import styles from '../styles/Home.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import DevChatLogo from '../public/Dev-Chat.png'
+import SavingIndicator from '../components/SavingIndicator'
 
 /**
  * @class Home Component Class
  * @component
  */
 class Home extends Component {
-
+  editorInstance = null;
+  
   constructor(props) {
     super(props)
     this.state = {
       isLoggedIn: undefined,
       currentToken: "",
+      isSaving: false,
+      isSaved: true,
     }
   }
 
@@ -80,9 +84,19 @@ class Home extends Component {
               editor={CustomEditor}
               onChange={(event, editor) => {
                 const data = editor.getData();
-                console.log({ event, editor, data })
+                this.autoSave.handleChange();
               }}
               key="ckeditor"
+              onReady={(editor) => {
+                this.editorInstance = editor;
+                editor.editing.view.change((writer) => {
+                  writer.setStyle(
+                    "height",
+                    "200px",
+                    editor.editing.view.document.getRoot()
+                  );
+                });
+              }}
             />
           </div>
         )
@@ -134,6 +148,10 @@ class Home extends Component {
             <div className={styles.contentOne}>
               <div>
                 <h1>Home</h1>
+                <SavingIndicator
+                  isSaving={this.state.isSaving}
+                  isSaved={this.state.isSaved}
+                />
               </div>
               <div>
                 <Image
@@ -155,6 +173,40 @@ class Home extends Component {
           </footer>
         </div>
       )
+    }
+  }
+
+
+  autoSave = {
+    timeout: null,
+    dataWasChanged: false,
+    start: async () => {
+      if (this.autoSave.timeout === null) {
+        this.autoSave.timeout = setTimeout( async () => {
+          if (this.editorInstance !== null) {
+            this.setState({ isSaving: true, isSaved: false });
+            let isSaved = await FrontendController.saveNote(this.editorInstance.getData())
+            this.autoSave.dataWasChanged = false;
+            this.autoSave.stop();
+            this.setState({ isSaved: isSaved, isSaving: false });
+          }
+        }, 1000);
+      }
+    },
+    stop: () => {
+      if (this.autoSave.timeout) {
+        clearTimeout(this.autoSave.timeout)
+        this.autoSave.timeout = null
+      }
+    },
+    handleChange: () => {
+      if (this.autoSave.dataWasChanged === false) {
+        this.autoSave.start();
+      } else {
+        this.autoSave.stop();
+        this.autoSave.start();
+      }
+      this.autoSave.dataWasChanged = true;
     }
   }
 }

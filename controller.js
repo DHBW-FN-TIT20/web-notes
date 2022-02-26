@@ -191,6 +191,22 @@ export class FrontendController {
     localStorage.removeItem("webnotes.auth.token")
     return true;
   }
+
+
+  static saveNote = async (note) => {
+    let response = await fetch('./api/notes/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        note: note,
+      })
+    });
+    let data = await response.json();
+    return data.wasSuccessfull;
+  }
+
 }
 
 export default new FrontendController();
