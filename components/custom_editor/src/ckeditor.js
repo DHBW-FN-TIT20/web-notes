@@ -93,7 +93,38 @@ Editor.defaultConfig = {
 			'tableRow',
 			'mergeTableCells'
 		]
+	},
+	licenseKey: 'ftaKC8uG4JLIlq8GIHuTaiyu7Et0vFwTjS7scuOeh9NknLcbVsfobIIHxybD',
+	exportPdf: {
+		tokenUrl: 'https://87398.cke-cs.com/token/dev/859bdd75b1f4c8100b86b285e848c31e00f578624d3231f6d79b59962261?limit=10',
+		stylesheets: [
+			// NOTE: Only external stylesheets can be loaded so far 
+			// FIXME: Add support for loading the existing local stylesheets (pdf-style.css, pdf-fonts.css)
+			// '../src/styles/pdf-style.css',
+			'https://raw.githubusercontent.com/diethardsteiner/css-for-print/master/sample1.css',
+			// './src/styles/pdf-fonts.css',
+			'EDITOR_STYLES',
+		],
+		fileName: 'web-notes-export.pdf',
+		converterOptions: {
+			format: 'A4',
+			margin_top: '20mm',
+			margin_bottom: '20mm',
+			margin_right: '12mm',
+			margin_left: '12mm',
+			page_orientation: 'portrait'
+		},
+
+		// NOTE: The following option is only needed if we want to have a watermark
+		// dataCallback: ( editor ) => {
+		// 	return `
+		// 		${ editor.getData() }
+		// 		<div class="watermark">web-notes export</div>
+		// 	`;
+		// },
+	
 	}
+
 };
 
 export default Editor;

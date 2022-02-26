@@ -1,0 +1,28 @@
+/* my-custom-editor-styles.css */
+
+/* Custom link color. */
+.ck.ck-content a {
+    color: purple;
+}
+
+/* Custom header styling. */
+.ck.ck-content h1 {
+    border-bottom: 2px solid;
+    color: brown;
+}
+
+.ck.ck-content p {
+    color: green;
+}
+
+
+.watermark {
+    font-size: 50px;
+    opacity: 0.5;
+    color: black;
+    position: fixed;
+    left: 20%;
+    top: 50%;
+    transform: rotate(25deg);
+    letter-spacing: 10px
+}

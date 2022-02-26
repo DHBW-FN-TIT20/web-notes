@@ -74,7 +74,7 @@ class Home extends Component {
       this.Editor = () => {
         return (
           <div className={styles.ckEditor}>
-            <CKEditor
+            <CKEditor className={styles.ckEditor}
               type=""
               name="editor1"
               editor={CustomEditor}
@@ -83,7 +83,6 @@ class Home extends Component {
                 console.log({ event, editor, data })
               }}
               key="ckeditor"
-
             />
           </div>
         )
