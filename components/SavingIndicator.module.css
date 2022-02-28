@@ -1,13 +1,19 @@
-/*
-You do not need to worry about .error {} colliding with any other `.css` or
-`.module.css` files!
-*/
-.error {
+.isSaving {
     color: white;
-    background-color: red;
+    /* background-color: green; */
+}
+
+.isSaved {
+    color: rgb(104, 179, 104);
+    /* background-color: green; */
+}
+
+.isNotSaved {
+    color: white;
+    /* background-color: red; */
 }
 
 .container {
-    min-height: 6vh;
-    max-height: 6vh;
+    min-height: 5vh;
+    max-height: 5vh;
 }

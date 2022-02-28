@@ -92,7 +92,12 @@ class Home extends Component {
                 editor.editing.view.change((writer) => {
                   writer.setStyle(
                     "height",
-                    "200px",
+                    "100vh",
+                    editor.editing.view.document.getRoot()
+                  );
+                  writer.setStyle(
+                    "width",
+                    "50vw",
                     editor.editing.view.document.getRoot()
                   );
                 });
@@ -112,8 +117,6 @@ class Home extends Component {
    * @returns JSX Output
    */
   render() {
-
-    console.log(this.editorIsLoaded);
 
     const { router } = this.props
 

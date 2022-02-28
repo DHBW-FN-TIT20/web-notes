@@ -1,5 +1,7 @@
 import { Component } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
+import SyncLoader from 'react-spinners/SyncLoader';
+import PulseLoader from 'react-spinners/PulseLoader';
 import styles from './SavingIndicator.module.css';
 
 /** 
@@ -21,25 +23,31 @@ class SavingIndicator extends Component {
 
         if (this.props.isSaving && !this.props.isSaved) {
             return (
-                <div className={styles.container}>
+                <div className={`${styles.isSaving} ${styles.container}`}>
                     <ClipLoader
-                        size={20}
-                        color={"#fffff"}
+                        size={17}
+                        color={"white"}
                         loading={true}
                     />
                 </div>
             )
         } else if (!this.props.isSaving && this.props.isSaved) {
             return (
-                <div className={styles.container}>
-                    <p>Saved!</p>
+                <div className={`${styles.isSaved} ${styles.container}`}>
+                    <p>✓</p>
                 </div>
             )
         } else {
             return (
-                <div className={styles.container}>
-                    <p>Not Saved!</p>
+                <div className={`${styles.isNotSaved} ${styles.container}`}>
+                    <SyncLoader
+                        size={3}
+                        color={"grey"}
+                        loading={true}
+                        speedMultiplier={0.7}
+                    />
                 </div>
+
             )
         }
     }
