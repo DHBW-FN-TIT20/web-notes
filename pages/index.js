@@ -100,6 +100,11 @@ class Home extends Component {
                     "50vw",
                     editor.editing.view.document.getRoot()
                   );
+                  writer.setStyle(
+                    "min-width",
+                    "668px",
+                    editor.editing.view.document.getRoot()
+                  );
                 });
               }}
             />
