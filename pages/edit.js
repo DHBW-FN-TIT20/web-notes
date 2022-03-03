@@ -13,6 +13,9 @@ import SavingIndicator from '../components/SavingIndicator'
  * @class Home Component Class
  * @component
  */
+class Edit extends Component {
+  editorInstance = null;
+  
   constructor(props) {
     super(props)
     this.state = {
@@ -26,6 +29,8 @@ import SavingIndicator from '../components/SavingIndicator'
   componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
+
+    this.setupEditor();
   }
 
   componentWillUnmount() {
@@ -54,6 +59,57 @@ import SavingIndicator from '../components/SavingIndicator'
       this.setState({ isLoggedIn: false })
     }
   }
+
+  Editor = () => {
+    return (
+      <div>
+        Loading...
+      </div>
+    )
+  }
+
+  setupEditor() {
+    if (window !== undefined) {
+      console.log("Loading Editor...");
+
+      let CKEditor = require("@ckeditor/ckeditor5-react").CKEditor
+      let CustomEditor = require("../components/custom_editor")
+
+      this.Editor = () => {
+        return (
+          <div>
+            <CKEditor className={styles.ckEditor}
+              type=""
+              name="editor1"
+              editor={CustomEditor}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                this.autoSave.handleChange();
+              }}
+              key="ckeditor"
+              onReady={(editor) => {
+                this.editorInstance = editor;
+                editor.editing.view.change((writer) => {
+                  writer.setStyle(
+                    "height",
+                    "100vh",
+                    editor.editing.view.document.getRoot()
+                  );
+                  writer.setStyle(
+                    "width",
+                    "50vw",
+                    editor.editing.view.document.getRoot()
+                  );
+                });
+              }}
+            />
+          </div>
+        )
+      }
+      this.editorIsLoaded = true;
+    }
+  }
+
 
 
   /**
@@ -94,7 +150,11 @@ import SavingIndicator from '../components/SavingIndicator'
           <main>
             <div className={styles.contentOne}>
               <div>
-                <h1>Home</h1>  
+                <h1>Home</h1>
+                <SavingIndicator
+                  isSaving={this.state.isSaving}
+                  isSaved={this.state.isSaved}
+                />
               </div>
               <div>
                 <Image
@@ -107,6 +167,7 @@ import SavingIndicator from '../components/SavingIndicator'
                   onClick={() => { router.push("https://dev-chat.me") }}
                 />
               </div>
+              <this.Editor />
             </div>
           </main>
 
@@ -117,6 +178,41 @@ import SavingIndicator from '../components/SavingIndicator'
       )
     }
   }
+
+
+  autoSave = {
+    timeout: null,
+    dataWasChanged: false,
+    start: async () => {
+      if (this.autoSave.timeout === null) {
+        this.autoSave.timeout = setTimeout( async () => {
+          if (this.editorInstance !== null) {
+            this.setState({ isSaving: true, isSaved: false });
+            let isSaved = await FrontendController.saveNote(this.editorInstance.getData())
+            this.autoSave.dataWasChanged = false;
+            this.autoSave.stop();
+            this.setState({ isSaved: isSaved, isSaving: false });
+          }
+        }, 1000);
+      }
+    },
+    stop: () => {
+      if (this.autoSave.timeout) {
+        clearTimeout(this.autoSave.timeout)
+        this.autoSave.timeout = null
+      }
+    },
+    handleChange: () => {
+      if (this.autoSave.dataWasChanged === false) {
+        this.autoSave.start();
+      } else {
+        this.autoSave.stop();
+        this.autoSave.start();
+      }
+      this.autoSave.dataWasChanged = true;
+      this.setState({ isSaved: false });
+    }
+  }
 }
 
-export default withRouter(Home)
+export default withRouter(Edit)
