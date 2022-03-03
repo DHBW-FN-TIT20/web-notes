@@ -41,22 +41,8 @@ class Home extends Component {
       { key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => { if (item.isSharedToMe) { return (`Geteilte Notiz`) } else { return (`Eigene Notiz`) } } },
       {
         key: "content", name: "Vorschau", fieldName: "content", minWidth: 300, maxWidth: 200, isResizable: true, onRender: (item) => {
-          let previewLine = "";
-          const maxElements = 20;
-          if (item.content.split(`><`).length == 0) {
-            previewLine = "<div>empty</div>";
-          } else if (item.content.split(`><`).length == 1) {
-            previewLine = item.content.split(`><`)[0];
-          } else {
-            previewLine = item.content.split(`><`)[0]
-            for (let i = 1; i < Math.min(item.content.split(`><`).length, maxElements); i++) {
-              previewLine += "><" + item.content.split(`><`)[i]
-            }
-            if (item.content.split(`><`).length < maxElements) { 
-              previewLine += ">" 
-            }
-
-          }          
+          const maxElements = 5;
+          let previewLine = this.splitHTMLintoElements(item.content, maxElements).join("");
           return (
             <div
               className={styles.previewLine}
@@ -70,6 +56,66 @@ class Home extends Component {
       },
     ];
   }
+
+  /**
+   * This function splits the HTML input into a list of elements
+   * @param {string} html The HTML string to be split into elements
+   * @param {number} maxStringElements The maximum number of displayed elements.
+   * @returns {string[]} The array of elements
+   */
+  splitHTMLintoElements(html, maxStringElements) {
+    let elements = [];
+    let currentElement = "";
+
+    // split the html string into elements
+    for (let i = 0; i < html.length; i++) {
+      if (html[i] == "<") {
+        if (currentElement != "") {
+          elements.push(currentElement);
+          currentElement = "";
+        }
+        currentElement += html[i];
+      } else if (html[i] == ">") {
+        currentElement += html[i];
+        elements.push(currentElement);
+        currentElement = "";
+      } else {
+        currentElement += html[i];
+      }
+    }
+
+    let result = [];
+    let openTagElements = [];
+    let textElementsCount = 0;
+
+    // the elements are splittet into text and tag elements and the text elements are counted
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
+      if (element.startsWith("<") && element.endsWith(">") && element[1] != "/") {
+        openTagElements.push(element);
+        result.push(element);
+      } else if (element.startsWith("<") && element.endsWith(">") && element[1] == "/") {
+        openTagElements.pop();
+        result.push(element);
+      } else {
+        textElementsCount++;
+        result.push(element);
+      }
+
+      // if the maximum number of elements is reached, no more text elements are added to the result
+      if (textElementsCount >= maxStringElements) {
+        break;
+      }
+    }
+
+    // for every open tag the corresponding closing tag is added
+    for (let i = openTagElements.length-1; i > -1; i--) {
+      result.push(`</${openTagElements[i].substring(1, openTagElements[i].length - 1)}>`);
+    }
+
+    return result;
+  }
+
 
   componentDidMount() {
     this.updateLoginState();
@@ -99,7 +145,7 @@ class Home extends Component {
         {
           id: "2",
           title: "Todo-Liste",
-          content: "<div>This is my Todo-Liste</div>",
+          content: "<h1>This is my Todo-Liste</h1><ul><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li></ul><div>This is my Todo-Liste</div><ul><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li></ul>",
           ownerID: 2,
           createdAt: "2020-01-01",
           sharedWith: [1, 3],
