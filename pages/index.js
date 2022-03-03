@@ -13,6 +13,7 @@ import SavingIndicator from '../components/SavingIndicator'
  * @class Home Component Class
  * @component
  */
+class Home extends Component {  
   constructor(props) {
     super(props)
     this.state = {
