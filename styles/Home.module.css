@@ -1,7 +1,4 @@
 .contentOne {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 5rem;
   padding: 40pt;
 
 }
@@ -10,3 +7,14 @@
   color: black;
   min-height: 4000px;
 }
+
+
+.previewLine {
+  
+}
+
+.previewLine h1 {
+  font-size: 20pt;
+  font-weight: bold;
+  font-style: normal;
+} 
