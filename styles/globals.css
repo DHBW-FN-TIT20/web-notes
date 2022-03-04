@@ -65,7 +65,7 @@ button:hover {
   transition: 0.3s;
 }
 
-input {
+/* input {
   font-size: 14pt;
   width: 100%;
   background-color: transparent;
@@ -75,4 +75,4 @@ input {
   border-color: #2A2A2A;
   border-width: 2pt;
   border-radius: 2pt;
-}
+} */

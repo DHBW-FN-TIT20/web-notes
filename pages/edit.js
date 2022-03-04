@@ -52,18 +52,16 @@ class Edit extends Component {
   }
 
   handleTitleChange = (event) => {
-    this.setState({ title: event.target.value });
+    this.setState({ title: event.target.value, isTitleSaved: false });
   }
 
   handleSaveTitle = () => {
     this.setState({ isTitleSaved: false });
+    console.log("Saving Title...");
     setTimeout(() => {
       this.setState({ isTitleSaved: true });
+      console.log("Title saved!");
     }, 1000);
-  }
-
-  handleTitleClick = () => {
-    this.setState({ isTitleSaved: false });
   }
 
   /**
@@ -169,9 +167,14 @@ class Edit extends Component {
           <main>
             <div className={styles.contentOne}>
               <div onClick={this.handleTitleClick}>
-                <TextField ref={input => {this.Title = input}} onChange={this.handleTitleChange} placeholder={"Titel..."} value={this.state.title} onClick={this.handleTitleClick} readOnly={this.state.isTitleSaved} onBlur={this.handleSaveTitle}/>
+                <TextField
+                  onChange={this.handleTitleChange}
+                  placeholder={"Titel..."} 
+                  value={this.state.title} 
+                  onBlur={this.handleSaveTitle} 
+                  style={{borderColor: this.state.isTitleSaved ? "green": "red"}}
+                />
               </div>
-              <DefaultButton text={"Save Title"} onClick={this.handleSaveTitle} disabled={this.state.isTitleSaved} />
               <SavingIndicator
                 isSaving={this.state.isSaving}
                 isSaved={this.state.isSaved}
