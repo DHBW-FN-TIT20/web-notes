@@ -8,6 +8,8 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import DevChatLogo from '../public/Dev-Chat.png'
 import SavingIndicator from '../components/SavingIndicator'
+import { DetailsList, DefaultButton, PrimaryButton, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react';
+
 
 /**
  * @class Home Component Class
@@ -15,7 +17,7 @@ import SavingIndicator from '../components/SavingIndicator'
  */
 class Edit extends Component {
   editorInstance = null;
-  
+
   constructor(props) {
     super(props)
     this.state = {
@@ -23,6 +25,8 @@ class Edit extends Component {
       currentToken: "",
       isSaving: false,
       isSaved: true,
+      title: "",
+      isTitleSaved: true,
     }
   }
 
@@ -45,6 +49,21 @@ class Edit extends Component {
     if (event.key === FrontendController.userTokenName) {
       this.updateLoginState();
     }
+  }
+
+  handleTitleChange = (event) => {
+    this.setState({ title: event.target.value });
+  }
+
+  handleSaveTitle = () => {
+    this.setState({ isTitleSaved: false });
+    setTimeout(() => {
+      this.setState({ isTitleSaved: true });
+    }, 1000);
+  }
+
+  handleTitleClick = () => {
+    this.setState({ isTitleSaved: false });
   }
 
   /**
@@ -97,7 +116,7 @@ class Edit extends Component {
                   );
                   writer.setStyle(
                     "width",
-                    "50vw",
+                    "100%",
                     editor.editing.view.document.getRoot()
                   );
                 });
@@ -149,24 +168,15 @@ class Edit extends Component {
 
           <main>
             <div className={styles.contentOne}>
-              <div>
-                <h1>Home</h1>
-                <SavingIndicator
-                  isSaving={this.state.isSaving}
-                  isSaved={this.state.isSaved}
-                />
+              <div onClick={this.handleTitleClick}>
+                <TextField ref={input => {this.Title = input}} onChange={this.handleTitleChange} placeholder={"Titel..."} value={this.state.title} onClick={this.handleTitleClick} readOnly={this.state.isTitleSaved} onBlur={this.handleSaveTitle}/>
               </div>
-              <div>
-                <Image
-                  src={DevChatLogo}
-                  objectFit='contain'
-                  sizes='fitContent'
-                  height={100}
-                  width={100}
-                  alt='Dev-Chat Logo'
-                  onClick={() => { router.push("https://dev-chat.me") }}
-                />
-              </div>
+              <DefaultButton text={"Save Title"} onClick={this.handleSaveTitle} disabled={this.state.isTitleSaved} />
+              <SavingIndicator
+                isSaving={this.state.isSaving}
+                isSaved={this.state.isSaved}
+                notSaveMessage={"Not saved yet!"}
+              />
               <this.Editor />
             </div>
           </main>
@@ -185,7 +195,7 @@ class Edit extends Component {
     dataWasChanged: false,
     start: async () => {
       if (this.autoSave.timeout === null) {
-        this.autoSave.timeout = setTimeout( async () => {
+        this.autoSave.timeout = setTimeout(async () => {
           if (this.editorInstance !== null) {
             this.setState({ isSaving: true, isSaved: false });
             let isSaved = await FrontendController.saveNote(this.editorInstance.getData())
@@ -193,7 +203,7 @@ class Edit extends Component {
             this.autoSave.stop();
             this.setState({ isSaved: isSaved, isSaving: false });
           }
-        }, 1000);
+        }, 2000);
       }
     },
     stop: () => {
@@ -214,5 +224,6 @@ class Edit extends Component {
     }
   }
 }
+
 
 export default withRouter(Edit)

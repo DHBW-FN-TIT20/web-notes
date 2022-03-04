@@ -1,6 +1,6 @@
 # WEB-NOTES
 
-# Seiten
+## Pages
 
 | Name | Beschreibung |
 | --- | --- |

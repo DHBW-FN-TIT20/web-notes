@@ -8,7 +8,7 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import DevChatLogo from '../public/Dev-Chat.png'
 import SavingIndicator from '../components/SavingIndicator'
-import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode } from '@fluentui/react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react';
 
 
 // export type Note {
@@ -34,8 +34,9 @@ class Home extends Component {
       isSaving: false,
       isSaved: true,
       noteList: [],
+      searchString: "",
     };
-    this._columns = [
+    this.noteListColumns = [
       { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true },
       { key: "createdAt", name: "Erstellt am", fieldName: "createdAt", minWidth: 100, maxWidth: 200, isResizable: true },
       { key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => { if (item.isSharedToMe) { return (`Geteilte Notiz`) } else { return (`Eigene Notiz`) } } },
@@ -87,6 +88,7 @@ class Home extends Component {
     let result = [];
     let openTagElements = [];
     let textElementsCount = 0;
+    let isShrinked = false;
 
     // the elements are splittet into text and tag elements and the text elements are counted
     for (let i = 0; i < elements.length; i++) {
@@ -104,15 +106,20 @@ class Home extends Component {
 
       // if the maximum number of elements is reached, no more text elements are added to the result
       if (textElementsCount >= maxStringElements) {
+        isShrinked = true;
         break;
       }
     }
 
     // for every open tag the corresponding closing tag is added
-    for (let i = openTagElements.length-1; i > -1; i--) {
+    for (let i = openTagElements.length - 1; i > -1; i--) {
       result.push(`</${openTagElements[i].substring(1, openTagElements[i].length - 1)}>`);
     }
 
+    // if the maximum number of elements is reached, the result is shrinked and the last element is a "..."
+    if (isShrinked) {
+      result.push("<div style='color: gray;'>...</div>");
+    }
     return result;
   }
 
@@ -128,7 +135,7 @@ class Home extends Component {
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
-  getNoteList = async () => {
+  getNoteList() {
     // get the note list from backend
 
     setTimeout(() => {
@@ -145,7 +152,7 @@ class Home extends Component {
         {
           id: "2",
           title: "Todo-Liste",
-          content: "<h1>This is my Todo-Liste</h1><ul><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li></ul><div>This is my Todo-Liste</div><ul><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li></ul>",
+          content: "<h1>This is my Todo-Liste</h1><ul><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li></ul><div>This is my Todo-Liste</div><ul><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li><li>Buy milk</li><li>Buy eggs</li><li>Buy Fahrrad</li></ul>",
           ownerID: 2,
           createdAt: "2020-01-01",
           sharedWith: [1, 3],
@@ -189,11 +196,19 @@ class Home extends Component {
     }
   }
 
-  _onItemInvoked = (item) => {
+  onActiveItemChanged = (item, index, ev) => {
     // open the note
-    alert(`You selected ${item.title} which has the id ${item.id}`);
+    this.props.router.push(`/edit?id=${item.id}`);
   }
 
+
+  handleSearchChange = (event, newValue) => {
+    if (newValue) {
+      this.setState({ searchString: newValue });
+    } else {
+      this.setState({ searchString: "" });
+    }
+  }
 
   /**
    * Generates the JSX Output for the Client
@@ -202,6 +217,17 @@ class Home extends Component {
   render() {
 
     const { router } = this.props
+
+    let filteredNoteList = [];
+    if (this.state.searchString == "") {
+      filteredNoteList = this.state.noteList;
+    } else if (this.state.noteList.length == 0) {
+      filteredNoteList = [];
+    } else {
+      filteredNoteList = this.state.noteList.filter(note => {
+        return note.title.toLowerCase().includes(this.state.searchString.toLowerCase()) || note.content.toLowerCase().includes(this.state.searchString.toLowerCase());
+      });
+    }
 
     if (this.state.isLoggedIn === undefined) {
       return (
@@ -232,11 +258,13 @@ class Home extends Component {
 
           <main>
             <div className={styles.contentOne}>
+              <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."}/>
               <DetailsList
-                items={this.state.noteList}
-                columns={this._columns}
+                items={filteredNoteList}
+                columns={this.noteListColumns}
                 setKey="set"
-                onItemInvoked={this._onItemInvoked}
+                // onItemInvoked={this.onItemInvoked}
+                onActiveItemChanged={this.onActiveItemChanged} 
                 selectionMode={SelectionMode.none}
               />
             </div>

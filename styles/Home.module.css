@@ -1,5 +1,5 @@
 .contentOne {
-  padding: 40pt;
+  padding: 8pt;
 
 }
 
@@ -8,13 +8,26 @@
   min-height: 4000px;
 }
 
-
-.previewLine {
-  
-}
-
 .previewLine h1 {
-  font-size: 20pt;
+  font-size: 13pt;
   font-weight: bold;
   font-style: normal;
+  text-decoration: none;
+  margin: 0;
+} 
+
+.previewLine h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: none;
+  margin: 0;
+} 
+
+.previewLine h3 {
+  font-size: 12pt;
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: none;
+  margin: 0;
 } 
