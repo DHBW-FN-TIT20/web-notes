@@ -9,7 +9,11 @@
     "source": {
       "include": [
         "pages",
-        "controller.js"
+        "controller.js",
+        "components"
+      ],
+      "exclude":[
+        "components/custom_editor"
       ],
       "includePattern": ".+\\.js(doc|x)?$",
       "excludePattern": "(^|\\/|\\\\)_"
