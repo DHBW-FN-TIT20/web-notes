@@ -48,7 +48,7 @@ export class FrontendController {
 
   /**
    * This method checks whether a given user exists in the database
-   * @param {number, string} user name or id to check
+   * @param {number} user name or id to check
    * @returns {Promise<boolean>} True if user exists, else false
    */
   static doesUserExist = async (user) => {

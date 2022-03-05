@@ -90,7 +90,7 @@ export class SupabaseConnection {
 
   /**
    * API function to check if the user exists
-   * @param {number, string} user User to check
+   * @param {number} user User to check
    * @returns {Promise<boolean>} True if user exists, false if not
    */
   doesUserExist = async (user) => {
