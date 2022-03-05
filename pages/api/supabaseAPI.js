@@ -53,7 +53,7 @@ export class SupabaseConnection {
       const { data, error } = await SupabaseConnection.CLIENT
         .from('User')
         .select()
-        .eq('UserID', user.id);
+        .eq('id', user.id);
       
       supabaseData = data;
       supabaseError = error;
@@ -65,7 +65,7 @@ export class SupabaseConnection {
       const { data, error } = await SupabaseConnection.CLIENT
         .from('User')
         .select()
-        .eq('Username', user.name);
+        .eq('name', user.name);
 
       supabaseData = data;
       supabaseError = error;
@@ -104,7 +104,7 @@ export class SupabaseConnection {
       const { data, error } = await SupabaseConnection.CLIENT
         .from('User')
         .select()
-        .eq('UserID', user.id);
+        .eq('id', user.id);
       
       supabaseData = data;
       supabaseError = error;
@@ -116,7 +116,7 @@ export class SupabaseConnection {
       const { data, error } = await SupabaseConnection.CLIENT
         .from('User')
         .select()
-        .eq('Username', user.name);
+        .eq('name', user.name);
 
       supabaseData = data;
       supabaseError = error;
@@ -178,7 +178,7 @@ export class SupabaseConnection {
       const { data, error } = await SupabaseConnection.CLIENT
         .from('User')
         .select()
-        .eq('Username', this.getUsernameFromToken(token));
+        .eq('name', this.getUsernameFromToken(token));
 
       if (data === null || error !== null || data.length === 0) {
         return returnUser;
@@ -239,7 +239,7 @@ export class SupabaseConnection {
     let hashedPassword = await this.hashPassword(user.password);
 
     const { data, error } = await SupabaseConnection.CLIENT
-      .from('User')
+      .from('name')
       .insert([
         { Username: user.name, Password: hashedPassword },
       ]);

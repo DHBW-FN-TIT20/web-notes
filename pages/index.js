@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { Component } from 'react'
 import withRouter from 'next/dist/client/with-router'
-import { FrontendController } from '../controller'
+import { FrontendController } from '../controller/frontEndController' 
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Header from '../components/header'

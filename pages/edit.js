@@ -1,15 +1,14 @@
 import Head from 'next/head'
 import { Component } from 'react'
 import withRouter from 'next/dist/client/with-router'
-import { FrontendController } from '../controller'
 import Image from 'next/image'
 import styles from '../styles/Edit.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import DevChatLogo from '../public/Dev-Chat.png'
 import SavingIndicator from '../components/SavingIndicator'
-import { DetailsList, DefaultButton, PrimaryButton, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react';
-
+import { Spinner, SpinnerSize, DetailsList, DefaultButton, PrimaryButton, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react'
+import { FrontendController } from '../controller/frontEndController' 
 
 /**
  * @class Home Component Class
@@ -53,6 +52,22 @@ class Edit extends Component {
 
   handleTitleChange = (event) => {
     this.setState({ title: event.target.value, isTitleSaved: false });
+  }
+
+  renderTitleLabel = (props) => {
+    if (this.state.isTitleSaved) {
+      return (
+        <div className={styles.titleLabel}>
+          <span>Title</span>
+        </div>
+      )
+    } else {
+      return (
+        <div className={styles.titleLabel}>
+          <span>Title (Not Saved...)</span>
+        </div>
+      )
+    }
   }
 
   handleSaveTitle = () => {
@@ -166,14 +181,17 @@ class Edit extends Component {
 
           <main>
             <div className={styles.contentOne}>
-              <div onClick={this.handleTitleClick}>
+              <div>
                 <TextField
+                  label="Title"
+                  onRenderLabel={this.renderTitleLabel}
                   onChange={this.handleTitleChange}
-                  placeholder={"Titel..."} 
-                  value={this.state.title} 
-                  onBlur={this.handleSaveTitle} 
-                  style={{borderColor: this.state.isTitleSaved ? "green": "red"}}
+                  placeholder={"Titel..."}
+                  value={this.state.title}
+                  onBlur={this.handleSaveTitle}
+                  style={{ borderColor: this.state.isTitleSaved ? "green" : "red" }}
                 />
+                {/* <Spinner size={SpinnerSize.small}  hidden={this.state.isTitleSaved}/> */}
               </div>
               <SavingIndicator
                 isSaving={this.state.isSaving}
