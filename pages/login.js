@@ -1,7 +1,7 @@
 import withRouter from 'next/dist/client/with-router'
 import Head from 'next/head'
 import { Component } from 'react'
-import { FrontendController } from '../controller'
+import { FrontendController } from '../controller/frontEndController'
 import styles from '../styles/Login.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
