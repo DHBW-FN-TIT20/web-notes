@@ -1,7 +1,6 @@
 import { withRouter } from 'next/router'
 import { Component } from 'react'
 import styles from '../styles/Header.module.css'
-import { FrontendController } from '../controller'
 
 /** 
  * @class Header Component Class

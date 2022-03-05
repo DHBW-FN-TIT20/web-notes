@@ -38,17 +38,26 @@ class SavingIndicator extends Component {
                 </div>
             )
         } else {
-            return (
-                <div className={`${styles.isNotSaved} ${styles.container}`}>
-                    <SyncLoader
-                        size={3}
-                        color={"grey"}
-                        loading={true}
-                        speedMultiplier={0.7}
-                    />
-                </div>
 
-            )
+            if (this.props.notSaveMessage) {
+                return (
+                    <div className={`${styles.notSaved} ${styles.container}`}>
+                        <p>{this.props.notSaveMessage}</p>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className={`${styles.isNotSaved} ${styles.container}`}>
+                        <SyncLoader
+                            size={3}
+                            color={"grey"}
+                            loading={true}
+                            speedMultiplier={0.7}
+                        />
+                    </div>
+
+                )
+            }
         }
     }
 }

@@ -1,8 +1,5 @@
 .contentOne {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 5rem;
-  padding: 40pt;
+  padding: 8pt;
 
 }
 
@@ -10,3 +7,27 @@
   color: black;
   min-height: 4000px;
 }
+
+.previewLine h1 {
+  font-size: 13pt;
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: none;
+  margin: 0;
+} 
+
+.previewLine h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: none;
+  margin: 0;
+} 
+
+.previewLine h3 {
+  font-size: 12pt;
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: none;
+  margin: 0;
+} 
