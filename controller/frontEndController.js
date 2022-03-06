@@ -204,6 +204,35 @@ export class FrontEndController {
     return true;
   }
 
+
+  /**
+   * This method gets all the users from the database
+   * @returns {Promise<{id: number, name: string}[]>} Array of all users
+   */
+  static async getAllUsers() {
+    // TODO: API route for getting all users
+    // const response = await fetch('./api/users/get_all_users', {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    // });
+
+    // const data = await response.json();
+    // return data.users;
+
+    const dummyUsers = [
+      { id: 1, name: 'Peter' },
+      { id: 2, name: 'Paul' },
+      { id: 3, name: 'Mary' },
+      { id: 4, name: 'John' },
+      { id: 5, name: 'Anna' },
+    ];
+
+    return dummyUsers;
+  }
+
+
   //#endregion
 
   //#region Token Methods
