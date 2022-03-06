@@ -2,6 +2,9 @@ import { DatabaseModel } from '../pages/api/databaseModel';
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 
+/**
+ * Backend Controller of WebNotes
+ */
 export class BackEndController {
   //#region Variables
   static KEY;
@@ -60,7 +63,7 @@ export class BackEndController {
         return data.username
       }
     } catch (error) {
-      
+
     }
     return "";
   }
@@ -98,7 +101,7 @@ export class BackEndController {
    */
   async hashPassword(password) {
     const saltOrRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltOrRounds);    
+    const hashedPassword = await bcrypt.hash(password, saltOrRounds);
     return hashedPassword
   }
 
@@ -251,6 +254,27 @@ export class BackEndController {
       }
     }
     return false;
+  }
+
+  //#endregion
+
+  //#region Note Methods
+
+  //TODO
+  /**
+   * Saves the String to the Database
+   * @param {String} note 
+   */
+  async saveNote(note) {
+
+  }
+
+  //TODO
+  /**
+   * Gets the Note from the Database
+   */
+  async getNote() {
+
   }
 
   //#endregion
