@@ -4,7 +4,9 @@ import { Component } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Footer.module.css'
+// @ts-ignore
 import GitHubIcon from '../public/GitHub.png'
+// @ts-ignore
 import DevChatIcon from '../public/Dev-Chat.png'
 
 /** 
@@ -67,7 +69,6 @@ class Footer extends Component {
                     height={40}
                     width={40}
                     alt='DEV-CHAT Icon'
-                    href={'https://dev-chat.me'}
                   />
                 </div>
               </Link>

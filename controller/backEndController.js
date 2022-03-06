@@ -272,8 +272,9 @@ export class BackEndController {
   //TODO
   /**
    * Gets the Note from the Database
+   * @param {number} id
    */
-  async getNote() {
+  async getNote(id) {
 
   }
 

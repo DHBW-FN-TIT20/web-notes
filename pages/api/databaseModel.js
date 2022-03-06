@@ -1,5 +1,5 @@
 // @ts-check
-import { createClient } from '@supabase/supabase-js'
+import { createClient, PostgrestResponse } from '@supabase/supabase-js'
 
 export class DatabaseModel {
   //#region Variables
@@ -37,7 +37,7 @@ export class DatabaseModel {
   /**
    * Gets der IUserFromResponse
    * @param {PostgrestResponse<{id: number, name: string, password: string}>} dbResponse Response of Database
-   * @returns {[{id: number, name: string, password: string}]} List of user objects.
+   * @returns {{id: number, name: string, password: string}[]} List of user objects.
    */
    getUserFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
@@ -56,7 +56,7 @@ export class DatabaseModel {
    * This is a universal select function for the user database
    * @param {number} userID  Filter userID
    * @param {string} username Filter username
-   * @param {string} hashedPassword Filter password (hash)
+   * @param {string} password Filter password (hash)
    * @returns {Promise<PostgrestResponse<{id: number, name: string, password: string}>>} DB result as list of user objects
    */
   async selectUserTable(userID = undefined, username = undefined, password = undefined) {
@@ -80,7 +80,7 @@ export class DatabaseModel {
 
   /**
    * API function to register a user
-   * @param {string} user username to register
+   * @param {string} username username to register
    * @param {string} hashedPassword password for the user
    * @returns {Promise<PostgrestResponse<{id: number, name: string, password: string}>>} DB result as list of user objects
    */
