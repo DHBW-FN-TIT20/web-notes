@@ -8,6 +8,8 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import SavingIndicator from '../components/SavingIndicator'
 import { initializeIcons, IBasePicker, ITag, IInputProps, IBasePickerSuggestionsProps, Spinner, SpinnerSize, DetailsList, DefaultButton, PrimaryButton, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX, TagPicker } from '@fluentui/react'
+import BeatLoader from "react-spinners/BeatLoader";
+
 
 /**
  * @class Home Component Class
@@ -27,6 +29,7 @@ class Edit extends Component {
       title: "",
       allUserTags: [],
       selectedUserTags: [],
+      isLoading: true,
     }
   }
 
@@ -72,6 +75,8 @@ class Edit extends Component {
 
     // setup user tag picker
     await this.setupUserTagPicker(dummyNote_sharedUsers); // TODO: change to currentNote.sharedUsers
+
+    this.setState({ isLoading: false });
   }
 
   /**
@@ -306,11 +311,35 @@ class Edit extends Component {
           </header>
         </div>
       )
+    } else if (this.state.isLoading) {
+
+      return (
+        <div>
+          <Head>
+            <title>Loading...</title>
+            <meta name="description" content="Loading..." />
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+
+          <header>
+            <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
+          </header>
+
+          <main>
+            <div className={styles.centerScreen}>
+              <BeatLoader />
+              <div>{"Setting up the editor... "}</div>
+            </div>
+          </main>
+
+        </div>
+      )
+
     } else {
       return (
         <div>
           <Head>
-            <title>Welcome</title>
+            <title>Editor</title>
             <meta name="description" content="Welcome page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>
@@ -345,6 +374,7 @@ class Edit extends Component {
                 />
               </div>
               <this.Editor />
+              <label>Diese Notiz teilen mit...</label>
               <TagPicker
                 onResolveSuggestions={this.filterSuggestedTags}
                 getTextFromItem={(item) => { return item.name }}
