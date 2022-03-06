@@ -1,3 +1,4 @@
+// @ts-check
 import { DatabaseModel } from '../pages/api/databaseModel';
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
@@ -122,7 +123,7 @@ export class BackEndController {
   /**
    * This method returns a filled User object for the given User.
    * @param {string} token Token to get User object from
-   * @returns {Promise<{id: number, name: string, password: string}> | {}} User object of username, empty User if token invalid
+   * @returns {Promise<{id: number, name: string, password: string} | {}>} User object of username, empty User if token invalid
    */
   async handleGetUserFromToken(token) {
     if (this.isTokenValid(token)) {
@@ -151,7 +152,7 @@ export class BackEndController {
       return false;
     }
 
-    if (this.isPasswordValid(newPassword) && await this.checkPassword(oldPassword, user.hashedPassword)) {
+    if (this.isPasswordValid(newPassword) && await this.checkPassword(oldPassword, user.password)) {
       const newHashedPassword = await this.hashPassword(newPassword);
       return this.databaseModel.evaluateSuccess(await this.databaseModel.changeUserPassword(newHashedPassword, user.id));
     }
@@ -163,7 +164,6 @@ export class BackEndController {
   /**
    * This method removes a target user from the database
    * @param {string} userToken user token to verificate delete process
-   * @param {string} usernameToDelete username of user to delete
    * @returns {Promise<boolean>} true if user was deleted, false if not
    */
   async handleDeleteUser(userToken) {
