@@ -1,3 +1,4 @@
+// @ts-check
 import Head from 'next/head'
 import { Component } from 'react'
 import withRouter from 'next/dist/client/with-router'

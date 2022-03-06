@@ -1,3 +1,4 @@
+// @ts-check
 import Head from 'next/head'
 import { Component } from 'react'
 import { FrontEndController } from '../controller/frontEndController'

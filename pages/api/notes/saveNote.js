@@ -1,3 +1,4 @@
+// @ts-check
 import { BackendController } from "../../../controller/backEndController";
 const backendController = new BackendController();
 /**

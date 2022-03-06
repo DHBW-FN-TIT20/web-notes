@@ -1,3 +1,4 @@
+// @ts-check
 import { createClient } from '@supabase/supabase-js'
 import { isUsernameValid, isPasswordValid } from './users/requirements';
 import jwt from 'jsonwebtoken';

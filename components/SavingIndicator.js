@@ -1,3 +1,4 @@
+// @ts-check
 import { Component } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
 import SyncLoader from 'react-spinners/SyncLoader';

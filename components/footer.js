@@ -1,3 +1,4 @@
+// @ts-check
 import { withRouter } from 'next/router'
 import { Component } from 'react'
 import Link from 'next/link'
