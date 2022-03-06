@@ -1,12 +1,12 @@
-import { SupabaseConnection } from "../supabaseAPI";
+import { BackEndController } from "../../../controller/backEndController";
 
-const supabaseConnection = new SupabaseConnection();
+const BACK_END_CONTROLLER = new BackEndController();
 
-export default async function handler(req, res) {
-  let username = req.body.username;
-  let password = req.body.password;
+export default async function loginHandler(req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
 
-  let token = await supabaseConnection.loginUser({name: username, password: password});
+  const token = await BACK_END_CONTROLLER.handleLoginUser(username, password);
 
   res.status(200).json({ userToken: token })
 }

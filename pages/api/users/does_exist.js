@@ -1,12 +1,15 @@
-import { SupabaseConnection } from "../supabaseAPI"
+import { BackEndController } from "../../../controller/backEndController";
 
-const supabaseConnection = new SupabaseConnection();
+const BACK_END_CONTROLLER = new BackEndController();
 
-export default async function handler(req, res) {
-  let userID = req.body.userID;
-  let username = req.body.username;
+export default async function doesUserExistHandler(req, res) {
+  const username = req.body.username;
 
-  let doesUserExist = await supabaseConnection.doesUserExist({id: userID, name: username})
+  console.log(username)
+
+  const doesUserExist = await BACK_END_CONTROLLER.handleUserAlreadyExists(username);
+
+  console.log(username, doesUserExist)
 
   res.status(200).json({ wasSuccessfull: doesUserExist })
 }

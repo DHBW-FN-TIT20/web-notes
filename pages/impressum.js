@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { Component } from 'react'
-import { FrontendController } from '../controller'
+import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Impressum.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
@@ -32,7 +32,7 @@ class Impressum extends Component {
    * @param {any} event Event triggered by an EventListener
    */
   storageTokenListener = async (event) => {
-    if (event.key === FrontendController.userTokenName) {
+    if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
   }
@@ -42,8 +42,8 @@ class Impressum extends Component {
    * @returns Nothing
    */
   async updateLoginState() {
-    let currentToken = FrontendController.getUserToken();
-    if (await FrontendController.verifyUserByToken(currentToken)) {
+    let currentToken = FrontEndController.getUserToken();
+    if (await FrontEndController.verifyUserByToken(currentToken)) {
       this.setState({isLoggedIn: true, currentToken: currentToken})
       return
     }
@@ -79,7 +79,7 @@ class Impressum extends Component {
           </Head>
 
           <header>
-            <Header username={FrontendController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
+            <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
           </header>
 
           <main>

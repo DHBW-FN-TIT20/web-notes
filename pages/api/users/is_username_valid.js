@@ -1,9 +1,11 @@
-import { isUsernameValid } from "./requirements";
+import { BackEndController } from "../../../controller/backEndController";
 
-export default async function handler(req, res) {
-  let username = req.body.username;
+const BACK_END_CONTROLLER = new BackEndController();
 
-  let isNameValid = isUsernameValid(username);
+export default async function isUsernameValidHandler(req, res) {
+  const username = req.body.username;
+
+  const isNameValid = BACK_END_CONTROLLER.isUsernameValid(username);
 
   res.status(200).json({ wasSuccessfull: isNameValid })
 }

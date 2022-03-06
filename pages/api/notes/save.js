@@ -1,10 +1,10 @@
-// import { SupabaseConnection } from "../supabaseAPI";
+// import { BackEndController } from "../../../controller/backEndController";
 
-// const supabaseConnection = new SupabaseConnection();
+// const BACK_END_CONTROLLER = new BackEndController();
 
-export default async function handler(req, res) {
+export default async function saveNoteHandler(req, res) {
+  const note = req.body.note || "";
 
-  let note = req.body.note || "";
   console.log(note);
 
   setTimeout(() => {

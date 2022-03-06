@@ -1,20 +1,13 @@
 import { withRouter } from 'next/router'
 import { Component } from 'react'
 import styles from '../styles/Header.module.css'
-import { FrontendController } from '../controller'
+import { FrontEndController } from '../controller/frontEndController'
 
 /** 
  * @class Header Component Class
  * @component
  */
 class Header extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-
-    }
-  }
-
   /**
    * Generates the JSX Output for the Client
    * @returns JSX Output
@@ -23,7 +16,7 @@ class Header extends Component {
     /** 
      * Initialize Router to navigate to other pages
      */
-    const { router } = this.props
+    const { router } = this.props;
 
     let username;
 
@@ -60,7 +53,7 @@ class Header extends Component {
       logoutButton = <td className={styles.td_right}>
                       <button
                         onClick={() => {
-                          FrontendController.logoutUser();
+                          FrontEndController.logoutUser();
                           location.reload();
                         }
                       }>
@@ -98,4 +91,4 @@ class Header extends Component {
   }
 }
 
-export default withRouter(Header)
+export default withRouter(Header);

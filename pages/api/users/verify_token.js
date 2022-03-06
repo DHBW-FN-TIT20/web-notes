@@ -1,10 +1,11 @@
-import { SupabaseConnection } from "../supabaseAPI";
+import { BackEndController } from "../../../controller/backEndController";
 
-const supabaseConnection = new SupabaseConnection();
+const BACK_END_CONTROLLER = new BackEndController();
 
-export default async function handler(req, res) {
-  let token = req.body.token;
-  let isValid = await supabaseConnection.isUserTokenValid(token);
+export default async function verifyTokenHandler(req, res) {
+  const token = req.body.token;
+
+  const isValid = await BACK_END_CONTROLLER.isUserTokenValid(token);
 
   res.status(200).json({ wasSuccessfull: isValid });
 }

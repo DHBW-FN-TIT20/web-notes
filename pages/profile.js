@@ -1,7 +1,7 @@
 import withRouter from 'next/dist/client/with-router'
 import Head from 'next/head'
 import { Component } from 'react'
-import { FrontendController } from '../controller'
+import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Profile.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
@@ -23,7 +23,7 @@ class Profile extends Component {
   async componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
-    this.setState({ currentUser: await FrontendController.getIUserFromToken(FrontendController.getUserToken()) });
+    this.setState({ currentUser: await FrontEndController.getUserFromToken(FrontEndController.getUserToken()) });
   }
 
   componentWillUnmount() {
@@ -35,7 +35,7 @@ class Profile extends Component {
    * @param {any} event Event triggered by an EventListener
    */
   storageTokenListener = async (event) => {
-    if (event.key === FrontendController.userTokenName) {
+    if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
   }
@@ -45,8 +45,8 @@ class Profile extends Component {
    * @returns Nothing
    */
   async updateLoginState() {
-    let currentToken = FrontendController.getUserToken();
-    if (await FrontendController.verifyUserByToken(currentToken)) {
+    let currentToken = FrontEndController.getUserToken();
+    if (await FrontEndController.verifyUserByToken(currentToken)) {
       this.setState({isLoggedIn: true, currentToken: currentToken})
     } else {
       const { router } = this.props
@@ -74,18 +74,6 @@ class Profile extends Component {
         </div>
       )
     } else {
-
-      let getAccessString = (accessLevel) => {
-        switch (accessLevel) {
-          case 0:
-            return "User";
-          case 1:
-            return "Admin";
-          default:
-            return "unavailable";
-        }
-      }
-
       return (
         <div>
           <Head>
@@ -95,12 +83,12 @@ class Profile extends Component {
           </Head>
 
           <header>
-            <Header username={FrontendController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
+            <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
           </header>
 
           <main>
             <div className={styles.content}>
-              <h1>User: {FrontendController.getUsernameFromToken(FrontendController.getUserToken())}</h1>
+              <h1>User: {FrontEndController.getUsernameFromToken(FrontEndController.getUserToken())}</h1>
               <h2>Information</h2>
               <table>
                 <thead>
@@ -109,12 +97,6 @@ class Profile extends Component {
                     <td>{this.state.currentUser?.id || "unavailable"}</td>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>Access Level:</td>
-                    <td>{getAccessString(this.state.currentUser?.accessLevel)}</td>
-                  </tr>
-                </tbody>
               </table>
             </div>
           </main>
