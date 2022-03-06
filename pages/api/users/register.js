@@ -1,12 +1,12 @@
-import { SupabaseConnection } from "../supabaseAPI"
+import { BackEndController } from "../../../controller/backEndController";
 
-const supabaseConnection = new SupabaseConnection();
+const BACK_END_CONTROLLER = new BackEndController();
 
-export default async function handler(req, res) {
-  let username = req.body.username;
-  let password = req.body.password;
+export default async function registerHandler(req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
 
-  let userCreate = await supabaseConnection.registerUser({name: username, password: password})
+  const userCreate = await BACK_END_CONTROLLER.handleRegisterUser(username, password);
 
-  res.status(200).json({ wasSuccessfull: userCreate })
+  res.status(200).json({ wasSuccessfull: userCreate });
 }

@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import { Component } from 'react'
 import withRouter from 'next/dist/client/with-router'
-import { FrontendController } from '../controller/frontEndController' 
-import Image from 'next/image'
+import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Home.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
-import DevChatLogo from '../public/Dev-Chat.png'
 import SavingIndicator from '../components/SavingIndicator'
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react';
 
@@ -178,7 +176,7 @@ class Home extends Component {
    * @param {any} event Event triggered by an EventListener
    */
   storageTokenListener = async (event) => {
-    if (event.key === FrontendController.userTokenName) {
+    if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
   }
@@ -188,8 +186,8 @@ class Home extends Component {
    * @returns Nothing
    */
   async updateLoginState() {
-    let currentToken = FrontendController.getUserToken();
-    if (await FrontendController.verifyUserByToken(currentToken)) {
+    let currentToken = FrontEndController.getUserToken();
+    if (await FrontEndController.verifyUserByToken(currentToken)) {
       this.setState({ isLoggedIn: true, currentToken: currentToken });
     } else {
       this.setState({ isLoggedIn: false })
@@ -253,7 +251,7 @@ class Home extends Component {
           </Head>
 
           <header>
-            <Header username={FrontendController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
+            <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
           </header>
 
           <main>

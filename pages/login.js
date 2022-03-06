@@ -1,7 +1,7 @@
 import withRouter from 'next/dist/client/with-router'
 import Head from 'next/head'
 import { Component } from 'react'
-import { FrontendController } from '../controller/frontEndController'
+import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Login.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
@@ -36,7 +36,7 @@ class Login extends Component {
    * @param {any} event Event triggered by an EventListener
    */
   storageTokenListener = async (event) => {
-    if (event.key === FrontendController.userTokenName) {
+    if (event.key === FrontEndController.userTokenName) {
       this.checkLoginState();
     }
   }
@@ -45,8 +45,8 @@ class Login extends Component {
    * This method checks and verifys the current user-token. If valid, it routes to root, if not, the isNotLoggedIn state is set to true.
    */
   async checkLoginState() {
-    let currentToken = FrontendController.getUserToken();
-    if (await FrontendController.verifyUserByToken(currentToken)) {
+    let currentToken = FrontEndController.getUserToken();
+    if (await FrontEndController.verifyUserByToken(currentToken)) {
       const { router } = this.props
       router.push("/")
     } else {
@@ -79,11 +79,12 @@ class Login extends Component {
      * This method logs the user in with the currently entered credentials. If the login was successfull, it routes to root, else all fields are cleared.
      */
     const loginVerification = async () => {
-      if (await FrontendController.loginUser(this.state.username, this.state.password)) {
+      if (await FrontEndController.loginUser(this.state.username, this.state.password)) {
         router.push("/");
+      } else {
+        this.setState({username: "", password: "", credentialsInfo: true})
+        document.getElementById("userInput")?.focus()
       }
-      this.setState({username: "", password: "", credentialsInfo: true})
-      document.getElementById("userInput")?.focus()
     }
 
     if (this.state.isNotLoggedIn) {
@@ -106,6 +107,7 @@ class Login extends Component {
                 type="text" 
                 placeholder="Username..." 
                 id='userInput'
+                className='formularInput'
                 autoFocus
                 onChange={(e) => this.setState({username: e.target.value})}
                 value={this.state.username}
@@ -113,6 +115,7 @@ class Login extends Component {
               <input 
                 type="password" 
                 placeholder="Password..."
+                className='formularInput'
                 onChange={(e) => this.setState({password: e.target.value})}
                 value={this.state.password}
                 onKeyDown={loginEnter} />

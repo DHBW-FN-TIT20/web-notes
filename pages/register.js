@@ -1,7 +1,7 @@
 import withRouter from 'next/dist/client/with-router'
 import Head from 'next/head'
 import { Component } from 'react'
-import { FrontendController } from '../controller'
+import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Register.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
@@ -40,7 +40,7 @@ class Register extends Component {
    * @param {any} event Event triggered by an EventListener
    */
   storageTokenListener = async (event) => {
-    if (event.key === FrontendController.userTokenName) {
+    if (event.key === FrontEndController.userTokenName) {
       this.checkLoginState();
     }
   }
@@ -49,12 +49,23 @@ class Register extends Component {
    * This method checks and verifys the current user-token. If valid, it routes to root, if not, the isNotLoggedIn state is set to true.
    */
   async checkLoginState() {
-    let currentToken = FrontendController.getUserToken();
-    if (await FrontendController.verifyUserByToken(currentToken)) {
+    let currentToken = FrontEndController.getUserToken();
+    if (await FrontEndController.verifyUserByToken(currentToken)) {
       const { router } = this.props
       router.push("/")
     } else {
       this.setState({isNotLoggedIn: true})
+    }
+  }
+
+  /**
+   * This method checks whether the entered password meets the needed requirements and sets the passwordReqMessage state accordingly.
+   */
+  async updatePasswordValid(password) {
+    if (await FrontEndController.isPasswordValid(password)) {
+      this.setState({passwordReqMessage: ""})
+    } else {
+      this.setState({passwordReqMessage: "check password requirements"})
     }
   }
 
@@ -84,7 +95,7 @@ class Register extends Component {
      */
     const registerVerification = async () => {
       if (this.state.password === this.state.confirmPassword && this.state.usernameReqMessage === "" && this.state.passwordReqMessage === "") {
-        if (await FrontendController.registerUser(this.state.username, this.state.password)) {
+        if (await FrontEndController.registerUser(this.state.username, this.state.password)) {
           router.push("/");
         }
         this.setState({username: "", password: "", confirmPassword: ""});
@@ -96,7 +107,7 @@ class Register extends Component {
      * This method checks whether the entered username meets the needed requirements and sets the usernameReqMessage state accordingly.
      */
     const updateUsernameValid = async() => {
-      if (await FrontendController.isUsernameValid(this.state.username)) {
+      if (await FrontEndController.isUsernameValid(this.state.username)) {
         this.setState({usernameReqMessage: ""})
       } else {
         this.setState({usernameReqMessage: "check username requirements"})
@@ -104,26 +115,13 @@ class Register extends Component {
     }
 
     /**
-     * This method checks whether the entered password meets the needed requirements and sets the passwordReqMessage state accordingly.
-     */
-    const updatePasswordValid = async () => {
-      if (await FrontendController.isPasswordValid(this.state.password)) {
-        this.setState({passwordReqMessage: ""})
-      } else {
-        this.setState({passwordReqMessage: "check password requirements"})
-      }
-    }
-
-    /**
      * This method updates the feedback message for the entered username and password.
      */
-    const updateFeedbackMessage = async () => {
-      if (this.state.doesUserExist) {
+    const updateFeedbackMessage = async (doesExist, password, confirmPassword) => {
+      if (doesExist) {
         this.setState({feedbackMessage: "Username not available."})
-      } else if (this.state.password !== this.state.confirmPassword) {
+      } else if (password !== undefined && password !== confirmPassword) {
         this.setState({feedbackMessage: "Passwords do not match."})
-      } else if (this.state.username === "" || this.state.password === "" || this.state.confirmPassword === "") {
-        this.setState({feedbackMessage: ""})
       } else {
         this.setState({feedbackMessage: ""})
       }
@@ -149,11 +147,12 @@ class Register extends Component {
                 type="text" 
                 placeholder="Username..." 
                 id='userInput'
+                className='formularInput'
                 autoFocus
                 onChange={async (e) => {
                   this.setState({username: e.target.value});
-                  this.setState({doesUserExist: await FrontendController.doesUserExist({name: e.target.value})});
-                  updateFeedbackMessage();
+                  this.setState({doesUserExist: await FrontEndController.doesUserExist(e.target.value)});
+                  updateFeedbackMessage(this.state.doesUserExist, this.state.password, this.state.confirmPassword);
                   updateUsernameValid();
                 }}
                 value={this.state.username}
@@ -164,10 +163,12 @@ class Register extends Component {
               <input 
                 type="password" 
                 placeholder="Password..."
+                className='formularInput'
                 onChange={async (e) => {
                   this.setState({password: e.target.value});
-                  updateFeedbackMessage();
-                  updatePasswordValid();
+                  updateFeedbackMessage(this.state.doesUserExist, e.target.value, this.state.confirmPassword);
+                  console.log(e.target.value)
+                  this.updatePasswordValid(e.target.value);
                 }}
                 value={this.state.password}
                 onKeyDown={registerEnter} />
@@ -177,9 +178,10 @@ class Register extends Component {
               <input 
                 type="password" 
                 placeholder="Confirm password..."
+                className='formularInput'
                 onChange={async (e) => {
                   this.setState({confirmPassword: e.target.value});
-                  updateFeedbackMessage();
+                  updateFeedbackMessage(this.state.doesUserExist, this.state.password, e.target.value);
                 }}
                 value={this.state.confirmPassword}
                 onKeyDown={registerEnter} />
