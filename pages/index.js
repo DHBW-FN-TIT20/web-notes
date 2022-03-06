@@ -10,16 +10,6 @@ import SavingIndicator from '../components/SavingIndicator'
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react';
 
 
-// export type Note {
-//   id: string;
-//   title: string;
-//   content: string;
-//   ownerID: number;
-//   createdAt?: string;
-//   sharedWith?: number[];
-// }
-
-
 /**
  * @class Home Component Class
  * @component
@@ -37,8 +27,8 @@ class Home extends Component {
     };
     this.noteListColumns = [
       { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true },
-      { key: "createdAt", name: "Erstellt am", fieldName: "createdAt", minWidth: 100, maxWidth: 200, isResizable: true },
-      { key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => { if (item.isSharedToMe) { return (`Geteilte Notiz`) } else { return (`Eigene Notiz`) } } },
+      { key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true },
+      { key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => { if (item.isShared) { return (`Geteilte Notiz`) } else { return (`Eigene Notiz`) } } },
       {
         key: "content", name: "Vorschau", fieldName: "content", minWidth: 300, maxWidth: 200, isResizable: true, onRender: (item) => {
           const maxElements = 5;
@@ -123,52 +113,25 @@ class Home extends Component {
   }
 
 
-  componentDidMount() {
+  async componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
 
-    this.getNoteList();
+    await this.getNoteList();
   }
 
   componentWillUnmount() {
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
-  getNoteList() {
-    // get the note list from backend
+  async getNoteList() {
 
-    setTimeout(() => {
-      let dummyNoteList = [
-        {
-          id: "1",
-          title: "Einkaufsliste",
-          content: "<div>This is my Einkaufsliste</div>",
-          ownerID: 1,
-          createdAt: "2020-01-01",
-          sharedWith: [2, 3],
-          isSharedToMe: true,
-        },
-        {
-          id: "2",
-          title: "Todo-Liste",
-          content: "<h1>This is my Todo-Liste</h1><ul><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li></ul><div>This is my Todo-Liste</div><ul><li>Buy milk</li><li>Buy eggs</li><li>Buy bread</li><li>Buy milk</li><li>Buy eggs</li><li>Buy Fahrrad</li></ul>",
-          ownerID: 2,
-          createdAt: "2020-01-01",
-          sharedWith: [1, 3],
-          isSharedToMe: false,
-        },
-        {
-          id: "3",
-          title: "JavaScript-Tutorial",
-          content: "<h1>Große Schrift</h1><div>This is my JavaScript-Tutorial</div>",
-          ownerID: 3,
-          createdAt: "2020-01-01",
-          sharedWith: [1, 2],
-          isSharedToMe: true,
-        },
-      ];
-      this.setState({ noteList: dummyNoteList });
-    }, 50);
+    // get the note list from backend
+    let notes = await FrontEndController.getNotes();
+
+    // update the state
+    console.log(notes);
+    this.setState({ noteList: notes });
 
   }
 
@@ -197,7 +160,8 @@ class Home extends Component {
 
   onActiveItemChanged = (item, index, ev) => {
     // open the note
-    this.props.router.push(`/edit?id=${item.id}`);
+    FrontEndController.setCurrentNoteID(item.id);
+    this.props.router.push(`/edit`);
   }
 
 
@@ -257,13 +221,13 @@ class Home extends Component {
 
           <main>
             <div className={styles.contentOne}>
-              <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."}/>
+              <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."} />
               <DetailsList
                 items={filteredNoteList}
                 columns={this.noteListColumns}
                 setKey="set"
                 // onItemInvoked={this.onItemInvoked}
-                onActiveItemChanged={this.onActiveItemChanged} 
+                onActiveItemChanged={this.onActiveItemChanged}
                 selectionMode={SelectionMode.none}
               />
             </div>

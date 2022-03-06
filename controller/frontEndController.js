@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken'
  */
 export class FrontEndController {
   static userTokenName = "webnotes.auth.token";
+  static currentNoteName = "webnotes.noteID";
 
   //#region User Methods
 
@@ -27,6 +28,32 @@ export class FrontEndController {
 
     const data = await response.json();
     return data.wasSuccessfull;
+  }
+
+
+  /**
+   * This method is used to store the id of the current note in the local storage
+   * @param {number} noteID ID of the note to be set as the current note
+   */
+  static setCurrentNoteID(noteID) {
+    localStorage.removeItem(FrontEndController.currentNoteName);
+    localStorage.setItem(FrontEndController.currentNoteName, String(noteID));
+  }
+
+  /**
+   * This method is used to get the id of the current note from the local storage
+   * @returns {number} ID of the current note
+   */
+  static getCurrentNoteID() {
+    return Number(localStorage.getItem(FrontEndController.currentNoteName));
+  }
+
+  /**
+   * This method removes the note id from the local storage
+   * @returns {void}
+   */
+  static removeCurrentNoteID() {
+    localStorage.removeItem(FrontEndController.currentNoteName);
   }
 
   /**
@@ -206,22 +233,50 @@ export class FrontEndController {
 
   //#region Note Methods
 
+  /**
+   * This method is used to save a note to the database. If no note.id is given, a new note is created.
+   * @param {{id?: number, title: string, content: string, inUse: boolean}} note note which should be saved
+   * @returns {Promise<boolean>} true if note was saved, false if not
+   */
   static async saveNote(note) {
 
     console.log(note);
 
-    const response = await fetch('./api/notes/save', {
+    const response = await fetch('./api/notes/save_note', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         note: note,
+        userToken: FrontEndController.getUserToken()
       })
     });
 
     const data = await response.json();
-    return data.wasSuccessfull;
+    return data.noteID;
+  }
+
+
+  /**
+   * This method is used to get all notes which are related to the user.
+   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean}[]>} Array of all notes of the current user
+   */
+  static async getNotes() {
+
+    const response = await fetch('./api/notes/get_all_notes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userToken: FrontEndController.getUserToken()
+      })
+    });
+
+    const data = await response.json();
+
+    return data.notes;
   }
 
   //#endregion

@@ -24,18 +24,49 @@ class Edit extends Component {
       isSaving: false,
       isSaved: true,
       title: "",
-      isTitleSaved: true,
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
 
-    this.setupEditor();
+    // get initial data
+    let noteID = FrontEndController.getCurrentNoteID();
+    let currentNote = null;
+
+    // check if there is a noteID if not a new note is created
+    if (!noteID) {
+      console.log("Creating new note...");
+      currentNote = {
+        content: "",
+        title: "Neue Notiz",
+        id: null,
+        inUse: true,
+      }
+      currentNote.id = await FrontEndController.saveNote(currentNote);
+      FrontEndController.setCurrentNoteID(currentNote.id);
+    } else {
+      console.log("Loading note...");
+      currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);;
+    }
+
+    console.log("Current Note: ", currentNote);
+
+    currentNote.content = currentNote.content || "";
+    
+    this.setupEditor(currentNote.content);
+    this.setState({ title: currentNote.title });
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
+    const noteToSave = {
+      content: this.editorInstance.getData(),
+      title: this.state.title,
+      id: FrontEndController.getCurrentNoteID(),
+      inUse: false
+    }
+    await FrontEndController.saveNote(noteToSave);
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
@@ -47,35 +78,6 @@ class Edit extends Component {
     if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
-  }
-
-  handleTitleChange = (event) => {
-    this.setState({ title: event.target.value, isTitleSaved: false });
-  }
-
-  renderTitleLabel = (props) => {
-    if (this.state.isTitleSaved) {
-      return (
-        <div className={styles.titleLabel}>
-          <span>Title</span>
-        </div>
-      )
-    } else {
-      return (
-        <div className={styles.titleLabel}>
-          <span>Title (Not Saved...)</span>
-        </div>
-      )
-    }
-  }
-
-  handleSaveTitle = () => {
-    this.setState({ isTitleSaved: false });
-    console.log("Saving Title...");
-    setTimeout(() => {
-      this.setState({ isTitleSaved: true });
-      console.log("Title saved!");
-    }, 1000);
   }
 
   /**
@@ -99,7 +101,7 @@ class Edit extends Component {
     )
   }
 
-  setupEditor() {
+  setupEditor(content) {
     if (window !== undefined) {
       console.log("Loading Editor...");
 
@@ -114,7 +116,6 @@ class Edit extends Component {
               name="editor1"
               editor={CustomEditor}
               onChange={(event, editor) => {
-                const data = editor.getData();
                 this.autoSave.handleChange();
               }}
               key="ckeditor"
@@ -133,6 +134,7 @@ class Edit extends Component {
                   );
                 });
               }}
+              data={content}
             />
           </div>
         )
@@ -183,14 +185,13 @@ class Edit extends Component {
               <div>
                 <TextField
                   label="Title"
-                  onRenderLabel={this.renderTitleLabel}
-                  onChange={this.handleTitleChange}
+                  onChange={(e, newValue) => {
+                    this.setState({ title: newValue })
+                    this.autoSave.handleChange()
+                  }}
                   placeholder={"Titel..."}
                   value={this.state.title}
-                  onBlur={this.handleSaveTitle}
-                  style={{ borderColor: this.state.isTitleSaved ? "green" : "red" }}
                 />
-                {/* <Spinner size={SpinnerSize.small}  hidden={this.state.isTitleSaved}/> */}
               </div>
               <SavingIndicator
                 isSaving={this.state.isSaving}
@@ -218,7 +219,16 @@ class Edit extends Component {
         this.autoSave.timeout = setTimeout(async () => {
           if (this.editorInstance !== null) {
             this.setState({ isSaving: true, isSaved: false });
-            let isSaved = await FrontEndController.saveNote(this.editorInstance.getData())
+
+            // save the note 
+            const noteToSave = {
+              id: FrontEndController.getCurrentNoteID(),
+              title: this.state.title,
+              content: this.editorInstance.getData(),
+              inUse: true,
+            }
+            let isSaved = await FrontEndController.saveNote(noteToSave)
+
             this.autoSave.dataWasChanged = false;
             this.autoSave.stop();
             this.setState({ isSaved: isSaved, isSaving: false });

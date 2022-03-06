@@ -35,7 +35,7 @@ export class DatabaseModel {
   //#region User Methods
 
   /**
-   * Gets der IUserFromResponse
+   * Gets der UserFromResponse
    * @param {PostgrestResponse<{id: number, name: string, password: string}>} dbResponse Response of Database
    * @returns {{id: number, name: string, password: string}[]} List of user objects.
    */
@@ -121,6 +121,106 @@ export class DatabaseModel {
       .match({ 'id': targetUserID });
 
     return deletedUser;
+  }
+
+  //#endregion
+
+  //#region Note Methods
+
+  /**
+   * Gets notes from the database response
+   * @param {PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>} dbResponse Response of Database
+   * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}[]} List of user objects.
+   */
+   getNoteFromResponse(dbResponse) {
+    if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
+      return [];
+    }
+
+    const allNotes = [];
+
+    for (const note of dbResponse.data) {
+      allNotes.push({ id: note.id, title: note.title, ownerID: note.ownerID, modifiedAt: new Date(note.modifiedAt), content: note.content, inUse: note.inUse });
+    }
+    return allNotes;
+  }
+
+  /**
+   * This is a universal select function for the note database
+   * @param {number} id  Filter noteID
+   * @param {string} title Filter title
+   * @param {number} ownerID Filter ownerID
+   * @param {Date} modifiedAt Filter modified
+   * @param {boolean} inUse Filter in use
+   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
+   */
+  async selectNoteTable(id = undefined, title = undefined, ownerID = undefined, modifiedAt = undefined, inUse = undefined) {
+    let idColumnName = "";
+    let titleColumnName = "";
+    let ownerColumnName = "";
+    let modifiedColumnName = "";
+    let inUseColumnName = "";
+
+    if (!(id === undefined) && !isNaN(id)) idColumnName = "id";
+    if (!(title === undefined)) titleColumnName = "title";
+    if (!(ownerID === undefined) && !isNaN(ownerID)) ownerColumnName = "ownerID";
+    if (!(modifiedAt === undefined)) modifiedColumnName = "modifiedAt";
+    if (!(inUse === undefined)) inUseColumnName = "inUse";
+
+    const noteResponse = await DatabaseModel.CLIENT
+      .from('Note')
+      .select()
+      .eq(idColumnName, id)
+      .eq(titleColumnName, title)
+      .eq(ownerColumnName, ownerID)
+      .eq(modifiedColumnName, modifiedAt)
+      .eq(inUseColumnName, inUse)
+      .order('modifiedAt', { ascending: true });
+
+    return noteResponse;
+  }
+
+  //#endregion
+
+  //#region UserNoteRelation Methods
+
+  /**
+   * Gets notes from the database response
+   * @param {PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>} dbResponse Response of Database
+   * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}[]} List of user objects.
+   */
+  getSharedNoteFromResponse(dbResponse) {
+    if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
+      return [];
+    }
+
+    const allSharedNotes = [];
+
+    for (const note of dbResponse.data) {
+      allSharedNotes.push({ id: note.Note.id, title: note.Note.title, ownerID: note.Note.ownerID, modifiedAt: new Date(note.Note.modifiedAt), content: note.Note.content, inUse: note.Note.inUse });
+    }
+
+    allSharedNotes.sort((a, b) => a.modifiedAt.getTime() - b.modifiedAt.getTime());
+
+    return allSharedNotes;
+  }
+
+  /**
+   * This is a universal select function for the UserNoteRelation database
+   * @param {number} userID Filter userID
+   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>>} DB result as list of note objects
+   */
+  async selectUserNoteRelationTable(userID = undefined) {
+    let userIDColumnName = "";
+
+    if (!(userID === undefined) && !isNaN(userID)) userIDColumnName = "userID";
+
+    const noteResponse = await DatabaseModel.CLIENT
+      .from('UserNoteRelation')
+      .select('*, Note(*)')
+      .eq(userIDColumnName, userID);
+
+    return noteResponse;
   }
 
   //#endregion

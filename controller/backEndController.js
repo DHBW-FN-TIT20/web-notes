@@ -263,19 +263,70 @@ export class BackEndController {
   //TODO
   /**
    * Saves the String to the Database
-   * @param {String} note 
+   * @param {{id?: number, title: string, content: string, inUse: boolean}} note 
    */
-  async saveNote(note) {
+  async saveNote(note, userToken) {
+    const isUserValid = await this.isUserTokenValid(userToken);
+
+    if (!isUserValid) {
+      // return a null object as noteID to indicate that the note was not saved
+      return null; 
+    }
+
+    if (!note.id) {
+      // create new note
+    }
+
+
+
 
   }
 
   //TODO
   /**
-   * Gets the Note from the Database
-   * @param {number} id
+   * Gets get all notes which are related to the user from the database
+   * @param {string} userToken
    */
-  async getNote(id) {
+  async getNotes(userToken) {
+    console.log("Hey")
+    const isUserValid = await this.isUserTokenValid(userToken);
 
+    if (!isUserValid) {
+      // return a empty array to indicate that the user is not valid
+      return [];
+    }
+
+    const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
+
+    if (user === undefined) {
+      return [];
+    }
+
+    const ownNotes = this.databaseModel.getNoteFromResponse(await this.databaseModel.selectNoteTable(undefined, undefined, user.id));
+
+    const sharedNotes = this.databaseModel.getSharedNoteFromResponse(await this.databaseModel.selectUserNoteRelationTable(user.id));
+
+    const allNotes = ownNotes.map(note => ({
+      id: note.id, 
+      title: note.title, 
+      ownerID: note.ownerID, 
+      modifiedAt: note.modifiedAt, 
+      content: note.content, 
+      inUse: note.inUse, 
+      isShared: false})
+      ).concat(sharedNotes.map(note => ({
+        id: note.id, 
+        title: note.title, 
+        ownerID: note.ownerID, 
+        modifiedAt: note.modifiedAt, 
+        content: note.content, 
+        inUse: note.inUse, 
+        isShared: true}
+      )));
+
+    console.log(allNotes);
+
+    return allNotes;
   }
 
   //#endregion
