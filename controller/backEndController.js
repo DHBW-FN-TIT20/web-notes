@@ -263,18 +263,51 @@ export class BackEndController {
   //TODO
   /**
    * Saves the String to the Database
-   * @param {{id?: number, title: string, content: string, inUse: boolean}} note 
+   * @param {{id: number | undefined, title: string, content: string, inUse: boolean}} note 
+   * @param {string} userToken
    */
   async saveNote(note, userToken) {
+    console.log("saveNote")
     const isUserValid = await this.isUserTokenValid(userToken);
 
     if (!isUserValid) {
-      // return a null object as noteID to indicate that the note was not saved
-      return null; 
+      // return a undefined object as noteID to indicate that the note was not saved
+      return undefined; 
     }
 
-    if (!note.id) {
+    if (note.id === undefined) {
       // create new note
+      const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
+      
+      if (user === undefined) {
+        return undefined;
+      }
+
+      const addedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.addNote(user.id, note.inUse))[0];
+      
+      if(addedNote === undefined) {
+        return undefined;
+      }
+
+      return addedNote.id;
+    } else {
+      // save note
+      const currentNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.selectNoteTable(note.id))[0];
+      if (currentNote === undefined) {
+        return undefined;
+      }
+      const noteToSave = currentNote;
+      noteToSave.title = note.title;
+      noteToSave.modifiedAt = new Date();
+      noteToSave.content = note.content;
+      noteToSave.inUse = note.inUse;
+      const savedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.updateNote(note.id, noteToSave))[0];
+
+      if (savedNote === undefined) {
+        return undefined;
+      }
+
+      return savedNote.id;
     }
 
 
@@ -324,9 +357,11 @@ export class BackEndController {
         isShared: true}
       )));
 
-    console.log(allNotes);
+    const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()))
+    
+    console.log(sortedNotes);
 
-    return allNotes;
+    return sortedNotes;
   }
 
   //#endregion

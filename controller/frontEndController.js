@@ -45,7 +45,11 @@ export class FrontEndController {
    * @returns {number} ID of the current note
    */
   static getCurrentNoteID() {
-    return Number(localStorage.getItem(FrontEndController.currentNoteName));
+    const currentNoteString = localStorage.getItem(FrontEndController.currentNoteName);
+    if (currentNoteString === null) {
+      return undefined;
+    }
+    return Number(currentNoteString);
   }
 
   /**
@@ -236,7 +240,7 @@ export class FrontEndController {
   /**
    * This method is used to save a note to the database. If no note.id is given, a new note is created.
    * @param {{id?: number, title: string, content: string, inUse: boolean}} note note which should be saved
-   * @returns {Promise<boolean>} true if note was saved, false if not
+   * @returns {Promise<number>} returns the id of the saved note
    */
   static async saveNote(note) {
 
@@ -254,6 +258,7 @@ export class FrontEndController {
     });
 
     const data = await response.json();
+    console.log("data: ", data);
     return data.noteID;
   }
 

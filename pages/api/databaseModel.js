@@ -35,7 +35,7 @@ export class DatabaseModel {
   //#region User Methods
 
   /**
-   * Gets der UserFromResponse
+   * This mehtod extracts user object from db response
    * @param {PostgrestResponse<{id: number, name: string, password: string}>} dbResponse Response of Database
    * @returns {{id: number, name: string, password: string}[]} List of user objects.
    */
@@ -79,7 +79,7 @@ export class DatabaseModel {
   }
 
   /**
-   * API function to register a user
+   * This method adds a user to the db
    * @param {string} username username to register
    * @param {string} hashedPassword password for the user
    * @returns {Promise<PostgrestResponse<{id: number, name: string, password: string}>>} DB result as list of user objects
@@ -95,7 +95,7 @@ export class DatabaseModel {
   }
 
   /** 
-   * This function is used to reset the password of a user
+   * This method is used to change the password of a user
    * @param {string} newHashedPassword
    * @param {number} userID
    * @returns {Promise<PostgrestResponse<{id: number, name: string, password: string}>>} DB result as list of user objects
@@ -128,7 +128,7 @@ export class DatabaseModel {
   //#region Note Methods
 
   /**
-   * Gets notes from the database response
+   * This method extracts note objects from the database response
    * @param {PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>} dbResponse Response of Database
    * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}[]} List of user objects.
    */
@@ -180,12 +180,57 @@ export class DatabaseModel {
     return noteResponse;
   }
 
+  /**
+   * This method creates a new note.
+   * @param {number} ownerID
+   * @param {boolean} inUse
+   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
+   */
+  async addNote(ownerID, inUse) {
+    const addedNote = await DatabaseModel.CLIENT
+      .from('Note')
+      .insert([
+        { ownerID: ownerID, inUse: inUse },
+      ]);
+
+    return addedNote;
+  }
+
+  /**
+   * This method updates a note.
+   * @param {number} noteID NoteID of note to update
+   * @param {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}} note Modified note (containing updated values)
+   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
+   */
+  async updateNote(noteID, note) {
+    const updatedNote = await DatabaseModel.CLIENT
+      .from('Note')
+      .update(note)
+      .eq('id', noteID);
+
+    return updatedNote;
+  }
+
+  /**
+   * This method deletes a note.
+   * @param {number} id
+   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
+   */
+  async deleteNote(id) {
+    const deletedNote = DatabaseModel.CLIENT
+      .from('Note')
+      .delete()
+      .match({ id: id })
+
+    return deletedNote;
+  }
+
   //#endregion
 
   //#region UserNoteRelation Methods
 
   /**
-   * Gets notes from the database response
+   * This method extracts shared-note objects from the database response
    * @param {PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>} dbResponse Response of Database
    * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}[]} List of user objects.
    */
@@ -221,6 +266,37 @@ export class DatabaseModel {
       .eq(userIDColumnName, userID);
 
     return noteResponse;
+  }
+
+  /**
+   * This method adds a user-note relation (share note)
+   * @param {number} userID
+   * @param {number} noteID
+   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>>} DB result as list of note objects
+   */
+  async addUserNoteRelation(userID, noteID) {
+    const addedUserNoteRelation = await DatabaseModel.CLIENT
+      .from('UserNoteRelation')
+      .insert([
+        { userID: userID, noteID: noteID },
+      ]);
+
+    return addedUserNoteRelation;
+  }
+
+  /**
+   * This method adds a user-note relation (share note)
+   * @param {number} userID
+   * @param {number} noteID
+   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>>} DB result as list of note objects
+   */
+  async deleteUserNoteRelation(userID, noteID) {
+    const deletedUserNoteRelation = await DatabaseModel.CLIENT
+      .from('UserNoteRelaiton')
+      .delete()
+      .match({ userID: userID, noteID: noteID});
+
+    return deletedUserNoteRelation;
   }
 
   //#endregion

@@ -28,7 +28,17 @@ class Home extends Component {
     this.noteListColumns = [
       { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true },
       { key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true },
-      { key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => { if (item.isShared) { return (`Geteilte Notiz`) } else { return (`Eigene Notiz`) } } },
+      {
+        key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => {
+          if (item.isShared === true) {
+            return (`Geteilte Notiz`)
+          } else if (item.isShared === false) {
+            return (`Eigene Notiz`)
+          } else {
+            return (``)
+          }
+        }
+      },
       {
         key: "content", name: "Vorschau", fieldName: "content", minWidth: 300, maxWidth: 200, isResizable: true, onRender: (item) => {
           const maxElements = 5;
@@ -160,8 +170,13 @@ class Home extends Component {
 
   onActiveItemChanged = (item, index, ev) => {
     // open the note
-    FrontEndController.setCurrentNoteID(item.id);
-    this.props.router.push(`/edit`);
+    if (item.id !== -1 || item.id === undefined) {
+      FrontEndController.setCurrentNoteID(item.id);
+      this.props.router.push(`/edit`);
+    } else {
+      FrontEndController.removeCurrentNoteID();
+      this.props.router.push(`/edit`);
+    }
   }
 
 
@@ -181,6 +196,7 @@ class Home extends Component {
 
     const { router } = this.props
 
+    // filter the list of notes according to the search string
     let filteredNoteList = [];
     if (this.state.searchString == "") {
       filteredNoteList = this.state.noteList;
@@ -190,6 +206,16 @@ class Home extends Component {
       filteredNoteList = this.state.noteList.filter(note => {
         return note.title.toLowerCase().includes(this.state.searchString.toLowerCase()) || note.content.toLowerCase().includes(this.state.searchString.toLowerCase());
       });
+    }      
+
+    // add the "new note" button
+    const newNote = { id: -1, title: "Neue Notiz...", content: "", isShared: null, }
+    if (filteredNoteList.length > 0) {
+      if (filteredNoteList[0].id !== -1) {
+        filteredNoteList.splice(0, 0, newNote);
+      }
+    } else {
+      filteredNoteList.splice(0, 0, newNote);
     }
 
     if (this.state.isLoggedIn === undefined) {

@@ -9,10 +9,10 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  */
 async function saveNoteHandler(req, res) {
-  const note = req.body.note || "";
+  const note = req.body.note;
   const userToken = req.body.userToken;
 
-  const noteID = BACK_END_CONTROLLER.saveNote(note, userToken);
+  const noteID = await BACK_END_CONTROLLER.saveNote(note, userToken);
 
   res.status(200).json({ noteID: noteID });
 };

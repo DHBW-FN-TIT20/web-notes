@@ -33,28 +33,23 @@ class Edit extends Component {
 
     // get initial data
     let noteID = FrontEndController.getCurrentNoteID();
-    let currentNote = null;
+    let currentNote = undefined;
 
     // check if there is a noteID if not a new note is created
     if (!noteID) {
-      console.log("Creating new note...");
       currentNote = {
         content: "",
         title: "Neue Notiz",
-        id: null,
+        id: undefined,
         inUse: true,
       }
       currentNote.id = await FrontEndController.saveNote(currentNote);
+      console.log("New note created with id: " + currentNote.id);
       FrontEndController.setCurrentNoteID(currentNote.id);
     } else {
-      console.log("Loading note...");
       currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);;
     }
 
-    console.log("Current Note: ", currentNote);
-
-    currentNote.content = currentNote.content || "";
-    
     this.setupEditor(currentNote.content);
     this.setState({ title: currentNote.title });
   }
@@ -182,8 +177,9 @@ class Edit extends Component {
 
           <main>
             <div className={styles.contentOne}>
-              <div>
+              <div className={styles.nameAndSaveIndicator}>
                 <TextField
+                  className={styles.titleInput}
                   label="Title"
                   onChange={(e, newValue) => {
                     this.setState({ title: newValue })
@@ -192,12 +188,13 @@ class Edit extends Component {
                   placeholder={"Titel..."}
                   value={this.state.title}
                 />
+                <SavingIndicator
+                  className={styles.savingIndicator}
+                  isSaving={this.state.isSaving}
+                  isSaved={this.state.isSaved}
+                  notSaveMessage={"Not saved yet!"}
+                />
               </div>
-              <SavingIndicator
-                isSaving={this.state.isSaving}
-                isSaved={this.state.isSaved}
-                notSaveMessage={"Not saved yet!"}
-              />
               <this.Editor />
             </div>
           </main>

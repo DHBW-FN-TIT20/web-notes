@@ -1,9 +1,24 @@
 .ckEditor {
-    color: black;
-    min-height: 4000px;
+  color: black;
+  min-height: 4000px;
 }
 
 .contentOne {
-    padding: 8pt;
-  
-  }
+  padding: 8pt;
+}
+
+.nameAndSaveIndicator {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 4px;
+  grid-row-gap: 0px;
+  margin-bottom: 3px;
+}
+
+.titleInput {
+  grid-area: 1 / 1 / 2 / 5;
+}
+.savingIndicator {
+  grid-area: 1 / 5 / 2 / 6;
+}
