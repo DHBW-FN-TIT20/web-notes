@@ -15,6 +15,7 @@ import { Spinner, SpinnerSize, DetailsList, DefaultButton, PrimaryButton, Detail
  */
 class Edit extends Component {
   editorInstance = null;
+  TitleField = null;
 
   constructor(props) {
     super(props)
@@ -44,13 +45,16 @@ class Edit extends Component {
         inUse: true,
       }
       currentNote.id = await FrontEndController.saveNote(currentNote);
-      console.log("New note created with id: " + currentNote.id);
       FrontEndController.setCurrentNoteID(currentNote.id);
+      this.TitleField.focus();
     } else {
-      currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);;
+      currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);
+      setTimeout(() => {
+        this.editorInstance.focus();
+      }, 1000);
     }
 
-    this.setupEditor(currentNote.content);
+    await this.setupEditor(currentNote.content);
     this.setState({ title: currentNote.title });
   }
 
@@ -187,6 +191,11 @@ class Edit extends Component {
                   }}
                   placeholder={"Titel..."}
                   value={this.state.title}
+                  onFocus={event => {
+                    event.target.select();
+                    setTimeout(() => { event.target.setSelectionRange(0, event.target.value.length); }, 0);
+                  }}
+                  componentRef={(textField) => { this.TitleField = textField }}
                 />
                 <SavingIndicator
                   className={styles.savingIndicator}

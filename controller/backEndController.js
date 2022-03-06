@@ -271,12 +271,14 @@ export class BackEndController {
     const isUserValid = await this.isUserTokenValid(userToken);
 
     if (!isUserValid) {
+      console.log("user invalid");
       // return a undefined object as noteID to indicate that the note was not saved
       return undefined; 
     }
 
     if (note.id === undefined) {
       // create new note
+      console.log("create new note");
       const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
       
       if (user === undefined) {
@@ -284,7 +286,8 @@ export class BackEndController {
       }
 
       const addedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.addNote(user.id, note.inUse))[0];
-      
+      console.log("addedNote: ", addedNote);
+
       if(addedNote === undefined) {
         return undefined;
       }

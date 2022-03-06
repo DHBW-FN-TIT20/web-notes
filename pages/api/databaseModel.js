@@ -134,6 +134,7 @@ export class DatabaseModel {
    */
    getNoteFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
+      console.log("getNoteFromResponse: ", dbResponse.error);
       return [];
     }
 

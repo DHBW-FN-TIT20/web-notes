@@ -7,7 +7,7 @@ import styles from '../styles/Home.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import SavingIndicator from '../components/SavingIndicator'
-import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX, ShimmeredDetailsList } from '@fluentui/react';
 
 
 /**
@@ -20,13 +20,12 @@ class Home extends Component {
     this.state = {
       isLoggedIn: undefined,
       currentToken: "",
-      isSaving: false,
-      isSaved: true,
+      isLoading: false,
       noteList: [],
       searchString: "",
     };
     this.noteListColumns = [
-      { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true },
+      { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true},
       { key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true },
       {
         key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => {
@@ -126,8 +125,9 @@ class Home extends Component {
   async componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
-
+    this.setState({ isLoading: true });
     await this.getNoteList();
+    this.setState({ isLoading: false });
   }
 
   componentWillUnmount() {
@@ -247,14 +247,16 @@ class Home extends Component {
 
           <main>
             <div className={styles.contentOne}>
-              <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."} />
-              <DetailsList
+              <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."} disabled={this.state.isLoading}/>
+              <ShimmeredDetailsList className={styles.detailsList}
                 items={filteredNoteList}
                 columns={this.noteListColumns}
                 setKey="set"
-                // onItemInvoked={this.onItemInvoked}
                 onActiveItemChanged={this.onActiveItemChanged}
                 selectionMode={SelectionMode.none}
+                enableShimmer={this.state.isLoading}
+                shimmerLines={7}
+                onRenderRow={ (props, defaultRender) => <div onMouseEnter={ () => console.log('hovering over: ' + props.item.title)}>{defaultRender(props)}</div> }
               />
             </div>
           </main>
