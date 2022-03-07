@@ -29,7 +29,7 @@ import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert';
 import AutoImage from '@ckeditor/ckeditor5-image/src/autoimage';
 
 
-class Editor extends ClassicEditor {}
+class Editor extends ClassicEditor { }
 
 // Plugins to include in the build.
 Editor.builtinPlugins = [
@@ -102,12 +102,9 @@ Editor.defaultConfig = {
 	exportPdf: {
 		tokenUrl: 'https://87398.cke-cs.com/token/dev/859bdd75b1f4c8100b86b285e848c31e00f578624d3231f6d79b59962261?limit=10',
 		stylesheets: [
-			// NOTE: Only external stylesheets can be loaded so far 
-			// FIXME: Add support for loading the existing local stylesheets (pdf-style.css, pdf-fonts.css)
-			// '../src/styles/pdf-style.css',
-			'https://raw.githubusercontent.com/diethardsteiner/css-for-print/master/sample1.css',
-			// './src/styles/pdf-fonts.css',
+			'/pdf-export-styles/fonts.css',
 			'EDITOR_STYLES',
+			'/pdf-export-styles/style.css',
 		],
 		fileName: 'web-notes-export.pdf',
 		converterOptions: {
@@ -116,8 +113,12 @@ Editor.defaultConfig = {
 			margin_bottom: '20mm',
 			margin_right: '12mm',
 			margin_left: '12mm',
-			page_orientation: 'portrait'
+			page_orientation: 'portrait',
+			// header_html: '<div class="styled">Header content</div>',
+			// footer_html: '<div class="styled-counter"><span class="pageNumber"></span></div>',
+			// header_and_footer_css: '#header, #footer { background: hsl(0, 0%, 95%); } .styled { font-weight: bold; text-align: center; } .styled-counter { font-size: 1em; color: hsl(0, 0%, 60%); }',
 		},
+
 
 		// NOTE: The following option is only needed if we want to have a watermark
 		// dataCallback: ( editor ) => {
@@ -126,7 +127,7 @@ Editor.defaultConfig = {
 		// 		<div class="watermark">web-notes export</div>
 		// 	`;
 		// },
-	
+
 	}
 
 };
