@@ -263,7 +263,7 @@ export class BackEndController {
   //TODO
   /**
    * Saves the String to the Database
-   * @param {{id: number | undefined, title: string, content: string, inUse: boolean}} note 
+   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: boolean}} note 
    * @param {string} userToken
    */
   async saveNote(note, userToken) {
@@ -349,7 +349,8 @@ export class BackEndController {
       modifiedAt: note.modifiedAt, 
       content: note.content, 
       inUse: note.inUse, 
-      isShared: false})
+      isShared: false,
+      sharedUserIDs: []})
       ).concat(sharedNotes.map(note => ({
         id: note.id, 
         title: note.title, 
@@ -357,7 +358,8 @@ export class BackEndController {
         modifiedAt: note.modifiedAt, 
         content: note.content, 
         inUse: note.inUse, 
-        isShared: true}
+        isShared: true,
+        sharedUserIDs: []}
       )));
 
     const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()))
@@ -365,6 +367,38 @@ export class BackEndController {
     console.log(sortedNotes);
 
     return sortedNotes;
+  }
+
+
+  async getAllUsers(userToken) {
+
+    // check if user is valid
+    const isUserValid = await this.isUserTokenValid(userToken);
+
+    if (!isUserValid) {
+      // return a empty array to indicate that the user is not valid
+      return [];
+    }
+
+    // get the current user
+    const currentUser = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
+
+    if (currentUser === undefined) {
+      return [];
+    }
+
+    // get all users
+    const allUsers = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, undefined, undefined));
+    
+    // only add users which are not the current user and remove passwords
+    let allOtherUsers = [];
+    for (let user of allUsers) {
+      if (user.id !== currentUser.id) {
+        allOtherUsers.push({id: user.id, name: user.name});
+      }
+    }
+
+    return allOtherUsers;
   }
 
   //#endregion

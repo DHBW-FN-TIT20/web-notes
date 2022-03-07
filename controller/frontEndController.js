@@ -210,26 +210,18 @@ export class FrontEndController {
    * @returns {Promise<{id: number, name: string}[]>} Array of all users
    */
   static async getAllUsers() {
-    // TODO: API route for getting all users
-    // const response = await fetch('./api/users/get_all_users', {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    // });
+    const response = await fetch('./api/users/get_all_users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userToken: FrontEndController.getUserToken()
+      })
+    });
 
-    // const data = await response.json();
-    // return data.users;
-
-    const dummyUsers = [
-      { id: 1, name: 'Peter' },
-      { id: 2, name: 'Paul' },
-      { id: 3, name: 'Mary' },
-      { id: 4, name: 'John' },
-      { id: 5, name: 'Anna' },
-    ];
-
-    return dummyUsers;
+    const data = await response.json();
+    return data.users;
   }
 
 
@@ -268,7 +260,7 @@ export class FrontEndController {
 
   /**
    * This method is used to save a note to the database. If no note.id is given, a new note is created.
-   * @param {{id?: number, title: string, content: string, inUse: boolean}} note note which should be saved
+   * @param {{id?: number, title?: string, content?: string, inUse: boolean, isShared?: boolean}} note note which should be saved
    * @returns {Promise<number>} returns the id of the saved note
    */
   static async saveNote(note) {
@@ -291,6 +283,19 @@ export class FrontEndController {
     return data.noteID;
   }
 
+  static async setNoteInUse(noteID) {
+    this.saveNote({
+      id: noteID,
+      inUse: true
+    });
+  }
+
+  static async setNoteNotInUse(noteID) {
+    this.saveNote({
+      id: noteID,
+      inUse: false
+    });
+  }
 
   /**
    * This method is used to get all notes which are related to the user.

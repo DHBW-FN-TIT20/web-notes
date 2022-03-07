@@ -30,6 +30,8 @@ class Edit extends Component {
       allUserTags: [],
       selectedUserTags: [],
       isLoading: true,
+      isReadOnly: false,
+      isSharedNote: false,
     }
   }
 
@@ -39,7 +41,14 @@ class Edit extends Component {
    */
   async componentDidMount() {
     this.updateLoginState();
+
+    // set up the storage event listener
     window.addEventListener('storage', this.storageTokenListener)
+
+    // set up beforunload listener
+    window.addEventListener('beforeunload', async (ev) => {
+      FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+    });
 
     // get initial data
     let noteID = FrontEndController.getCurrentNoteID();
@@ -52,6 +61,7 @@ class Edit extends Component {
         title: "Neue Notiz",
         id: undefined,
         inUse: true,
+        isShared: false
         // sharedUsers: [],
       }
       currentNote.id = await FrontEndController.saveNote(currentNote);
@@ -61,14 +71,14 @@ class Edit extends Component {
       currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);
       setTimeout(() => {
         this.editorInstance.focus();
-      }, 1000);
+      }, 3000); // TODO: remove this trick with a real waiting solution
     }
 
     // setup editor
-    await this.setupEditor(currentNote.content);
+    this.setupEditor(currentNote.content, currentNote.inUse);
 
-    // setup title
-    this.setState({ title: currentNote.title });
+    // change the InUse state of the note
+    FrontEndController.setNoteInUse(currentNote.id);
 
     // TODO: get currentNote.sharedUsers from the database
     const dummyNote_sharedUsers = [1, 2, 3];
@@ -76,7 +86,8 @@ class Edit extends Component {
     // setup user tag picker
     await this.setupUserTagPicker(dummyNote_sharedUsers); // TODO: change to currentNote.sharedUsers
 
-    this.setState({ isLoading: false });
+    // update the state
+    this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared });
   }
 
   /**
@@ -84,13 +95,7 @@ class Edit extends Component {
    * It is used to remove the storage event listener and to save the note (it was probably saved bevor).
    */
   async componentWillUnmount() {
-    const noteToSave = {
-      content: this.editorInstance.getData(),
-      title: this.state.title,
-      id: FrontEndController.getCurrentNoteID(),
-      inUse: false
-    }
-    await FrontEndController.saveNote(noteToSave);
+    FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
@@ -151,7 +156,7 @@ class Edit extends Component {
    * This method sets up the editor.
    * @param {string} content The HTML content of the note
    */
-  setupEditor(content) {
+  setupEditor(content, readOnly) {
     if (window !== undefined) {
       console.log("Loading Editor...");
 
@@ -162,6 +167,7 @@ class Edit extends Component {
         return (
           <div>
             <CKEditor className={styles.ckEditor}
+              disabled={readOnly}
               type=""
               name="editor1"
               editor={CustomEditor}
@@ -374,14 +380,16 @@ class Edit extends Component {
                 />
               </div>
               <this.Editor />
-              <label>Diese Notiz teilen mit...</label>
-              <TagPicker
-                onResolveSuggestions={this.filterSuggestedTags}
-                getTextFromItem={(item) => { return item.name }}
-                pickerSuggestionsProps={{ suggestionsHeaderText: 'Vorgeschlagene Personen', noResultsFoundText: 'Keine Personen gefunden', }}
-                onChange={this.handlePersonPickerChange}
-                selectedItems={this.state.selectedUserTags}
-              />
+              <div hidden={this.state.isSharedNote}>
+                <label>Diese Notiz teilen mit...</label>
+                <TagPicker
+                  onResolveSuggestions={this.filterSuggestedTags}
+                  getTextFromItem={(item) => { return item.name }}
+                  pickerSuggestionsProps={{ suggestionsHeaderText: 'Vorgeschlagene Personen', noResultsFoundText: 'Keine Personen gefunden', }}
+                  onChange={this.handlePersonPickerChange}
+                  selectedItems={this.state.selectedUserTags}
+                />
+              </div>
             </div>
           </main>
 

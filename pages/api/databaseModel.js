@@ -252,7 +252,26 @@ export class DatabaseModel {
   }
 
   /**
-   * This is a universal select function for the UserNoteRelation database
+   * This method extracts user-note relations from the databse response
+   * @param {PostgrestResponse<{noteID: number, userID: number}>} dbResponse Response of Database
+   * @returns {{noteID: number, userID: number}[]} List of user objects.
+   */
+  getSharedUserNoteRelationFromResponse(dbResponse) {
+    if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
+      return [];
+    }
+
+    const allRelations = [];
+
+    for (const relation of dbResponse.data) {
+      allRelations.push({ noteID: relation.noteID, userID: relation.userID });
+    }
+
+    return allRelations
+  }
+
+  /**
+   * This is a universal select function for the UserNoteRelation database to get the shared notes
    * @param {number} userID Filter userID
    * @returns {Promise<PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>>} DB result as list of note objects
    */
@@ -265,6 +284,24 @@ export class DatabaseModel {
       .from('UserNoteRelation')
       .select('*, Note(*)')
       .eq(userIDColumnName, userID);
+
+    return noteResponse;
+  }
+  
+  /**
+   * This is a universal select function for the UserNoteRelation database to get the note relations
+   * @param {number} noteID Filter noteID
+   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number}>>} DB result as list of note-user relations
+   */
+  async selectUserRelationTable(noteID = undefined) {
+    let noteIDColumnName = "";
+
+    if (!(noteID === undefined) && !isNaN(noteID)) noteIDColumnName = "noteID";
+
+    const noteResponse = await DatabaseModel.CLIENT
+      .from('UserNoteRelation')
+      .select()
+      .eq(noteIDColumnName, noteID);
 
     return noteResponse;
   }
