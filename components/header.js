@@ -27,7 +27,7 @@ class Header extends Component {
     let username;
 
     if (this.props.hideLogout) {
-      username = <></>
+      username = <div></div>
     } else {
       username = <Link href={'/profile'}>
         <div className={styles.nav}>
@@ -95,20 +95,21 @@ class Header extends Component {
             <div
               className={`${styles.menu}`}
               id="menu">
+              <div className={`${styles.nav} ${styles.logo}`}>
+                <div className={styles.logoDiv}>
+                  <Image 
+                    src={Logo}
+                    alt='Logo.png missing.'
+                    objectFit='contain'
+                    sizes='fitContent'
+                    layout="fill">
+                    
+                  </Image>
+                </div>
+              </div>
               <Link href={'/'}>
-                <div className={`${styles.nav} ${styles.logo}`}>
-                  <div className={styles.logoDiv}>
-                    <Image 
-                      src={Logo}
-                      alt='Logo.png missing.'
-                      objectFit='contain'
-                      sizes='fitContent'
-                      layout="fill">
-                    </Image>
-                  </div>
-                  <span>
-                    Home
-                  </span>
+                <div className={styles.nav}>
+                  Home
                 </div>
               </Link>
               <Link href={'/impressum'}>
