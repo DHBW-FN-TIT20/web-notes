@@ -21,6 +21,7 @@ class Edit extends Component {
 
   constructor(props) {
     super(props)
+    this.isNoteNew = false;
     this.state = {
       isLoggedIn: undefined,
       currentToken: "",
@@ -66,25 +67,26 @@ class Edit extends Component {
       }
       currentNote.id = await FrontEndController.saveNote(currentNote);
       FrontEndController.setCurrentNoteID(currentNote.id);
-      this.TitleField.focus();
+      this.isNoteNew = true;
     } else {
       currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);
-      setTimeout(() => {
-        this.editorInstance.focus();
-      }, 3000); // TODO: remove this trick with a real waiting solution
     }
-
+    
     // setup editor
     this.setupEditor(currentNote.content, currentNote.inUse);
-
+    
     // change the InUse state of the note
     FrontEndController.setNoteInUse(currentNote.id);
-
+    
     // setup user tag picker
-    await this.setupUserTagPicker(currentNote.sharedUserIDs); // TODO: change to currentNote.sharedUsers
-
+    await this.setupUserTagPicker(currentNote.sharedUserIDs);
+    
     // update the state
     this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared });
+    
+    if (this.isNoteNew) {
+      this.TitleField.focus();
+    }
   }
 
   /**
@@ -186,6 +188,9 @@ class Edit extends Component {
                     editor.editing.view.document.getRoot()
                   );
                 });
+                if (!this.isNoteNew) {
+                  editor.focus();
+                }
               }}
               data={content}
             />
@@ -249,7 +254,7 @@ class Edit extends Component {
           if (this.editorInstance !== null) {
             this.setState({ isSaving: true, isSaved: false });
 
-            // save the note  TODO: Add the shared user IDs
+            // save the note
             const noteToSave = {
               id: FrontEndController.getCurrentNoteID(),
               title: this.state.title,
