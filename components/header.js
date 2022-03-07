@@ -7,6 +7,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 // @ts-ignore
 import Logo from '../public/Logo.png'
+// @ts-ignore
+import LogoSchrift from '../public/Logo_Schrift_Weiss.png'
 
 /** 
  * @class Header Component Class
@@ -31,7 +33,9 @@ class Header extends Component {
     } else {
       username = <Link href={'/profile'}>
         <div className={styles.nav}>
-          {this.props.username}
+          <span>
+            {this.props.username}
+          </span>
         </div>
       </Link>
     }
@@ -92,34 +96,53 @@ class Header extends Component {
               <span></span>
               <span></span>
             </div>
+            <div className={styles.logoSchrift}>
+              <Image 
+                src={LogoSchrift}
+                alt='Logo_Schrift_Weiss.png missing.'
+                objectFit='contain'
+                sizes='fitContent'
+                layout="fill">
+              </Image>
+            </div>
             <div
-              className={`${styles.menu}`}
+              className={styles.menu}
               id="menu">
-              <div className={`${styles.nav} ${styles.logo}`}>
-                <div className={styles.logoDiv}>
+              <div className={styles.navLogo}>
+                <Image 
+                  src={Logo}
+                  alt='Logo_Schrift_Weiss.png missing.'
+                  objectFit='contain'
+                  sizes='fitContent'
+                  layout="fill">
+                </Image>
+              </div>
+              <div className={styles.navLogoSchrift}>
                   <Image 
-                    src={Logo}
-                    alt='Logo.png missing.'
+                    src={LogoSchrift}
+                    alt='Logo_Schrift_Weiss.png missing.'
                     objectFit='contain'
                     sizes='fitContent'
                     layout="fill">
-                    
                   </Image>
-                </div>
               </div>
               <Link href={'/'}>
                 <div className={styles.nav}>
-                  Home
+                  <span>
+                    Home
+                  </span>
                 </div>
               </Link>
               <Link href={'/impressum'}>
                 <div className={styles.nav}>
-                  Impressum
+                  <span>
+                    Impressum
+                  </span>
                 </div>
               </Link>
               {username}
               <div>
-                EMPTY
+                {/* Spacing for View */}
               </div>
               <div className={`${styles.nav} ${styles.button}`}>
                 {loginButton}

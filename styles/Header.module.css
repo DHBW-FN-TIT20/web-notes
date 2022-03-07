@@ -1,7 +1,7 @@
 .navBar {
   background-color: #151515;
   display: grid;
-  grid-template-columns: 40pt auto;
+  grid-template-columns: 40pt auto 40pt;
   column-gap: 5vw;
   height: 40pt;
 }
@@ -31,6 +31,12 @@
               opacity 0.55s ease;
 }
 
+.logoSchrift {
+  position: relative;
+  height: 30pt;
+  align-self: center;
+}
+
 .menu
 {
   position: absolute;
@@ -39,7 +45,7 @@
   box-shadow: 0 0 10px #4e5052;
   margin: 0 0 0 0;
   padding: 0px;
-  padding-top: 75px;
+  padding-top: 65px;
   padding-bottom: 50px;
   background-color: #151515;
   -webkit-font-smoothing: antialiased;
@@ -49,7 +55,7 @@
   z-index: 3;
 
   display: grid;
-  grid-template-rows: 50pt 40pt 40pt 40pt auto 40pt;
+  grid-template-rows: 70pt 40pt 40pt 40pt auto 40pt;
 }
 
 .nav {
@@ -64,17 +70,27 @@
   cursor: pointer;
   background-color: #333333;
   color: #00D0FF;
-  padding-left: 55px;
-  transition: 0.3s;
 }
 
-.nav:not(:hover) {
-  transition: 0.3s;
+.nav:hover span {
+  transform: translateX(5px);
+  transition: 0.5s;
 }
 
-.logoDiv {
+.nav:not(:hover) span {
+  transition: 0.5s;
+}
+
+.navLogo {
   position: relative;
-  height: 40pt;
+  height: 30pt;
+  align-self: center;
+  display: none;
+}
+
+.navLogoSchrift {
+  position: relative;
+  height: 50pt;
   width: 100%;
 }
 
@@ -82,6 +98,7 @@
   cursor: default;
   background-color: #151515;
   color: white;
+  padding-left: 50px;
   transition: 0;
 }
 
@@ -99,7 +116,16 @@
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
+  .navBar {
+    grid-template-columns: 100vw;
+    column-gap: 0;
+  }
+
   .menuIcon {
+    display: none;
+  }
+
+  .logoSchrift {
     display: none;
   }
 
@@ -111,17 +137,35 @@
     transition: none;
 
     grid-template-rows: none;
-    grid-template-columns: min-content min-content min-content auto min-content;
+    grid-template-columns: min-content min-content min-content min-content auto min-content;
     row-gap: 0;
     column-gap: 0;
+  }
+
+  .navLogo{
+    /* display: initial; */
+  }
+
+  .navLogoSchrift {
+    height: 30pt;
+    width: 90pt;
+    margin: 0 20px;
+    align-self: center;
+    justify-self: center;
+    /* display: none; */
   }
 
   .nav {
     padding: 0 20px;
   }
 
-  .nav:hover {
-    padding: 2px 20px 0 20px;
+  .nav:hover span {
+    transform: translateX(0);
+    transform: translateY(2px);
+  }
+
+  .button:hover {
+    padding: 0 20px;
   }
 }
 
