@@ -342,31 +342,54 @@ export class BackEndController {
 
     const sharedNotes = this.databaseModel.getSharedNoteFromResponse(await this.databaseModel.selectUserNoteRelationTable(user.id));
 
-    const allNotes = ownNotes.map(note => ({
-      id: note.id, 
-      title: note.title, 
-      ownerID: note.ownerID, 
-      modifiedAt: note.modifiedAt, 
-      content: note.content, 
-      inUse: note.inUse, 
-      isShared: false,
-      sharedUserIDs: []})
-      ).concat(sharedNotes.map(note => ({
+    /**
+     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}[]}
+     */
+    const ownNotesWithSharedAttribute = [];
+
+    for (const note of ownNotes) {
+      ownNotesWithSharedAttribute.push({
         id: note.id, 
         title: note.title, 
         ownerID: note.ownerID, 
         modifiedAt: note.modifiedAt, 
         content: note.content, 
         inUse: note.inUse, 
-        isShared: true,
-        sharedUserIDs: []}
-      )));
+        isShared: false,
+        sharedUserIDs: await this.getSharedUserIDFromNoteID(note.id)
+      })
+    }
+
+    const sharedNotesWithSharedAttribute = sharedNotes.map(note => ({
+      id: note.id, 
+      title: note.title, 
+      ownerID: note.ownerID, 
+      modifiedAt: note.modifiedAt, 
+      content: note.content, 
+      inUse: note.inUse, 
+      isShared: true,
+      /**
+       * @type {number[]}
+       */
+      sharedUserIDs: []
+    }));
+      
+    const allNotes = ownNotesWithSharedAttribute.concat(sharedNotesWithSharedAttribute);
 
     const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()))
     
     console.log(sortedNotes);
 
     return sortedNotes;
+  }
+
+  async getSharedUserIDFromNoteID(noteID) {
+    const relations = this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.selectUserRelationTable(noteID));
+    const userIDs = [];
+    for (const element of relations) {
+      userIDs.push(element.userID)
+    }
+    return userIDs;
   }
 
 
