@@ -357,7 +357,7 @@ export class BackEndController {
         inUse: note.inUse, 
         isShared: false,
         sharedUserIDs: await this.getSharedUserIDFromNoteID(note.id)
-      })
+      });
     }
 
     const sharedNotesWithSharedAttribute = sharedNotes.map(note => ({
@@ -376,22 +376,30 @@ export class BackEndController {
       
     const allNotes = ownNotesWithSharedAttribute.concat(sharedNotesWithSharedAttribute);
 
-    const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()))
+    const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()));
     
     console.log(sortedNotes);
 
     return sortedNotes;
   }
 
+  /**
+   * This method returns the userIDs that the note is shared with
+   * @param {number} noteID 
+   * @returns {Promise<number[]>} Array of userIDs
+   */
   async getSharedUserIDFromNoteID(noteID) {
     const relations = this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.selectUserRelationTable(noteID));
+    
+    /**
+     * @type {number[]}
+     */
     const userIDs = [];
     for (const element of relations) {
-      userIDs.push(element.userID)
+      userIDs.push(element.userID);
     }
     return userIDs;
   }
-
 
   async getAllUsers(userToken) {
 
