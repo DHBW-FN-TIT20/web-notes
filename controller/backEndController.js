@@ -32,7 +32,6 @@ export class BackEndController {
       jwt.verify(token, BackEndController.KEY);
       return true;
     } catch (error) {
-      // console.log(error);
       return false;
     }
   }
@@ -263,7 +262,7 @@ export class BackEndController {
   //TODO
   /**
    * Saves the String to the Database
-   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: boolean}} note 
+   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: boolean, sharedUserIDs: number[] | undefined}} note 
    * @param {string} userToken
    */
   async saveNote(note, userToken) {
@@ -306,25 +305,29 @@ export class BackEndController {
       noteToSave.inUse = note.inUse;
       const savedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.updateNote(note.id, noteToSave))[0];
 
+      console.log("note.sharedUserIDs: ", note.sharedUserIDs);
+
+      // TODO: @schuler-henry evaluate success of update
+      if (note.sharedUserIDs !== undefined) {
+        console.log(this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.deleteUserNoteRelation(undefined, note.id)));
+        if (note.sharedUserIDs.length > 0) {
+          console.log(this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.addUserNoteRelation(note.sharedUserIDs, note.id)));
+        }
+      }
+
       if (savedNote === undefined) {
         return undefined;
       }
 
       return savedNote.id;
     }
-
-
-
-
   }
 
-  //TODO
   /**
    * Gets get all notes which are related to the user from the database
    * @param {string} userToken
    */
   async getNotes(userToken) {
-    console.log("Hey")
     const isUserValid = await this.isUserTokenValid(userToken);
 
     if (!isUserValid) {
@@ -378,8 +381,6 @@ export class BackEndController {
 
     const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()));
     
-    console.log(sortedNotes);
-
     return sortedNotes;
   }
 

@@ -61,8 +61,8 @@ class Edit extends Component {
         title: "Neue Notiz",
         id: undefined,
         inUse: true,
-        isShared: false
-        // sharedUsers: [],
+        isShared: false,
+        sharedUserIDs: [],
       }
       currentNote.id = await FrontEndController.saveNote(currentNote);
       FrontEndController.setCurrentNoteID(currentNote.id);
@@ -80,11 +80,8 @@ class Edit extends Component {
     // change the InUse state of the note
     FrontEndController.setNoteInUse(currentNote.id);
 
-    // TODO: get currentNote.sharedUsers from the database
-    const dummyNote_sharedUsers = [1, 2, 3];
-
     // setup user tag picker
-    await this.setupUserTagPicker(dummyNote_sharedUsers); // TODO: change to currentNote.sharedUsers
+    await this.setupUserTagPicker(currentNote.sharedUserIDs); // TODO: change to currentNote.sharedUsers
 
     // update the state
     this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared });
@@ -258,6 +255,7 @@ class Edit extends Component {
               title: this.state.title,
               content: this.editorInstance.getData(),
               inUse: true,
+              sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
             }
             let isSaved = await FrontEndController.saveNote(noteToSave)
 

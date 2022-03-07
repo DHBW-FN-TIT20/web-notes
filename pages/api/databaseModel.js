@@ -132,7 +132,7 @@ export class DatabaseModel {
    * @param {PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>} dbResponse Response of Database
    * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}[]} List of user objects.
    */
-   getNoteFromResponse(dbResponse) {
+  getNoteFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
       console.log("getNoteFromResponse: ", dbResponse.error);
       return [];
@@ -307,17 +307,23 @@ export class DatabaseModel {
   }
 
   /**
-   * This method adds a user-note relation (share note)
-   * @param {number} userID
+   * This method adds user-note relation (share note)
+   * @param {number | number[]} userID
    * @param {number} noteID
-   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>>} DB result as list of note objects
+   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number}>>} DB result as list of note-user relations
    */
   async addUserNoteRelation(userID, noteID) {
+    let relationsToInsert = [];
+
+    let userIDs = Array.isArray(userID) ? userID : [userID];
+
+    for (const userID of userIDs) {
+      relationsToInsert.push({ noteID: noteID, userID: userID });
+    }
+
     const addedUserNoteRelation = await DatabaseModel.CLIENT
       .from('UserNoteRelation')
-      .insert([
-        { userID: userID, noteID: noteID },
-      ]);
+      .insert(relationsToInsert);
 
     return addedUserNoteRelation;
   }
@@ -326,13 +332,21 @@ export class DatabaseModel {
    * This method adds a user-note relation (share note)
    * @param {number} userID
    * @param {number} noteID
-   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>>} DB result as list of note objects
+   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number}>>} DB result as list of note-user relations
    */
   async deleteUserNoteRelation(userID, noteID) {
+
+    let userIDColumnName = "";
+    if (!(userID === undefined) && !isNaN(userID)) userIDColumnName = "userID";
+
+    let noteIDColumnName = "";
+    if (!(noteID === undefined) && !isNaN(noteID)) noteIDColumnName = "noteID";
+
     const deletedUserNoteRelation = await DatabaseModel.CLIENT
-      .from('UserNoteRelaiton')
+      .from('UserNoteRelation')
       .delete()
-      .match({ userID: userID, noteID: noteID});
+      .eq(userIDColumnName, userID)
+      .eq(noteIDColumnName, noteID);
 
     return deletedUserNoteRelation;
   }

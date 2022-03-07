@@ -260,7 +260,7 @@ export class FrontEndController {
 
   /**
    * This method is used to save a note to the database. If no note.id is given, a new note is created.
-   * @param {{id?: number, title?: string, content?: string, inUse: boolean, isShared?: boolean}} note note which should be saved
+   * @param {{id?: number, title?: string, content?: string, inUse: boolean, isShared?: boolean, sharedUserIDs?: number[]}} note note which should be saved
    * @returns {Promise<number>} returns the id of the saved note
    */
   static async saveNote(note) {
@@ -299,7 +299,7 @@ export class FrontEndController {
 
   /**
    * This method is used to get all notes which are related to the user.
-   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean}[]>} Array of all notes of the current user
+   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}[]>} Array of all notes of the current user
    */
   static async getNotes() {
 
