@@ -31,7 +31,7 @@ class Header extends Component {
     if (this.props.hideLogout) {
       username = <div></div>
     } else {
-      username = <Link href={'/profile'}>
+      username = <Link href={'/profile'} passHref>
         <div className={styles.nav}>
           <span>
             {this.props.username}
@@ -45,7 +45,7 @@ class Header extends Component {
     if (this.props.hideLogin) {
       loginButton = <></>
     } else {
-      loginButton = <Link href={'/login'}>
+      loginButton = <Link href={'/login'} passHref>
         <button>
           Login
         </button>
@@ -126,14 +126,14 @@ class Header extends Component {
                     layout="fill">
                   </Image>
               </div>
-              <Link href={'/'}>
+              <Link href={'/'} passHref>
                 <div className={styles.nav}>
                   <span>
                     Home
                   </span>
                 </div>
               </Link>
-              <Link href={'/impressum'}>
+              <Link href={'/impressum'} passHref>
                 <div className={styles.nav}>
                   <span>
                     Impressum
