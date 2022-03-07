@@ -28,7 +28,8 @@ class Home extends Component {
       { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true },
       { key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true },
       {
-        key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => {
+        key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true,
+        onRender: (item) => {
           if (item.isShared === true) {
             return (`Geteilte Notiz`)
           } else if (item.isShared === false) {
@@ -39,7 +40,8 @@ class Home extends Component {
         }
       },
       {
-        key: "content", name: "Vorschau", fieldName: "content", minWidth: 300, maxWidth: 200, isResizable: true, onRender: (item) => {
+        key: "content", name: "Vorschau", fieldName: "content", minWidth: 300, maxWidth: 200, isResizable: true,
+        onRender: (item) => {
           const maxElements = 5;
           let previewContent = splitHTMLintoElements(item.content, maxElements).join("");
           return (
@@ -108,6 +110,7 @@ class Home extends Component {
     if (await FrontEndController.verifyUserByToken(currentToken)) {
       this.setState({ isLoggedIn: true, currentToken: currentToken });
     } else {
+      this.props.router.push('/getting-started');
       this.setState({ isLoggedIn: false })
     }
   }
@@ -176,7 +179,7 @@ class Home extends Component {
       return (
         <div>
           <Head>
-            <title>Welcome</title>
+            <title>WEB-NOTES</title>
             <meta name="description" content="Welcome page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>
@@ -190,7 +193,7 @@ class Home extends Component {
       return (
         <div>
           <Head>
-            <title>Welcome</title>
+            <title>WEB-NOTES</title>
             <meta name="description" content="Welcome page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>

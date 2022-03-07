@@ -80,6 +80,13 @@ class Header extends Component {
                 >
                   Impressum
                 </td>
+                <td
+                  hidden={this.props.hideGettingStarted}
+                  className={styles.td_left && styles.nav}
+                  onClick={() => router.push("/getting-started")}
+                >
+                  Getting Started
+                </td>
                 <td className={styles.td_space}></td>
                 { username }
                 { loginButton }
