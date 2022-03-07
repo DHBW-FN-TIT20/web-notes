@@ -213,7 +213,6 @@ class Home extends Component {
                 selectionMode={SelectionMode.none}
                 enableShimmer={this.state.isLoading}
                 shimmerLines={7}
-                onRenderRow={(props, defaultRender) => <div onMouseEnter={() => console.log('hovering over: ' + props.item.title)}>{defaultRender(props)}</div>}
               />
             </div>
           </main>
