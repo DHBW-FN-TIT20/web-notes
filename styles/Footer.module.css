@@ -1,27 +1,49 @@
 .footer {
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  column-gap: 9rem;
-  display: grid;
-  padding: 20pt 10% 40pt 10%;
-  background-color: #2A2A2A;
-  border-top: solid;
-  border-color: #00D0FF;
+  background-color: #151515;
 }
 
-.footer h4 {
-  font-size: 20pt;
-  margin: 0 0 20pt 0;
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
 }
 
-.socialMedia {
-  grid-template-columns: 1fr 1fr 1fr;
-  column-gap: auto;
-  display: grid;
-  margin: 0 auto;
-  justify-items: start;
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
 }
 
-.socialMedia a:hover {
-  opacity: 80%;
-  transition: 0.3s;
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .footer {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 9rem;
+    display: grid;
+    padding: 20pt 10% 40pt 10%;
+    background-color: #151515;
+    border-top: solid;
+    border-color: #00D0FF;
+  }
+  
+  .footer h4 {
+    font-size: 20pt;
+    margin: 0 0 20pt 0;
+  }
+  
+  .socialMedia {
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: auto;
+    display: grid;
+    margin: 0 auto;
+    justify-items: start;
+  }
+  
+  .socialMedia a:hover {
+    opacity: 80%;
+    transition: 0.3s;
+  }
 }
