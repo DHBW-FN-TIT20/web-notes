@@ -107,44 +107,46 @@ class Login extends Component {
             <Header username={""} hideLogin={true} hideLogout={true} />
           </header>
 
-          <main className={styles.field}>
-            <div className={styles.fieldDiv}>
-              <h1>Login</h1>
-              <input
-                type="text"
-                placeholder="Username..."
-                id='userInput'
-                className='formularInput'
-                autoFocus
-                onChange={(e) => this.setState({ username: e.target.value })}
-                value={this.state.username}
-                onKeyDown={loginEnter} />
-              <input
-                type="password"
-                placeholder="Password..."
-                className='formularInput'
-                onChange={(e) => this.setState({ password: e.target.value })}
-                value={this.state.password}
-                onKeyDown={loginEnter} />
-              <div hidden={!this.state.credentialsInfo} className={styles.error} >
-                Credentials incorrect!
+          <div className="scrollBody">
+            <main className={styles.field}>
+              <div className={styles.fieldDiv}>
+                <h1>Login</h1>
+                <input
+                  type="text"
+                  placeholder="Username..."
+                  id='userInput'
+                  className='formularInput'
+                  autoFocus
+                  onChange={(e) => this.setState({ username: e.target.value })}
+                  value={this.state.username}
+                  onKeyDown={loginEnter} />
+                <input
+                  type="password"
+                  placeholder="Password..."
+                  className='formularInput'
+                  onChange={(e) => this.setState({ password: e.target.value })}
+                  value={this.state.password}
+                  onKeyDown={loginEnter} />
+                <div hidden={!this.state.credentialsInfo} className={styles.error} >
+                  Credentials incorrect!
+                </div>
+                <button onClick={loginVerification}>
+                  Login
+                </button>
+                <p>
+                  Or&nbsp;
+                  <a onClick={() => router.push("/register")}>
+                    register
+                  </a>
+                  &nbsp;instead.
+                </p>
               </div>
-              <button onClick={loginVerification}>
-                Login
-              </button>
-              <p>
-                Or&nbsp;
-                <a onClick={() => router.push("/register")}>
-                  register
-                </a>
-                &nbsp;instead.
-              </p>
-            </div>
-          </main>
+            </main>
 
-          <footer>
-            <Footer />
-          </footer>
+            <footer>
+              <Footer />
+            </footer>
+          </div>
         </div>
       )
     } else {

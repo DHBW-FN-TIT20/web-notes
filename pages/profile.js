@@ -153,10 +153,11 @@ class Profile extends Component {
             <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
           </header>
 
-          <main>
-            <div className={styles.content}>
-              <h1>Username: {FrontEndController.getUsernameFromToken(FrontEndController.getUserToken())}</h1>
-              {/* <h2>Information</h2>
+          <div className="scrollBody">
+            <main>
+              <div className={styles.content}>
+                <h1>Username: {FrontEndController.getUsernameFromToken(FrontEndController.getUserToken())}</h1>
+                {/* <h2>Information</h2>
                 <table>
                   <thead>
                     <tr>
@@ -166,51 +167,52 @@ class Profile extends Component {
                   </thead>
                 </table> */}
 
-              <div>
-                <h2>Passwort ändern</h2>
-                <div className={styles.fieldDiv}>
-                  <label className={styles.fieldLabel}>Altes Passwort:</label>
-                  <input className={styles.fieldInput} type="password" name="oldPassword" onChange={this.changedInput} value={this.state.oldPassword} />
-                  <label className={styles.fieldLabel}>Neues Passwort:</label>
-                  <input className={styles.fieldInput} type="password" name="newPassword" onChange={this.changedInput} value={this.state.newPassword} />
-                  <label className={styles.fieldLabel}>Neues Passwort wiederholen:</label>
-                  <input className={styles.fieldInput} type="password" name="newPasswordConfirm" onChange={this.changedInput} value={this.state.newPasswordConfirm} />
-                  <div hidden={this.state.passwordReqMessage === ""} className={styles.inputRequirements}>
-                    {this.state.passwordReqMessage}
-                  </div>
-                  <button disabled={!this.state.isInputValidForChangePassword} onClick={this.changePassword}>Passwort ändern</button>
+                <div>
+                  <h2>Passwort ändern</h2>
+                  <div className={styles.fieldDiv}>
+                    <label className={styles.fieldLabel}>Altes Passwort:</label>
+                    <input className={styles.fieldInput} type="password" name="oldPassword" onChange={this.changedInput} value={this.state.oldPassword} />
+                    <label className={styles.fieldLabel}>Neues Passwort:</label>
+                    <input className={styles.fieldInput} type="password" name="newPassword" onChange={this.changedInput} value={this.state.newPassword} />
+                    <label className={styles.fieldLabel}>Neues Passwort wiederholen:</label>
+                    <input className={styles.fieldInput} type="password" name="newPasswordConfirm" onChange={this.changedInput} value={this.state.newPasswordConfirm} />
+                    <div hidden={this.state.passwordReqMessage === ""} className={styles.inputRequirements}>
+                      {this.state.passwordReqMessage}
+                    </div>
+                    <button disabled={!this.state.isInputValidForChangePassword} onClick={this.changePassword}>Passwort ändern</button>
 
-                  <p className={styles.showReq}>
-                    <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
-                      show requirements
-                    </a>
-                  </p>
+                    <p className={styles.showReq}>
+                      <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
+                        show requirements
+                      </a>
+                    </p>
 
-                  <div hidden={!this.state.showRequirements} className={styles.requirementsDiv}>
-                    <h2>Username</h2>
-                    <ul>
-                      <li>4-16 characters</li>
-                      <li>only letters and numbers</li>
-                      <li>keyword &ldquo;admin&ldquo; is not allowed</li>
-                    </ul>
-                    <h2>Password</h2>
-                    <ul>
-                      <li>min. 8 characters</li>
-                      <li>min. 1 number, 1 lowercase, 1 uppercase</li>
-                      <li>min. 1 of: ! * # , ; ? + - _ . = ~ ^ % ( ) &#123; &#125; | : &ldquo; /</li>
-                    </ul>
+                    <div hidden={!this.state.showRequirements} className={styles.requirementsDiv}>
+                      <h2>Username</h2>
+                      <ul>
+                        <li>4-16 characters</li>
+                        <li>only letters and numbers</li>
+                        <li>keyword &ldquo;admin&ldquo; is not allowed</li>
+                      </ul>
+                      <h2>Password</h2>
+                      <ul>
+                        <li>min. 8 characters</li>
+                        <li>min. 1 number, 1 lowercase, 1 uppercase</li>
+                        <li>min. 1 of: ! * # , ; ? + - _ . = ~ ^ % ( ) &#123; &#125; | : &ldquo; /</li>
+                      </ul>
+                    </div>
+                    <p hidden={this.state.updatedPasswordMessage === ""}>{this.state.updatedPasswordMessage}</p>
                   </div>
-                  <p hidden={this.state.updatedPasswordMessage === ""}>{this.state.updatedPasswordMessage}</p>
+
                 </div>
 
               </div>
+            </main >
 
-            </div>
-          </main >
-
-          <footer>
-            <Footer />
-          </footer>
+            <footer>
+              <Footer />
+            </footer>
+          </div>
         </div >
       )
     }

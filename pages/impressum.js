@@ -7,7 +7,7 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 
 /**
- * @class Home Component Class
+ * @class Impressum Component Class
  * @component
  */
 class Impressum extends Component {
@@ -89,26 +89,28 @@ class Impressum extends Component {
             <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
           </header>
 
-          <main>
-            <div className={styles.content}>
-              <h1>Impressum</h1>
-              <h2>Verantwortlich</h2>
-              <p>Dummy</p>
-              <h2>Kontakt</h2>
-              <p>
-                Dummy <br />
-                Fallenbrunnen 2 <br />
-                Friedrichshafen <br />
-                <br />
-                Telefon: &#43;49 1234 56789 <br />
-                E-Mail: test&#64;outlook.de <br />
-              </p>
-            </div>
-          </main>
+          <div className="scrollBody">
+            <main>
+              <div className={styles.content}>
+                <h1>Impressum</h1>
+                <h2>Verantwortlich</h2>
+                <p>Dummy</p>
+                <h2>Kontakt</h2>
+                <p>
+                  Dummy <br />
+                  Fallenbrunnen 2 <br />
+                  Friedrichshafen <br />
+                  <br />
+                  Telefon: &#43;49 1234 56789 <br />
+                  E-Mail: test&#64;outlook.de <br />
+                </p>
+              </div>
+            </main>
 
-          <footer>
-            <Footer />
-          </footer>
+            <footer>
+              <Footer />
+            </footer>
+          </div>
         </div>
       )
     }

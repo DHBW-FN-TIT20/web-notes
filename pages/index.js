@@ -3,18 +3,17 @@ import Head from 'next/head'
 import { Component } from 'react'
 import withRouter from 'next/dist/client/with-router'
 import { FrontEndController } from '../controller/frontEndController'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Notizen.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
-import SavingIndicator from '../components/SavingIndicator'
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX, ShimmeredDetailsList } from '@fluentui/react';
 import splitHTMLintoElements from '../shared/split_HTML_into_elements'
 
 /**
- * @class Home Component Class
+ * @class Notizen Component Class
  * @component
  */
-class Home extends Component {
+class Notizen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -202,28 +201,30 @@ class Home extends Component {
             <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
           </header>
 
-          <main>
-            <div className={styles.contentOne}>
-              <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."} disabled={this.state.isLoading} />
-              <ShimmeredDetailsList className={styles.detailsList}
-                items={filteredNoteList}
-                columns={this.noteListColumns}
-                setKey="set"
-                onActiveItemChanged={this.onActiveItemChanged}
-                selectionMode={SelectionMode.none}
-                enableShimmer={this.state.isLoading}
-                shimmerLines={7}
-              />
-            </div>
-          </main>
+          <div className="scrollBody">
+            <main>
+              <div className={styles.contentOne}>
+                <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."} disabled={this.state.isLoading} />
+                <ShimmeredDetailsList className={styles.detailsList}
+                  items={filteredNoteList}
+                  columns={this.noteListColumns}
+                  setKey="set"
+                  onActiveItemChanged={this.onActiveItemChanged}
+                  selectionMode={SelectionMode.none}
+                  enableShimmer={this.state.isLoading}
+                  shimmerLines={7}
+                />
+              </div>
+            </main>
 
-          <footer>
-            <Footer />
-          </footer>
+            <footer>
+              <Footer />
+            </footer>
+          </div>
         </div>
       )
     }
   }
 }
 
-export default withRouter(Home)
+export default withRouter(Notizen)

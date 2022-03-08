@@ -1,0 +1,22 @@
+.content {
+  padding: 10pt;
+  color: black;
+  border-bottom: 2px solid;
+}
+
+.content h1 {
+  margin: 0;
+}
+
+.content h2 {
+  margin: 0;
+}
+
+.contentSection {
+  padding: 10pt 0;
+  border-bottom: 1px solid;
+}
+
+.contentSection:last-of-type {
+  border-bottom: none;
+}
