@@ -3,6 +3,11 @@ import { BackEndController } from "../../../controller/backEndController";
 
 const BACK_END_CONTROLLER = new BackEndController();
 
+/**
+ * Api Route to change the password of the user
+ * @param req the request object
+ * @param res the response object
+ */
 export default async function changePasswordHandler(req, res) {
   const userToken = req.body.userToken;
   const oldPassword = req.body.oldPassword;

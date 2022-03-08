@@ -3,6 +3,11 @@ import { BackEndController } from "../../../controller/backEndController";
 
 const BACK_END_CONTROLLER = new BackEndController();
 
+/**
+ * Api Route to check if a username is valid
+ * @param req the request object
+ * @param res the response object
+ */
 export default async function isUsernameValidHandler(req, res) {
   const username = req.body.username;
 

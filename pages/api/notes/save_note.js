@@ -14,8 +14,6 @@ async function saveNoteHandler(req, res) {
 
   const noteID = await BACK_END_CONTROLLER.saveNote(note, userToken);
 
-  console.log("noteID: ", noteID);
-
   res.status(200).json({ noteID: noteID });
 };
 export default saveNoteHandler;
