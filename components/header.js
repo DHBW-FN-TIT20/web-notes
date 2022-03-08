@@ -82,12 +82,14 @@ class Header extends Component {
               onClick={() => {
                 if (this.isVisible) {
                   console.log("Hide")
-                  document.getElementById("menu").style.transform = "translate(-100%, 0)";
+                  document.getElementById("menu").classList.remove(`${styles.showHeader}`)
+                  //document.getElementById("menu").style.transform = "translate(-100%, 0)";
                   console.log(document.documentElement.scrollHeight)
                   this.isVisible = false;
                 } else {
                   console.log("Show")
-                  document.getElementById("menu").style.transform = "none";
+                  document.getElementById("menu").classList.add(`${styles.showHeader}`)
+                  //document.getElementById("menu").style.transform = "none";
                   this.isVisible = true;
                 }
                 console.log()
@@ -133,6 +135,13 @@ class Header extends Component {
                   </span>
                 </div>
               </Link>
+              <Link href={'/getting-started'} passHref>
+                <div className={styles.nav}>
+                  <span>
+                    Getting Started
+                  </span>
+                </div>
+              </Link>
               <Link href={'/impressum'} passHref>
                 <div className={styles.nav}>
                   <span>
@@ -140,8 +149,11 @@ class Header extends Component {
                   </span>
                 </div>
               </Link>
+              <div className={styles.pcSpacing}>
+                {/* Spacing for View */}
+              </div>
               {username}
-              <div>
+              <div className={styles.mobileSpacing}>
                 {/* Spacing for View */}
               </div>
               <div className={`${styles.nav} ${styles.button}`}>
