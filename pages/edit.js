@@ -48,7 +48,9 @@ class Edit extends Component {
 
     // set up beforunload listener
     window.addEventListener('beforeunload', async (ev) => {
-      FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+      if (!this.state.isReadOnly) {
+        FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+      }
     });
 
     // get initial data
@@ -61,7 +63,7 @@ class Edit extends Component {
         content: "",
         title: "Neue Notiz",
         id: undefined,
-        inUse: true,
+        inUse: false,
         isShared: false,
         sharedUserIDs: [],
       }
@@ -82,7 +84,7 @@ class Edit extends Component {
     await this.setupUserTagPicker(currentNote.sharedUserIDs);
     
     // update the state
-    this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared });
+    this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared, isReadOnly: currentNote.inUse });
     
     if (this.isNoteNew) {
       this.TitleField.focus();
@@ -94,7 +96,9 @@ class Edit extends Component {
    * It is used to remove the storage event listener and to save the note (it was probably saved bevor).
    */
   async componentWillUnmount() {
-    FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+    if (!this.state.isReadOnly) {
+      FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+    }
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
@@ -345,6 +349,17 @@ class Edit extends Component {
       )
 
     } else {
+
+      let infoString = "";
+
+      if (this.state.isReadOnly && this.state.isSharedNote) {
+        infoString = "(Geteilte Notiz: Geschützt, da gerade ein anderer Nutzer diese Notiz bearbeitet)";
+      } else if (this.state.isReadOnly && !this.state.isSharedNote) {
+        infoString = "(Geschützt, da gerade ein anderer Nutzer diese Notiz bearbeitet)";
+      } else if (!this.state.isReadOnly && this.state.isSharedNote) {
+        infoString = "(Geteilte Notiz)";
+      }
+
       return (
         <div>
           <Head>
@@ -362,7 +377,7 @@ class Edit extends Component {
               <div className={styles.nameAndSaveIndicator}>
                 <TextField
                   className={styles.titleInput}
-                  label="Title"
+                  label={"Title " + infoString}
                   onChange={(e, newValue) => {
                     this.setState({ title: newValue })
                     this.autoSave.handleChange()
@@ -391,6 +406,7 @@ class Edit extends Component {
                   pickerSuggestionsProps={{ suggestionsHeaderText: 'Vorgeschlagene Personen', noResultsFoundText: 'Keine Personen gefunden', }}
                   onChange={this.handlePersonPickerChange}
                   selectedItems={this.state.selectedUserTags}
+                  disabled={this.state.isReadOnly}
                 />
               </div>
             </div>
