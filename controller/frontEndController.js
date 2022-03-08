@@ -142,10 +142,11 @@ export class FrontEndController {
 
     if (data.userToken === "") {
       localStorage.removeItem(this.userTokenName);
+      console.log("Login failed");
       return false;
     }
-
     localStorage.setItem(this.userTokenName, data.userToken);
+    console.log("Login successfull");
     return true;
   }
 
@@ -173,6 +174,34 @@ export class FrontEndController {
     }
 
     return data.wasSuccessfull;
+  }
+
+  /**
+   * This method changes the password of the current user
+   * @param {string} oldPassword 
+   * @param {string} newPassword 
+   * @returns {Promise<boolean>} True if password was changed, false if not
+   */
+  static async changePassword(oldPassword, newPassword) {
+    const response = await fetch('./api/users/change_password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userToken: this.getUserToken(),
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.wasSuccessfull) {
+      return await this.loginUser(this.getUsernameFromToken(this.getUserToken()), newPassword);
+    }
+
+    return false;
   }
 
   /**

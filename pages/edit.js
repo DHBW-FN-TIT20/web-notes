@@ -73,19 +73,19 @@ class Edit extends Component {
     } else {
       currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);
     }
-    
+
     // setup editor
     this.setupEditor(currentNote.content, currentNote.inUse);
-    
+
     // change the InUse state of the note
     FrontEndController.setNoteInUse(currentNote.id);
-    
+
     // setup user tag picker
     await this.setupUserTagPicker(currentNote.sharedUserIDs);
-    
+
     // update the state
     this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared, isReadOnly: currentNote.inUse });
-    
+
     if (this.isNoteNew) {
       this.TitleField.focus();
     }

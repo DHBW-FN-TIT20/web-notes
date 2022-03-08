@@ -259,7 +259,6 @@ export class BackEndController {
 
   //#region Note Methods
 
-  //TODO
   /**
    * Saves the String to the Database
    * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: boolean, sharedUserIDs: number[] | undefined}} note 
@@ -272,14 +271,14 @@ export class BackEndController {
     if (!isUserValid) {
       console.log("user invalid");
       // return a undefined object as noteID to indicate that the note was not saved
-      return undefined; 
+      return undefined;
     }
 
     if (note.id === undefined) {
       // create new note
       console.log("create new note");
       const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
-      
+
       if (user === undefined) {
         return undefined;
       }
@@ -287,7 +286,7 @@ export class BackEndController {
       const addedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.addNote(user.id, note.inUse))[0];
       console.log("addedNote: ", addedNote);
 
-      if(addedNote === undefined) {
+      if (addedNote === undefined) {
         return undefined;
       }
 
@@ -352,35 +351,35 @@ export class BackEndController {
 
     for (const note of ownNotes) {
       ownNotesWithSharedAttribute.push({
-        id: note.id, 
-        title: note.title, 
-        ownerID: note.ownerID, 
-        modifiedAt: note.modifiedAt, 
-        content: note.content, 
-        inUse: note.inUse, 
+        id: note.id,
+        title: note.title,
+        ownerID: note.ownerID,
+        modifiedAt: note.modifiedAt,
+        content: note.content,
+        inUse: note.inUse,
         isShared: false,
         sharedUserIDs: await this.getSharedUserIDFromNoteID(note.id)
       });
     }
 
     const sharedNotesWithSharedAttribute = sharedNotes.map(note => ({
-      id: note.id, 
-      title: note.title, 
-      ownerID: note.ownerID, 
-      modifiedAt: note.modifiedAt, 
-      content: note.content, 
-      inUse: note.inUse, 
+      id: note.id,
+      title: note.title,
+      ownerID: note.ownerID,
+      modifiedAt: note.modifiedAt,
+      content: note.content,
+      inUse: note.inUse,
       isShared: true,
       /**
        * @type {number[]}
        */
       sharedUserIDs: []
     }));
-      
+
     const allNotes = ownNotesWithSharedAttribute.concat(sharedNotesWithSharedAttribute);
 
     const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()));
-    
+
     return sortedNotes;
   }
 
@@ -391,7 +390,7 @@ export class BackEndController {
    */
   async getSharedUserIDFromNoteID(noteID) {
     const relations = this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.selectUserRelationTable(noteID));
-    
+
     /**
      * @type {number[]}
      */
@@ -421,12 +420,12 @@ export class BackEndController {
 
     // get all users
     const allUsers = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, undefined, undefined));
-    
+
     // only add users which are not the current user and remove passwords
     let allOtherUsers = [];
     for (let user of allUsers) {
       if (user.id !== currentUser.id) {
-        allOtherUsers.push({id: user.id, name: user.name});
+        allOtherUsers.push({ id: user.id, name: user.name });
       }
     }
 

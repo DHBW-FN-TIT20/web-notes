@@ -17,3 +17,98 @@
   overflow: hidden;
   padding: 2pt 10pt 2pt 0;
 }
+
+
+.field {
+  padding-top: 20vh;
+}
+
+.fieldDiv {
+  width: 40%;
+  margin: auto;
+  padding: 10pt;
+  border: solid;
+  border-radius: 2pt;
+  border-width: 2pt;
+  border-color: #00C0FF;
+}
+
+.fieldDiv * {
+  margin: 5pt 0;
+}
+
+.error {
+  animation: fadeIn .5s;
+  -moz-animation: fadeIn .5s; /* Firefox */
+  -webkit-animation: fadeIn .5s; /* Safari and Chrome */
+  -o-animation: fadeIn .5s; /* Opera */
+  font-size: 14pt;
+  width: 100%;
+  background-color: rgb(253, 55, 55);
+  color: white;
+  text-align: center;
+  padding: 5pt 10pt;
+  border: solid;
+  border-color: #2A2A2A;
+  border-width: 2pt;
+  border-radius: 2pt;
+}
+
+.inputRequirements {
+  animation: fadeIn .5s;
+  -moz-animation: fadeIn .5s; /* Firefox */
+  -webkit-animation: fadeIn .5s; /* Safari and Chrome */
+  -o-animation: fadeIn .5s; /* Opera */
+  color: rgb(253, 55, 55);
+  text-align: right;
+  margin-top: 0;
+}
+
+.flexBox {
+  display: flex;
+  width: 100%;
+}
+
+.loginInstead {
+  align-self: flex-start;
+}
+
+.showReq {
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.requirementsDiv {
+  animation: fadeIn .5s;
+  -moz-animation: fadeIn .5s; /* Firefox */
+  -webkit-animation: fadeIn .5s; /* Safari and Chrome */
+  -o-animation: fadeIn .5s; /* Opera */
+  width: 40%;
+  margin: auto;
+  padding: 10pt;
+  margin-top: 1vh;
+  border: solid;
+  border-radius: 2pt;
+  border-width: 2pt;
+  border-color: #00C0FF;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@-moz-keyframes fadeIn { /* Firefox */
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@-webkit-keyframes fadeIn { /* Safari and Chrome */
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@-o-keyframes fadeIn { /* Opera */
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

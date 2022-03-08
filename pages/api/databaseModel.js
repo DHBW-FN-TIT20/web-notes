@@ -22,7 +22,7 @@ export class DatabaseModel {
    * @param {PostgrestResponse<any>} dbResponse Response of DB
    * @returns {boolean} if Response Sucessful
    */
-   evaluateSuccess(dbResponse) {
+  evaluateSuccess(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
       console.log("evaluateSuccess: ", dbResponse.error)
       return false;
@@ -39,7 +39,7 @@ export class DatabaseModel {
    * @param {PostgrestResponse<{id: number, name: string, password: string}>} dbResponse Response of Database
    * @returns {{id: number, name: string, password: string}[]} List of user objects.
    */
-   getUserFromResponse(dbResponse) {
+  getUserFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
       return [];
     }
@@ -103,7 +103,7 @@ export class DatabaseModel {
   async changeUserPassword(newHashedPassword, userID) {
     const updatedUser = await DatabaseModel.CLIENT
       .from('User')
-      .update({ hashedPassword: newHashedPassword })
+      .update({ password: newHashedPassword })
       .eq('id', userID);
 
     return updatedUser;
@@ -287,7 +287,7 @@ export class DatabaseModel {
 
     return noteResponse;
   }
-  
+
   /**
    * This is a universal select function for the UserNoteRelation database to get the note relations
    * @param {number} noteID Filter noteID

@@ -12,7 +12,7 @@ import Footer from '../components/footer'
  * @component
  */
 class Register extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       isNotLoggedIn: false,
@@ -27,11 +27,17 @@ class Register extends Component {
     }
   }
 
+  /**
+   * This method is called when the component is mounted.
+   */
   componentDidMount() {
     this.checkLoginState();
     window.addEventListener('storage', this.storageTokenListener)
   }
 
+  /**
+   * This method is called when the component will unmount.
+   */
   componentWillUnmount() {
     window.removeEventListener('storage', this.storageTokenListener)
   }
@@ -55,7 +61,7 @@ class Register extends Component {
       const { router } = this.props
       router.push("/")
     } else {
-      this.setState({isNotLoggedIn: true})
+      this.setState({ isNotLoggedIn: true })
     }
   }
 
@@ -64,9 +70,9 @@ class Register extends Component {
    */
   async updatePasswordValid(password) {
     if (await FrontEndController.isPasswordValid(password)) {
-      this.setState({passwordReqMessage: ""})
+      this.setState({ passwordReqMessage: "" })
     } else {
-      this.setState({passwordReqMessage: "check password requirements"})
+      this.setState({ passwordReqMessage: "check password requirements" })
     }
   }
 
@@ -99,7 +105,7 @@ class Register extends Component {
         if (await FrontEndController.registerUser(this.state.username, this.state.password)) {
           router.push("/");
         }
-        this.setState({username: "", password: "", confirmPassword: ""});
+        this.setState({ username: "", password: "", confirmPassword: "" });
         document.getElementById("userInput")?.focus();
       }
     }
@@ -107,11 +113,11 @@ class Register extends Component {
     /**
      * This method checks whether the entered username meets the needed requirements and sets the usernameReqMessage state accordingly.
      */
-    const updateUsernameValid = async() => {
+    const updateUsernameValid = async () => {
       if (await FrontEndController.isUsernameValid(this.state.username)) {
-        this.setState({usernameReqMessage: ""})
+        this.setState({ usernameReqMessage: "" })
       } else {
-        this.setState({usernameReqMessage: "check username requirements"})
+        this.setState({ usernameReqMessage: "check username requirements" })
       }
     }
 
@@ -120,11 +126,11 @@ class Register extends Component {
      */
     const updateFeedbackMessage = async (doesExist, password, confirmPassword) => {
       if (doesExist) {
-        this.setState({feedbackMessage: "Username not available."})
+        this.setState({ feedbackMessage: "Username not available." })
       } else if (password !== undefined && password !== confirmPassword) {
-        this.setState({feedbackMessage: "Passwords do not match."})
+        this.setState({ feedbackMessage: "Passwords do not match." })
       } else {
-        this.setState({feedbackMessage: ""})
+        this.setState({ feedbackMessage: "" })
       }
     }
 
@@ -144,15 +150,15 @@ class Register extends Component {
           <main className={styles.field}>
             <div className={styles.fieldDiv}>
               <h1>Register</h1>
-              <input 
-                type="text" 
-                placeholder="Username..." 
+              <input
+                type="text"
+                placeholder="Username..."
                 id='userInput'
                 className='formularInput'
                 autoFocus
                 onChange={async (e) => {
-                  this.setState({username: e.target.value});
-                  this.setState({doesUserExist: await FrontEndController.doesUserExist(e.target.value)});
+                  this.setState({ username: e.target.value });
+                  this.setState({ doesUserExist: await FrontEndController.doesUserExist(e.target.value) });
                   updateFeedbackMessage(this.state.doesUserExist, this.state.password, this.state.confirmPassword);
                   updateUsernameValid();
                 }}
@@ -161,12 +167,12 @@ class Register extends Component {
               <div hidden={this.state.usernameReqMessage === ""} className={styles.inputRequirements}>
                 {this.state.usernameReqMessage}
               </div>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 placeholder="Password..."
                 className='formularInput'
                 onChange={async (e) => {
-                  this.setState({password: e.target.value});
+                  this.setState({ password: e.target.value });
                   updateFeedbackMessage(this.state.doesUserExist, e.target.value, this.state.confirmPassword);
                   console.log(e.target.value)
                   this.updatePasswordValid(e.target.value);
@@ -176,12 +182,12 @@ class Register extends Component {
               <div hidden={this.state.passwordReqMessage === ""} className={styles.inputRequirements}>
                 {this.state.passwordReqMessage}
               </div>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 placeholder="Confirm password..."
                 className='formularInput'
                 onChange={async (e) => {
-                  this.setState({confirmPassword: e.target.value});
+                  this.setState({ confirmPassword: e.target.value });
                   updateFeedbackMessage(this.state.doesUserExist, this.state.password, e.target.value);
                 }}
                 value={this.state.confirmPassword}
@@ -197,13 +203,13 @@ class Register extends Component {
               <div className={styles.flexBox}>
                 <p className={styles.loginInstead}>
                   Or&nbsp;
-                  <a onClick={() => {router.push("/login")}}>
+                  <a onClick={() => { router.push("/login") }}>
                     login
                   </a>
                   &nbsp;instead.
                 </p>
                 <p className={styles.showReq}>
-                  <a onClick={() => {this.setState({showRequirements: !this.state.showRequirements})}}>
+                  <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
                     show requirements
                   </a>
                 </p>

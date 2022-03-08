@@ -12,7 +12,7 @@ import Footer from '../components/footer'
  * @component
  */
 class Login extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       isNotLoggedIn: false,
@@ -20,14 +20,20 @@ class Login extends Component {
       password: "",
       credentialsInfo: false,
     }
-    
+
   }
 
+  /**
+   * This method is called when the component is mounted.
+   */
   componentDidMount() {
     this.checkLoginState();
     window.addEventListener('storage', this.storageTokenListener)
   }
 
+  /**
+   * This method is called when the component will unmout.
+   */
   componentWillUnmount() {
     window.removeEventListener('storage', this.storageTokenListener)
   }
@@ -51,7 +57,7 @@ class Login extends Component {
       const { router } = this.props
       router.push("/")
     } else {
-      this.setState({isNotLoggedIn: true})
+      this.setState({ isNotLoggedIn: true })
     }
   }
 
@@ -83,7 +89,7 @@ class Login extends Component {
       if (await FrontEndController.loginUser(this.state.username, this.state.password)) {
         router.push("/");
       } else {
-        this.setState({username: "", password: "", credentialsInfo: true})
+        this.setState({ username: "", password: "", credentialsInfo: true })
         document.getElementById("userInput")?.focus()
       }
     }
@@ -104,20 +110,20 @@ class Login extends Component {
           <main className={styles.field}>
             <div className={styles.fieldDiv}>
               <h1>Login</h1>
-              <input 
-                type="text" 
-                placeholder="Username..." 
+              <input
+                type="text"
+                placeholder="Username..."
                 id='userInput'
                 className='formularInput'
                 autoFocus
-                onChange={(e) => this.setState({username: e.target.value})}
+                onChange={(e) => this.setState({ username: e.target.value })}
                 value={this.state.username}
                 onKeyDown={loginEnter} />
-              <input 
-                type="password" 
+              <input
+                type="password"
                 placeholder="Password..."
                 className='formularInput'
-                onChange={(e) => this.setState({password: e.target.value})}
+                onChange={(e) => this.setState({ password: e.target.value })}
                 value={this.state.password}
                 onKeyDown={loginEnter} />
               <div hidden={!this.state.credentialsInfo} className={styles.error} >
