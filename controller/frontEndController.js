@@ -142,10 +142,11 @@ export class FrontEndController {
 
     if (data.userToken === "") {
       localStorage.removeItem(this.userTokenName);
+      console.log("Login failed");
       return false;
     }
-
     localStorage.setItem(this.userTokenName, data.userToken);
+    console.log("Login successfull");
     return true;
   }
 
@@ -176,6 +177,34 @@ export class FrontEndController {
   }
 
   /**
+   * This method changes the password of the current user
+   * @param {string} oldPassword 
+   * @param {string} newPassword 
+   * @returns {Promise<boolean>} True if password was changed, false if not
+   */
+  static async changePassword(oldPassword, newPassword) {
+    const response = await fetch('./api/users/change_password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userToken: this.getUserToken(),
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.wasSuccessfull) {
+      return await this.loginUser(this.getUsernameFromToken(this.getUserToken()), newPassword);
+    }
+
+    return false;
+  }
+
+  /**
    * This method checks whether the given token has a valid signature and user
    * @param {string} token token to be verified
    * @returns {Promise<boolean>} true if signature is valid and user exists, false if not
@@ -203,6 +232,27 @@ export class FrontEndController {
     localStorage.removeItem(this.userTokenName);
     return true;
   }
+
+
+  /**
+   * This method gets all the users from the database
+   * @returns {Promise<{id: number, name: string}[]>} Array of all users
+   */
+  static async getAllUsers() {
+    const response = await fetch('./api/users/get_all_users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userToken: FrontEndController.getUserToken()
+      })
+    });
+
+    const data = await response.json();
+    return data.users;
+  }
+
 
   //#endregion
 
@@ -239,7 +289,7 @@ export class FrontEndController {
 
   /**
    * This method is used to save a note to the database. If no note.id is given, a new note is created.
-   * @param {{id?: number, title: string, content: string, inUse: boolean}} note note which should be saved
+   * @param {{id?: number, title?: string, content?: string, inUse: boolean, isShared?: boolean, sharedUserIDs?: number[]}} note note which should be saved
    * @returns {Promise<number>} returns the id of the saved note
    */
   static async saveNote(note) {
@@ -262,10 +312,23 @@ export class FrontEndController {
     return data.noteID;
   }
 
+  static async setNoteInUse(noteID) {
+    this.saveNote({
+      id: noteID,
+      inUse: true
+    });
+  }
+
+  static async setNoteNotInUse(noteID) {
+    this.saveNote({
+      id: noteID,
+      inUse: false
+    });
+  }
 
   /**
    * This method is used to get all notes which are related to the user.
-   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean}[]>} Array of all notes of the current user
+   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}[]>} Array of all notes of the current user
    */
   static async getNotes() {
 

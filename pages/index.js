@@ -7,8 +7,8 @@ import styles from '../styles/Home.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import SavingIndicator from '../components/SavingIndicator'
-import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react';
-
+import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX, ShimmeredDetailsList } from '@fluentui/react';
+import splitHTMLintoElements from '../shared/split_HTML_into_elements'
 
 /**
  * @class Home Component Class
@@ -20,8 +20,7 @@ class Home extends Component {
     this.state = {
       isLoggedIn: undefined,
       currentToken: "",
-      isSaving: false,
-      isSaved: true,
+      isLoading: false,
       noteList: [],
       searchString: "",
     };
@@ -29,7 +28,8 @@ class Home extends Component {
       { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true },
       { key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true },
       {
-        key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true, onRender: (item) => {
+        key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true,
+        onRender: (item) => {
           if (item.isShared === true) {
             return (`Geteilte Notiz`)
           } else if (item.isShared === false) {
@@ -40,14 +40,15 @@ class Home extends Component {
         }
       },
       {
-        key: "content", name: "Vorschau", fieldName: "content", minWidth: 300, maxWidth: 200, isResizable: true, onRender: (item) => {
+        key: "content", name: "Vorschau", fieldName: "content", minWidth: 300, maxWidth: 200, isResizable: true,
+        onRender: (item) => {
           const maxElements = 5;
-          let previewLine = this.splitHTMLintoElements(item.content, maxElements).join("");
+          let previewContent = splitHTMLintoElements(item.content, maxElements).join("");
           return (
             <div
               className={styles.previewLine}
               dangerouslySetInnerHTML={{
-                __html: previewLine
+                __html: previewContent
               }}
             >
             </div>
@@ -58,82 +59,27 @@ class Home extends Component {
   }
 
   /**
-   * This function splits the HTML input into a list of elements
-   * @param {string} html The HTML string to be split into elements
-   * @param {number} maxStringElements The maximum number of displayed elements.
-   * @returns {string[]} The array of elements
+   * This method is called when the component is mounted.
    */
-  splitHTMLintoElements(html, maxStringElements) {
-    let elements = [];
-    let currentElement = "";
-
-    // split the html string into elements
-    for (let i = 0; i < html.length; i++) {
-      if (html[i] == "<") {
-        if (currentElement != "") {
-          elements.push(currentElement);
-          currentElement = "";
-        }
-        currentElement += html[i];
-      } else if (html[i] == ">") {
-        currentElement += html[i];
-        elements.push(currentElement);
-        currentElement = "";
-      } else {
-        currentElement += html[i];
-      }
-    }
-
-    let result = [];
-    let openTagElements = [];
-    let textElementsCount = 0;
-    let isShrinked = false;
-
-    // the elements are splittet into text and tag elements and the text elements are counted
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
-      if (element.startsWith("<") && element.endsWith(">") && element[1] != "/") {
-        openTagElements.push(element);
-        result.push(element);
-      } else if (element.startsWith("<") && element.endsWith(">") && element[1] == "/") {
-        openTagElements.pop();
-        result.push(element);
-      } else {
-        textElementsCount++;
-        result.push(element);
-      }
-
-      // if the maximum number of elements is reached, no more text elements are added to the result
-      if (textElementsCount >= maxStringElements) {
-        isShrinked = true;
-        break;
-      }
-    }
-
-    // for every open tag the corresponding closing tag is added
-    for (let i = openTagElements.length - 1; i > -1; i--) {
-      result.push(`</${openTagElements[i].substring(1, openTagElements[i].length - 1)}>`);
-    }
-
-    // if the maximum number of elements is reached, the result is shrinked and the last element is a "..."
-    if (isShrinked) {
-      result.push("<div style='color: gray;'>...</div>");
-    }
-    return result;
-  }
-
-
   async componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
-
+    this.setState({ isLoading: true });
     await this.getNoteList();
+    this.setState({ isLoading: false });
   }
 
+  /**
+   * This method is called just bevor the component is unmounted.
+   * It is used to remove the storage event listener.
+   */
   componentWillUnmount() {
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
+  /**
+   * This method is used to load the notes from the backend.
+   */
   async getNoteList() {
 
     // get the note list from backend
@@ -164,10 +110,17 @@ class Home extends Component {
     if (await FrontEndController.verifyUserByToken(currentToken)) {
       this.setState({ isLoggedIn: true, currentToken: currentToken });
     } else {
+      this.props.router.push('/getting-started');
       this.setState({ isLoggedIn: false })
     }
   }
 
+  /**
+   * This method is called when the user clicks on a item in the details list. It redirects the user to the corresponding note.
+   * @param {{ id: number; title: string; ownerID: number; modifiedAt: Date; content: string; inUse: boolean; isShared: boolean }} item The item that was clicked
+   * @param {number} index The index of the item in the list
+   * @param {any} ev The event that triggered the method
+   */
   onActiveItemChanged = (item, index, ev) => {
     // open the note
     if (item.id !== -1 || item.id === undefined) {
@@ -179,7 +132,11 @@ class Home extends Component {
     }
   }
 
-
+  /**
+   * This method is called when the user changes the search string.
+   * @param {any} event 
+   * @param {string} newValue 
+   */
   handleSearchChange = (event, newValue) => {
     if (newValue) {
       this.setState({ searchString: newValue });
@@ -206,7 +163,7 @@ class Home extends Component {
       filteredNoteList = this.state.noteList.filter(note => {
         return note.title.toLowerCase().includes(this.state.searchString.toLowerCase()) || note.content.toLowerCase().includes(this.state.searchString.toLowerCase());
       });
-    }      
+    }
 
     // add the "new note" button
     const newNote = { id: -1, title: "Neue Notiz...", content: "", isShared: null, }
@@ -222,7 +179,7 @@ class Home extends Component {
       return (
         <div>
           <Head>
-            <title>Welcome</title>
+            <title>WEB-NOTES</title>
             <meta name="description" content="Welcome page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>
@@ -236,7 +193,7 @@ class Home extends Component {
       return (
         <div>
           <Head>
-            <title>Welcome</title>
+            <title>WEB-NOTES</title>
             <meta name="description" content="Welcome page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>
@@ -247,14 +204,15 @@ class Home extends Component {
 
           <main>
             <div className={styles.contentOne}>
-              <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."} />
-              <DetailsList
+              <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."} disabled={this.state.isLoading} />
+              <ShimmeredDetailsList className={styles.detailsList}
                 items={filteredNoteList}
                 columns={this.noteListColumns}
                 setKey="set"
-                // onItemInvoked={this.onItemInvoked}
                 onActiveItemChanged={this.onActiveItemChanged}
                 selectionMode={SelectionMode.none}
+                enableShimmer={this.state.isLoading}
+                shimmerLines={7}
               />
             </div>
           </main>

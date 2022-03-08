@@ -32,7 +32,6 @@ export class BackEndController {
       jwt.verify(token, BackEndController.KEY);
       return true;
     } catch (error) {
-      // console.log(error);
       return false;
     }
   }
@@ -260,10 +259,9 @@ export class BackEndController {
 
   //#region Note Methods
 
-  //TODO
   /**
    * Saves the String to the Database
-   * @param {{id: number | undefined, title: string, content: string, inUse: boolean}} note 
+   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: boolean, sharedUserIDs: number[] | undefined}} note 
    * @param {string} userToken
    */
   async saveNote(note, userToken) {
@@ -271,21 +269,24 @@ export class BackEndController {
     const isUserValid = await this.isUserTokenValid(userToken);
 
     if (!isUserValid) {
+      console.log("user invalid");
       // return a undefined object as noteID to indicate that the note was not saved
-      return undefined; 
+      return undefined;
     }
 
     if (note.id === undefined) {
       // create new note
+      console.log("create new note");
       const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
-      
+
       if (user === undefined) {
         return undefined;
       }
 
       const addedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.addNote(user.id, note.inUse))[0];
-      
-      if(addedNote === undefined) {
+      console.log("addedNote: ", addedNote);
+
+      if (addedNote === undefined) {
         return undefined;
       }
 
@@ -303,25 +304,29 @@ export class BackEndController {
       noteToSave.inUse = note.inUse;
       const savedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.updateNote(note.id, noteToSave))[0];
 
+      console.log("note.sharedUserIDs: ", note.sharedUserIDs);
+
+      // TODO: @schuler-henry evaluate success of update
+      if (note.sharedUserIDs !== undefined) {
+        console.log(this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.deleteUserNoteRelation(undefined, note.id)));
+        if (note.sharedUserIDs.length > 0) {
+          console.log(this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.addUserNoteRelation(note.sharedUserIDs, note.id)));
+        }
+      }
+
       if (savedNote === undefined) {
         return undefined;
       }
 
       return savedNote.id;
     }
-
-
-
-
   }
 
-  //TODO
   /**
    * Gets get all notes which are related to the user from the database
    * @param {string} userToken
    */
   async getNotes(userToken) {
-    console.log("Hey")
     const isUserValid = await this.isUserTokenValid(userToken);
 
     if (!isUserValid) {
@@ -339,29 +344,92 @@ export class BackEndController {
 
     const sharedNotes = this.databaseModel.getSharedNoteFromResponse(await this.databaseModel.selectUserNoteRelationTable(user.id));
 
-    const allNotes = ownNotes.map(note => ({
-      id: note.id, 
-      title: note.title, 
-      ownerID: note.ownerID, 
-      modifiedAt: note.modifiedAt, 
-      content: note.content, 
-      inUse: note.inUse, 
-      isShared: false})
-      ).concat(sharedNotes.map(note => ({
-        id: note.id, 
-        title: note.title, 
-        ownerID: note.ownerID, 
-        modifiedAt: note.modifiedAt, 
-        content: note.content, 
-        inUse: note.inUse, 
-        isShared: true}
-      )));
+    /**
+     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}[]}
+     */
+    const ownNotesWithSharedAttribute = [];
 
-    const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()))
-    
-    console.log(sortedNotes);
+    for (const note of ownNotes) {
+      ownNotesWithSharedAttribute.push({
+        id: note.id,
+        title: note.title,
+        ownerID: note.ownerID,
+        modifiedAt: note.modifiedAt,
+        content: note.content,
+        inUse: note.inUse,
+        isShared: false,
+        sharedUserIDs: await this.getSharedUserIDFromNoteID(note.id)
+      });
+    }
+
+    const sharedNotesWithSharedAttribute = sharedNotes.map(note => ({
+      id: note.id,
+      title: note.title,
+      ownerID: note.ownerID,
+      modifiedAt: note.modifiedAt,
+      content: note.content,
+      inUse: note.inUse,
+      isShared: true,
+      /**
+       * @type {number[]}
+       */
+      sharedUserIDs: []
+    }));
+
+    const allNotes = ownNotesWithSharedAttribute.concat(sharedNotesWithSharedAttribute);
+
+    const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()));
 
     return sortedNotes;
+  }
+
+  /**
+   * This method returns the userIDs that the note is shared with
+   * @param {number} noteID 
+   * @returns {Promise<number[]>} Array of userIDs
+   */
+  async getSharedUserIDFromNoteID(noteID) {
+    const relations = this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.selectUserRelationTable(noteID));
+
+    /**
+     * @type {number[]}
+     */
+    const userIDs = [];
+    for (const element of relations) {
+      userIDs.push(element.userID);
+    }
+    return userIDs;
+  }
+
+  async getAllUsers(userToken) {
+
+    // check if user is valid
+    const isUserValid = await this.isUserTokenValid(userToken);
+
+    if (!isUserValid) {
+      // return a empty array to indicate that the user is not valid
+      return [];
+    }
+
+    // get the current user
+    const currentUser = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
+
+    if (currentUser === undefined) {
+      return [];
+    }
+
+    // get all users
+    const allUsers = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, undefined, undefined));
+
+    // only add users which are not the current user and remove passwords
+    let allOtherUsers = [];
+    for (let user of allUsers) {
+      if (user.id !== currentUser.id) {
+        allOtherUsers.push({ id: user.id, name: user.name });
+      }
+    }
+
+    return allOtherUsers;
   }
 
   //#endregion

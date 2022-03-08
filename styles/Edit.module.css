@@ -22,3 +22,11 @@
 .savingIndicator {
   grid-area: 1 / 5 / 2 / 6;
 }
+
+.centerScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}

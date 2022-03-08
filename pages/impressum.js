@@ -19,11 +19,17 @@ class Impressum extends Component {
     }
   }
 
+  /**
+   * This method is called when the component is mounted.
+   */
   componentDidMount() {
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
   }
 
+  /**
+   * This method is called when the component will unmount.
+   */
   componentWillUnmount() {
     window.removeEventListener('storage', this.storageTokenListener)
   }
@@ -45,10 +51,10 @@ class Impressum extends Component {
   async updateLoginState() {
     let currentToken = FrontEndController.getUserToken();
     if (await FrontEndController.verifyUserByToken(currentToken)) {
-      this.setState({isLoggedIn: true, currentToken: currentToken})
+      this.setState({ isLoggedIn: true, currentToken: currentToken })
       return
     }
-    this.setState({isLoggedIn: false})
+    this.setState({ isLoggedIn: false })
   }
 
   /**
@@ -60,10 +66,10 @@ class Impressum extends Component {
       return (
         <div>
           <Head>
-          <title>Impressum</title>
-          <meta name="description" content="Impressum page." />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+            <title>Impressum</title>
+            <meta name="description" content="Impressum page." />
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
 
           <header>
             <Header username={""} hideLogin={true} hideLogout={true} />

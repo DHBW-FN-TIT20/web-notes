@@ -1,0 +1,8 @@
+/* Import the web font for your website. */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap');
+/* Import the web font for your editor. */
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;600&display=swap');
+
+html, body {
+    font-family: 'Montserrat', sans-serif;
+}

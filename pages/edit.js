@@ -7,7 +7,9 @@ import styles from '../styles/Edit.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import SavingIndicator from '../components/SavingIndicator'
-import { Spinner, SpinnerSize, DetailsList, DefaultButton, PrimaryButton, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX } from '@fluentui/react'
+import { initializeIcons, IBasePicker, ITag, IInputProps, IBasePickerSuggestionsProps, Spinner, SpinnerSize, DetailsList, DefaultButton, PrimaryButton, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX, TagPicker } from '@fluentui/react'
+import BeatLoader from "react-spinners/BeatLoader";
+
 
 /**
  * @class Home Component Class
@@ -15,21 +17,41 @@ import { Spinner, SpinnerSize, DetailsList, DefaultButton, PrimaryButton, Detail
  */
 class Edit extends Component {
   editorInstance = null;
+  TitleField = null;
 
   constructor(props) {
     super(props)
+    this.isNoteNew = false;
     this.state = {
       isLoggedIn: undefined,
       currentToken: "",
       isSaving: false,
       isSaved: true,
       title: "",
+      allUserTags: [],
+      selectedUserTags: [],
+      isLoading: true,
+      isReadOnly: false,
+      isSharedNote: false,
     }
   }
 
+  /**
+   * This method is called when the component is mounted.
+   * It is used to set up all the editing components and to load the note.
+   */
   async componentDidMount() {
     this.updateLoginState();
+
+    // set up the storage event listener
     window.addEventListener('storage', this.storageTokenListener)
+
+    // set up beforunload listener
+    window.addEventListener('beforeunload', async (ev) => {
+      if (!this.state.isReadOnly) {
+        FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+      }
+    });
 
     // get initial data
     let noteID = FrontEndController.getCurrentNoteID();
@@ -41,27 +63,42 @@ class Edit extends Component {
         content: "",
         title: "Neue Notiz",
         id: undefined,
-        inUse: true,
+        inUse: false,
+        isShared: false,
+        sharedUserIDs: [],
       }
       currentNote.id = await FrontEndController.saveNote(currentNote);
-      console.log("New note created with id: " + currentNote.id);
       FrontEndController.setCurrentNoteID(currentNote.id);
+      this.isNoteNew = true;
     } else {
-      currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);;
+      currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);
     }
 
-    this.setupEditor(currentNote.content);
-    this.setState({ title: currentNote.title });
+    // setup editor
+    this.setupEditor(currentNote.content, currentNote.inUse);
+
+    // change the InUse state of the note
+    FrontEndController.setNoteInUse(currentNote.id);
+
+    // setup user tag picker
+    await this.setupUserTagPicker(currentNote.sharedUserIDs);
+
+    // update the state
+    this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared, isReadOnly: currentNote.inUse });
+
+    if (this.isNoteNew) {
+      this.TitleField.focus();
+    }
   }
 
+  /**
+   * This method is called just bevor the component is unmounted.
+   * It is used to remove the storage event listener and to save the note (it was probably saved bevor).
+   */
   async componentWillUnmount() {
-    const noteToSave = {
-      content: this.editorInstance.getData(),
-      title: this.state.title,
-      id: FrontEndController.getCurrentNoteID(),
-      inUse: false
+    if (!this.state.isReadOnly) {
+      FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
     }
-    await FrontEndController.saveNote(noteToSave);
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
@@ -73,6 +110,24 @@ class Edit extends Component {
     if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
+  }
+
+  /**
+   * This method sets up the user tag picker.
+   * @param {number[]} sharedUserIDs The IDs of the users to share the note with
+   */
+  async setupUserTagPicker(sharedUserIDs) {
+
+    // initialize the icons of Fluent UI
+    initializeIcons();
+
+    // get all user as tags
+    const allUserTags = (await FrontEndController.getAllUsers()).map(user => { return { key: user.id, name: user.name } });
+
+    // get all user tags of the current note
+    const selectedUserTags = allUserTags.filter(userTag => sharedUserIDs.includes(userTag.key));
+
+    this.setState({ allUserTags: allUserTags, selectedUserTags: selectedUserTags });
   }
 
   /**
@@ -88,6 +143,10 @@ class Edit extends Component {
     }
   }
 
+  /**
+   * This functional component renders the Editor.
+   * If the editor is not loaded yet, it renders "Loading..."
+   */
   Editor = () => {
     return (
       <div>
@@ -96,7 +155,11 @@ class Edit extends Component {
     )
   }
 
-  setupEditor(content) {
+  /**
+   * This method sets up the editor.
+   * @param {string} content The HTML content of the note
+   */
+  setupEditor(content, readOnly) {
     if (window !== undefined) {
       console.log("Loading Editor...");
 
@@ -107,6 +170,7 @@ class Edit extends Component {
         return (
           <div>
             <CKEditor className={styles.ckEditor}
+              disabled={readOnly}
               type=""
               name="editor1"
               editor={CustomEditor}
@@ -119,7 +183,7 @@ class Edit extends Component {
                 editor.editing.view.change((writer) => {
                   writer.setStyle(
                     "height",
-                    "100vh",
+                    "70vh",
                     editor.editing.view.document.getRoot()
                   );
                   writer.setStyle(
@@ -128,6 +192,9 @@ class Edit extends Component {
                     editor.editing.view.document.getRoot()
                   );
                 });
+                if (!this.isNoteNew) {
+                  editor.focus();
+                }
               }}
               data={content}
             />
@@ -138,12 +205,107 @@ class Edit extends Component {
     }
   }
 
-
+  /**
+   * This method handles the change of the person tag picker.
+   * @param {ITag[]} items The currently selected items
+   */
+  handlePersonPickerChange = (items) => {
+    this.setState({ selectedUserTags: items })
+    console.log("Selected User Tags: ", items)
+    this.autoSave.handleChange();
+  }
 
   /**
-   * Generates the JSX Output for the Client
-   * @returns JSX Output
+   * This method filters the suggested tags.
+   * @param {string} filterText The text input to filter the suggestions
+   * @param {ITag[]} tagList The already selected tags
+   * @returns {ITag[]} The filtered tags
    */
+  filterSuggestedTags = (filterText, tagList) => {
+    return filterText
+      ? this.state.allUserTags.filter(
+        tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !this.listContainsTagList(tag, tagList),
+      )
+      : [];
+  };
+
+  /**
+   * This method checks whether a tag is already in the selected tag list.
+   * @param {ITag} tag The tag to check
+   * @param {ITag[]} tagList The already selected tags
+   * @returns True if the tag is in the tagList
+   */
+  listContainsTagList = (tag, tagList) => {
+    if (!tagList || !tagList.length || tagList.length === 0) {
+      return false;
+    }
+    return tagList.some(compareTag => compareTag.key === tag.key);
+  };
+
+  /**
+   * This variable is used to handle the auto-saving of the document.
+   */
+  autoSave = {
+    timeout: null,
+    dataWasChanged: false,
+
+    /**
+     * This method starts the timer for the auto-saving.
+     */
+    start: async () => {
+      if (this.autoSave.timeout === null) {
+        this.autoSave.timeout = setTimeout(async () => {
+          if (this.editorInstance !== null) {
+            this.setState({ isSaving: true, isSaved: false });
+
+            // save the note
+            const noteToSave = {
+              id: FrontEndController.getCurrentNoteID(),
+              title: this.state.title,
+              content: this.editorInstance.getData(),
+              inUse: true,
+              sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
+            }
+            let isSaved = await FrontEndController.saveNote(noteToSave)
+
+            this.autoSave.dataWasChanged = false;
+            this.autoSave.stop();
+            this.setState({ isSaved: isSaved, isSaving: false });
+          }
+        }, 2000);
+      }
+    },
+
+    /**
+     * This method is called when the user interupts the auto-saving.
+     * It clears the timeout.
+     */
+    stop: () => {
+      if (this.autoSave.timeout) {
+        clearTimeout(this.autoSave.timeout)
+        this.autoSave.timeout = null
+      }
+    },
+
+    /**
+     * This method is called when the user changes the document.
+     */
+    handleChange: () => {
+      if (this.autoSave.dataWasChanged === false) {
+        this.autoSave.start();
+      } else {
+        this.autoSave.stop();
+        this.autoSave.start();
+      }
+      this.autoSave.dataWasChanged = true;
+      this.setState({ isSaved: false });
+    }
+  }
+
+  /**
+    * Generates the JSX Output for the Client
+    * @returns JSX Output
+    */
   render() {
 
     const { router } = this.props
@@ -162,11 +324,46 @@ class Edit extends Component {
           </header>
         </div>
       )
-    } else {
+    } else if (this.state.isLoading) {
+
       return (
         <div>
           <Head>
-            <title>Welcome</title>
+            <title>Loading...</title>
+            <meta name="description" content="Loading..." />
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+
+          <header>
+            <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
+          </header>
+
+          <main>
+            <div className={styles.centerScreen}>
+              <BeatLoader />
+              <div>{"Setting up the editor... "}</div>
+            </div>
+          </main>
+
+        </div>
+      )
+
+    } else {
+
+      let infoString = "";
+
+      if (this.state.isReadOnly && this.state.isSharedNote) {
+        infoString = "(Geteilte Notiz: Geschützt, da gerade ein anderer Nutzer diese Notiz bearbeitet)";
+      } else if (this.state.isReadOnly && !this.state.isSharedNote) {
+        infoString = "(Geschützt, da gerade ein anderer Nutzer diese Notiz bearbeitet)";
+      } else if (!this.state.isReadOnly && this.state.isSharedNote) {
+        infoString = "(Geteilte Notiz)";
+      }
+
+      return (
+        <div>
+          <Head>
+            <title>Editor</title>
             <meta name="description" content="Welcome page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>
@@ -180,13 +377,18 @@ class Edit extends Component {
               <div className={styles.nameAndSaveIndicator}>
                 <TextField
                   className={styles.titleInput}
-                  label="Title"
+                  label={"Title " + infoString}
                   onChange={(e, newValue) => {
                     this.setState({ title: newValue })
                     this.autoSave.handleChange()
                   }}
                   placeholder={"Titel..."}
                   value={this.state.title}
+                  onFocus={event => {
+                    event.target.select();
+                    setTimeout(() => { event.target.setSelectionRange(0, event.target.value.length); }, 0);
+                  }}
+                  componentRef={(textField) => { this.TitleField = textField }}
                 />
                 <SavingIndicator
                   className={styles.savingIndicator}
@@ -196,6 +398,17 @@ class Edit extends Component {
                 />
               </div>
               <this.Editor />
+              <div hidden={this.state.isSharedNote}>
+                <label>Diese Notiz teilen mit...</label>
+                <TagPicker
+                  onResolveSuggestions={this.filterSuggestedTags}
+                  getTextFromItem={(item) => { return item.name }}
+                  pickerSuggestionsProps={{ suggestionsHeaderText: 'Vorgeschlagene Personen', noResultsFoundText: 'Keine Personen gefunden', }}
+                  onChange={this.handlePersonPickerChange}
+                  selectedItems={this.state.selectedUserTags}
+                  disabled={this.state.isReadOnly}
+                />
+              </div>
             </div>
           </main>
 
@@ -207,49 +420,6 @@ class Edit extends Component {
     }
   }
 
-
-  autoSave = {
-    timeout: null,
-    dataWasChanged: false,
-    start: async () => {
-      if (this.autoSave.timeout === null) {
-        this.autoSave.timeout = setTimeout(async () => {
-          if (this.editorInstance !== null) {
-            this.setState({ isSaving: true, isSaved: false });
-
-            // save the note 
-            const noteToSave = {
-              id: FrontEndController.getCurrentNoteID(),
-              title: this.state.title,
-              content: this.editorInstance.getData(),
-              inUse: true,
-            }
-            let isSaved = await FrontEndController.saveNote(noteToSave)
-
-            this.autoSave.dataWasChanged = false;
-            this.autoSave.stop();
-            this.setState({ isSaved: isSaved, isSaving: false });
-          }
-        }, 2000);
-      }
-    },
-    stop: () => {
-      if (this.autoSave.timeout) {
-        clearTimeout(this.autoSave.timeout)
-        this.autoSave.timeout = null
-      }
-    },
-    handleChange: () => {
-      if (this.autoSave.dataWasChanged === false) {
-        this.autoSave.start();
-      } else {
-        this.autoSave.stop();
-        this.autoSave.start();
-      }
-      this.autoSave.dataWasChanged = true;
-      this.setState({ isSaved: false });
-    }
-  }
 }
 
 
