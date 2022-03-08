@@ -50,13 +50,13 @@
   padding-bottom: 50px;
   background-color: #151515;
   -webkit-font-smoothing: antialiased;
-  left: -80vw;
+  left: -81vw;
   transform: translate(0, 0);
   transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
   z-index: 3;
 
   display: grid;
-  grid-template-rows: 70pt 40pt 40pt 40pt 40pt auto 40pt;
+  grid-template-rows: 70pt min-content min-content min-content min-content auto 40pt;
   overflow-y: auto;
 }
 
@@ -66,9 +66,10 @@
 }
 
 .nav {
+  height: 40pt;
   display: flex;
   white-space: nowrap;
-  padding: 0 50px;
+  padding: 0 60px;
   font-size: 1.5em;
   align-items: center;
   color: white;
@@ -109,16 +110,28 @@
 .button:hover {
   cursor: default;
   background-color: #151515;
-  color: white;
-  padding-left: 50px;
+  transform: translateX(0);
   transition: 0;
+}
+
+.span {
+  opacity: 1;
+  transform: rotate(45deg) translate(1px, -1px);
+}
+.spanTwo {
+  opacity: 0;
+  transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+.spanThree {
+  transform: rotate(-45deg) translate(0, -1px);
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
   .menu {
-    width: 50vw;
-    left: -50vw;
+    width: 60vw;
+    left: -61vw;
   }
 }
 
@@ -163,7 +176,6 @@
     margin: 0 20px;
     align-self: center;
     justify-self: center;
-    /* display: none; */
   }
 
   .nav {

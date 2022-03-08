@@ -26,6 +26,21 @@ class Header extends Component {
      */
     const { router } = this.props;
 
+    let home;
+
+    if (this.props.hideLogout) {
+      home = <div></div>
+    } 
+    if (this.props.hideLogin) {
+      home =  <Link href={'/'} passHref>
+        <div className={styles.nav}>
+          <span>
+            Home
+          </span>
+        </div>
+      </Link>
+    }
+
     let username;
 
     if (this.props.hideLogout) {
@@ -83,20 +98,30 @@ class Header extends Component {
                 if (this.isVisible) {
                   console.log("Hide")
                   document.getElementById("menu").classList.remove(`${styles.showHeader}`)
-                  //document.getElementById("menu").style.transform = "translate(-100%, 0)";
+                  // rotation elements for menu icon
+                  document.getElementById("spanOne").classList.remove(`${styles.span}`)
+                  document.getElementById("spanTwo").classList.remove(`${styles.span}`)
+                  document.getElementById("spanTwo").classList.remove(`${styles.spanTwo}`)
+                  document.getElementById("spanThree").classList.remove(`${styles.span}`)
+                  document.getElementById("spanThree").classList.remove(`${styles.spanThree}`)
                   console.log(document.documentElement.scrollHeight)
                   this.isVisible = false;
                 } else {
                   console.log("Show")
                   document.getElementById("menu").classList.add(`${styles.showHeader}`)
-                  //document.getElementById("menu").style.transform = "none";
+                  // rotation elements for menu icon
+                  document.getElementById("spanOne").classList.add(`${styles.span}`)
+                  document.getElementById("spanTwo").classList.add(`${styles.span}`)
+                  document.getElementById("spanTwo").classList.add(`${styles.spanTwo}`)
+                  document.getElementById("spanThree").classList.add(`${styles.span}`)
+                  document.getElementById("spanThree").classList.add(`${styles.spanThree}`)
                   this.isVisible = true;
                 }
                 console.log()
               }}>
-              <span></span>
-              <span></span>
-              <span></span>
+              <span id="spanOne"></span>
+              <span id="spanTwo"></span>
+              <span id="spanThree"></span>
             </div>
             <div className={styles.logoSchrift}>
               <Image 
@@ -128,13 +153,7 @@ class Header extends Component {
                     layout="fill">
                   </Image>
               </div>
-              <Link href={'/'} passHref>
-                <div className={styles.nav}>
-                  <span>
-                    Home
-                  </span>
-                </div>
-              </Link>
+             {home}
               <Link href={'/getting-started'} passHref>
                 <div className={styles.nav}>
                   <span>
