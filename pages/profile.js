@@ -24,9 +24,8 @@ class Profile extends Component {
       newPassword: "",
       newPasswordConfirm: "",
       isInputValidForChangePassword: false,
-      passwordReqMessage: "",
-      updatedPasswordMessage: "",
       feedbackMessage: "",
+      updatedPasswordMessage: "",
     }
   }
 
@@ -78,9 +77,9 @@ class Profile extends Component {
     const changedPasswordSuccessfully = await FrontEndController.changePassword(this.state.oldPassword, this.state.newPassword);
 
     if (!changedPasswordSuccessfully) {
-      this.setState({ isInputValidForChangePassword: false, passwordReqMessage: "Incorrect old password.", oldPassword: "", newPassword: "", newPasswordConfirm: "" });
+      this.setState({ isInputValidForChangePassword: false, feedbackMessage: "Incorrect old password.", oldPassword: "", newPassword: "", newPasswordConfirm: "" });
     } else {
-      this.setState({ isInputValidForChangePassword: false, passwordReqMessage: "", oldPassword: "", newPassword: "", newPasswordConfirm: "", updatedPasswordMessage: "Password changed successfully." });
+      this.setState({ isInputValidForChangePassword: false, feedbackMessage: "", oldPassword: "", newPassword: "", newPasswordConfirm: "", updatedPasswordMessage: "Password changed successfully." });
     }
   }
 
@@ -89,7 +88,7 @@ class Profile extends Component {
    * It evaluates the input and sets the feedback state accordingly.
    * @param {any} event the change event
    */
-  changedInput = async (event) => {
+   changedInput = async (event) => {
 
     // get all input values
     const oldPassword = event.target.name === "oldPassword" ? event.target.value : this.state.oldPassword;
@@ -97,40 +96,28 @@ class Profile extends Component {
     const newPasswordConfirm = event.target.name === "newPasswordConfirm" ? event.target.value : this.state.newPasswordConfirm;
 
     let isInputValidForChangePassword = false;
-    let passwordReqMessage = "";
     let feedbackMessage = "";
 
-    if (newPassword.length > 0) {
-      if (!await FrontEndController.isPasswordValid(newPassword)) {
-        passwordReqMessage = "überprüfe die Passwortanforderungen"
-      }
+    // evaluate input values and set the feedback
+    if (oldPassword.length > 0 && newPassword.length > 0 && checkPasswordOnRegex(newPassword) !== "") {
+      feedbackMessage = "Das Passwort erfüllt die Anforderungen nicht.";
     }
-
-    if (newPassword.length > 0 && newPasswordConfirm.length > 0) {
-      if (newPassword !== newPasswordConfirm) {
-        feedbackMessage = "Die neuen Passwörter stimmen nicht überein."
+    if (oldPassword.length > 0 && newPassword.length > 0 && newPasswordConfirm.length > 0) {
+      if (checkPasswordOnRegex(newPassword) !== "") {
+        feedbackMessage = "Das Passwort erfüllt die Anforderungen nicht.";
+      } else if (newPassword === newPasswordConfirm) {
+        isInputValidForChangePassword = true;
+      } else {
+        isInputValidForChangePassword = false;
+        feedbackMessage = "Die Passwörter stimmen nicht überein.";
       }
+    } else {
+      isInputValidForChangePassword = false;
+      // feedbackMessage = "Bitte füllen Sie alle Felder aus.";
     }
-
-
-    // // evaluate input values and set the feedback
-    // if (oldPassword.length > 0 && newPassword.length > 0) {
-    //   if (checkPasswordOnRegex(newPassword) !== "") {
-    //     passwordReqMessage = "Das Passwort erfüllt die Anforderungen nicht.";
-    //   } else if (newPassword === newPasswordConfirm) {
-    //     isInputValidForChangePassword = true;
-    //     feedbackMessage = "";
-    //   } else {
-    //     isInputValidForChangePassword = false;
-    //     feedbackMessage = "Die Passwörter stimmen nicht überein.";
-    //   }
-    // } else {
-    //   isInputValidForChangePassword = false;
-    //   // passwordReqMessage = "Bitte füllen Sie alle Felder aus.";
-    // }
 
     // apply the feedback and the input values to the state
-    this.setState({ [event.target.name]: event.target.value, isInputValidForChangePassword: isInputValidForChangePassword, passwordReqMessage: passwordReqMessage, updatedPasswordMessage: "", feedbackMessage: feedbackMessage });
+    this.setState({ [event.target.name]: event.target.value, isInputValidForChangePassword: isInputValidForChangePassword, feedbackMessage: feedbackMessage, updatedPasswordMessage: "" });
   }
 
   /**
@@ -148,7 +135,7 @@ class Profile extends Component {
    * This method registers the user with the currently entered credentials. If the registration was successfull, it routes to root, else all fields are cleared.
    */
   changePasswordVerification = async () => {
-    if (this.state.newPassword === this.state.newPasswordConfirm && this.state.usernameReqMessage === "" && this.state.passwordReqMessage === "") {
+    if (this.state.newPassword === this.state.newPasswordConfirm && this.state.usernameReqMessage === "" && this.state.feedbackMessage === "") {
       if (await FrontEndController.changePassword(this.state.oldPassword, this.state.newPassword)) {
         // Do sth for success
       }
@@ -224,9 +211,6 @@ class Profile extends Component {
                       onChange={this.changedInput}
                       value={this.state.newPassword}
                       onKeyDown={this.changeEnter} />
-                    <div hidden={this.state.passwordReqMessage === ""} className={styles.inputRequirements}>
-                      {this.state.passwordReqMessage}
-                    </div>
                     <input
                       type="password"
                       placeholder="Neues Passwort bestätigen..."
@@ -237,6 +221,9 @@ class Profile extends Component {
                       onKeyDown={this.changeEnter} />
                     <div hidden={this.state.feedbackMessage === ""} className={styles.error} >
                       {this.state.feedbackMessage}
+                    </div>
+                    <div hidden={this.state.updatedPasswordMessage === ""} className={styles.success}>
+                      {this.state.updatedPasswordMessage}
                     </div>
                     <button disabled={!this.state.isInputValidForChangePassword} onClick={this.changePassword}>Passwort ändern</button>
                     <p className={styles.showReq}>
@@ -260,7 +247,6 @@ class Profile extends Component {
                         <li>min. 1 of: ! * # , ; ? + - _ . = ~ ^ % ( ) &#123; &#125; | : &ldquo; /</li>
                       </ul>
                     </div>
-                    <p hidden={this.state.updatedPasswordMessage === ""}>{this.state.updatedPasswordMessage}</p>
                   </div>
 
                 </div>
