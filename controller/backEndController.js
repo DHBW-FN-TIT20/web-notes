@@ -308,6 +308,7 @@ export class BackEndController {
       console.log("note.sharedUserIDs: ", note.sharedUserIDs);
 
       // TODO: @schuler-henry evaluate success of update
+      if (note.sharedUserIDs !== undefined && savedNote.ownerID === user.id) {
         console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.deleteUserNoteRelation(undefined, note.id)));
         if (note.sharedUserIDs.length > 0) {
           console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.addUserNoteRelation(note.sharedUserIDs, note.id)));
