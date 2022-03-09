@@ -41,9 +41,12 @@ class Edit extends Component {
    * It is used to set up all the editing components and to load the note.
    */
   async componentDidMount() {
-
+    
     // check if the user is logged in
     this.updateLoginState();
+
+    // check if there is still an open note
+    await FrontEndController.freeNote();
 
     // set up the storage event listener
     window.addEventListener('storage', this.storageTokenListener)
