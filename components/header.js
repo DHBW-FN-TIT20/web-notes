@@ -85,9 +85,6 @@ class Header extends Component {
 
     return (
       <div>
-        <nav role="navigation">
-
-        </nav>
         <nav>
           <div className={styles.navBar}>
             <div

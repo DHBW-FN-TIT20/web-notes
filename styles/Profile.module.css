@@ -7,10 +7,6 @@
   margin: 0;
 }
 
-.content p {
-  color: #AAAAAA;
-}
-
 .content table, .content table td{
   border: hidden;
   border-width: 0.5pt;
