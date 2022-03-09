@@ -49,8 +49,9 @@ class Edit extends Component {
     // set up beforunload listener
     window.addEventListener('beforeunload', async (ev) => {
       if (!this.state.isReadOnly) {
-        FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+        await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
       }
+      FrontEndController.removeCurrentNoteID();
     });
 
     // get initial data
@@ -97,8 +98,9 @@ class Edit extends Component {
    */
   async componentWillUnmount() {
     if (!this.state.isReadOnly) {
-      FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+      await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
     }
+    FrontEndController.removeCurrentNoteID();
     window.removeEventListener('storage', this.storageTokenListener)
   }
 

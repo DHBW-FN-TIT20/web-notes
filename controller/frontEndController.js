@@ -347,5 +347,19 @@ export class FrontEndController {
     return data.notes;
   }
 
+
+  /**
+   * This method checks if there is still a noteID in the local storage.
+   * If this is the case, the note is set to not in use and the noteID is removed from the local storage.
+   * The function is called, when entering the note overview.
+   */
+  static async freeNote() {
+    const localStorageNoteID = this.getCurrentNoteID();
+    if (localStorageNoteID) {
+      this.setNoteNotInUse(localStorageNoteID);
+      this.removeCurrentNoteID();
+    }
+  }
+
   //#endregion
 }
