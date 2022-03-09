@@ -1,5 +1,10 @@
 .content {
-  padding-left: 10pt;
+  padding: 10pt;
+  color: black;
+}
+
+.content h1 {
+  margin: 0;
 }
 
 .content p {
@@ -24,8 +29,9 @@
 }
 
 .fieldDiv {
-  width: 40%;
+  width: 90vw;
   margin: auto;
+  margin-top: 10px;
   padding: 10pt;
   border: solid;
   border-radius: 2pt;
@@ -83,7 +89,7 @@
   -moz-animation: fadeIn .5s; /* Firefox */
   -webkit-animation: fadeIn .5s; /* Safari and Chrome */
   -o-animation: fadeIn .5s; /* Opera */
-  width: 40%;
+  width: 90vw;
   margin: auto;
   padding: 10pt;
   margin-top: 1vh;
@@ -111,4 +117,30 @@
 @-o-keyframes fadeIn { /* Opera */
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .fieldDiv, .requirementsDiv {
+    width: 60vw;
+    margin-left: 0;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .fieldDiv, .requirementsDiv {
+    width: 40vw;
+    max-width: 600px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  
 }

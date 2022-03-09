@@ -72,7 +72,7 @@ class Register extends Component {
     if (await FrontEndController.isPasswordValid(password)) {
       this.setState({ passwordReqMessage: "" })
     } else {
-      this.setState({ passwordReqMessage: "check password requirements" })
+      this.setState({ passwordReqMessage: "überprüfe die Passwortanforderungen" })
     }
   }
 
@@ -117,7 +117,7 @@ class Register extends Component {
       if (await FrontEndController.isUsernameValid(this.state.username)) {
         this.setState({ usernameReqMessage: "" })
       } else {
-        this.setState({ usernameReqMessage: "check username requirements" })
+        this.setState({ usernameReqMessage: "überprüfe die Benutzernamensanforderung" })
       }
     }
 
@@ -126,9 +126,9 @@ class Register extends Component {
      */
     const updateFeedbackMessage = async (doesExist, password, confirmPassword) => {
       if (doesExist) {
-        this.setState({ feedbackMessage: "Username not available." })
+        this.setState({ feedbackMessage: "Benutzername ist nicht verfügbar." })
       } else if (password !== undefined && password !== confirmPassword) {
-        this.setState({ feedbackMessage: "Passwords do not match." })
+        this.setState({ feedbackMessage: "Passwörter stimmen nicht überein." })
       } else {
         this.setState({ feedbackMessage: "" })
       }
@@ -147,93 +147,95 @@ class Register extends Component {
             <Header username={""} hideLogin={false} hideLogout={true} />
           </header>
 
-          <main className={styles.field}>
-            <div className={styles.fieldDiv}>
-              <h1>Register</h1>
-              <input
-                type="text"
-                placeholder="Username..."
-                id='userInput'
-                className='formularInput'
-                autoFocus
-                onChange={async (e) => {
-                  this.setState({ username: e.target.value });
-                  this.setState({ doesUserExist: await FrontEndController.doesUserExist(e.target.value) });
-                  updateFeedbackMessage(this.state.doesUserExist, this.state.password, this.state.confirmPassword);
-                  updateUsernameValid();
-                }}
-                value={this.state.username}
-                onKeyDown={registerEnter} />
-              <div hidden={this.state.usernameReqMessage === ""} className={styles.inputRequirements}>
-                {this.state.usernameReqMessage}
+          <div className="scrollBody">
+            <main className={styles.field}>
+              <div className={styles.fieldDiv}>
+                <h1>Register</h1>
+                <input
+                  type="text"
+                  placeholder="Username..."
+                  id='userInput'
+                  className='formularInput'
+                  autoFocus
+                  onChange={async (e) => {
+                    this.setState({ username: e.target.value });
+                    this.setState({ doesUserExist: await FrontEndController.doesUserExist(e.target.value) });
+                    updateFeedbackMessage(this.state.doesUserExist, this.state.password, this.state.confirmPassword);
+                    updateUsernameValid();
+                  }}
+                  value={this.state.username}
+                  onKeyDown={registerEnter} />
+                <div hidden={this.state.usernameReqMessage === ""} className={styles.inputRequirements}>
+                  {this.state.usernameReqMessage}
+                </div>
+                <input
+                  type="password"
+                  placeholder="Passwort..."
+                  className='formularInput'
+                  onChange={async (e) => {
+                    this.setState({ password: e.target.value });
+                    updateFeedbackMessage(this.state.doesUserExist, e.target.value, this.state.confirmPassword);
+                    console.log(e.target.value)
+                    this.updatePasswordValid(e.target.value);
+                  }}
+                  value={this.state.password}
+                  onKeyDown={registerEnter} />
+                <div hidden={this.state.passwordReqMessage === ""} className={styles.inputRequirements}>
+                  {this.state.passwordReqMessage}
+                </div>
+                <input
+                  type="password"
+                  placeholder="Passwort bestätigen..."
+                  className='formularInput'
+                  onChange={async (e) => {
+                    this.setState({ confirmPassword: e.target.value });
+                    updateFeedbackMessage(this.state.doesUserExist, this.state.password, e.target.value);
+                  }}
+                  value={this.state.confirmPassword}
+                  onKeyDown={registerEnter} />
+                <div hidden={this.state.feedbackMessage === ""} className={styles.error} >
+                  {this.state.feedbackMessage}
+                </div>
+                <button onClick={async () => {
+                  registerVerification()
+                }}>
+                  Register
+                </button>
+                <div className={styles.flexBox}>
+                  <p className={styles.loginInstead}>
+                    Or&nbsp;
+                    <a onClick={() => { router.push("/login") }}>
+                      login
+                    </a>
+                    &nbsp;instead.
+                  </p>
+                  <p className={styles.showReq}>
+                    <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
+                      show requirements
+                    </a>
+                  </p>
+                </div>
               </div>
-              <input
-                type="password"
-                placeholder="Password..."
-                className='formularInput'
-                onChange={async (e) => {
-                  this.setState({ password: e.target.value });
-                  updateFeedbackMessage(this.state.doesUserExist, e.target.value, this.state.confirmPassword);
-                  console.log(e.target.value)
-                  this.updatePasswordValid(e.target.value);
-                }}
-                value={this.state.password}
-                onKeyDown={registerEnter} />
-              <div hidden={this.state.passwordReqMessage === ""} className={styles.inputRequirements}>
-                {this.state.passwordReqMessage}
+              <div hidden={!this.state.showRequirements} className={styles.requirementsDiv}>
+                <h2>Username</h2>
+                <ul>
+                  <li>4-16 characters</li>
+                  <li>only letters and numbers</li>
+                  <li>keyword &ldquo;admin&ldquo; is not allowed</li>
+                </ul>
+                <h2>Password</h2>
+                <ul>
+                  <li>min. 8 characters</li>
+                  <li>min. 1 number, 1 lowercase, 1 uppercase</li>
+                  <li>min. 1 of: ! * # , ; ? + - _ . = ~ ^ % ( ) &#123; &#125; | : &ldquo; /</li>
+                </ul>
               </div>
-              <input
-                type="password"
-                placeholder="Confirm password..."
-                className='formularInput'
-                onChange={async (e) => {
-                  this.setState({ confirmPassword: e.target.value });
-                  updateFeedbackMessage(this.state.doesUserExist, this.state.password, e.target.value);
-                }}
-                value={this.state.confirmPassword}
-                onKeyDown={registerEnter} />
-              <div hidden={this.state.feedbackMessage === ""} className={styles.error} >
-                {this.state.feedbackMessage}
-              </div>
-              <button onClick={async () => {
-                registerVerification()
-              }}>
-                Register
-              </button>
-              <div className={styles.flexBox}>
-                <p className={styles.loginInstead}>
-                  Or&nbsp;
-                  <a onClick={() => { router.push("/login") }}>
-                    login
-                  </a>
-                  &nbsp;instead.
-                </p>
-                <p className={styles.showReq}>
-                  <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
-                    show requirements
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div hidden={!this.state.showRequirements} className={styles.requirementsDiv}>
-              <h2>Username</h2>
-              <ul>
-                <li>4-16 characters</li>
-                <li>only letters and numbers</li>
-                <li>keyword &ldquo;admin&ldquo; is not allowed</li>
-              </ul>
-              <h2>Password</h2>
-              <ul>
-                <li>min. 8 characters</li>
-                <li>min. 1 number, 1 lowercase, 1 uppercase</li>
-                <li>min. 1 of: ! * # , ; ? + - _ . = ~ ^ % ( ) &#123; &#125; | : &ldquo; /</li>
-              </ul>
-            </div>
-          </main>
+            </main>
 
-          <footer>
-            <Footer />
-          </footer>
+            <footer>
+              <Footer />
+            </footer>
+          </div>
         </div>
       )
     } else {

@@ -26,8 +26,8 @@ class SavingIndicator extends Component {
             return (
                 <div className={`${styles.isSaving} ${styles.container}`}>
                     <ClipLoader
-                        size={17}
-                        color={"white"}
+                        size={20}
+                        color={"black"}
                         loading={true}
                     />
                 </div>
@@ -49,12 +49,13 @@ class SavingIndicator extends Component {
             } else {
                 return (
                     <div className={`${styles.isNotSaved} ${styles.container}`}>
-                        <SyncLoader
+                        {/* <SyncLoader
                             size={3}
                             color={"grey"}
                             loading={true}
                             speedMultiplier={0.7}
-                        />
+                        /> */}
+                        <p>✕</p>
                     </div>
 
                 )

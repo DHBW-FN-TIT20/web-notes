@@ -26,20 +26,19 @@ class Header extends Component {
      */
     const { router } = this.props;
 
-    let home;
+    let notizen;
 
     if (this.props.hideLogout) {
-      home = <div></div>
-    } 
-    if (this.props.hideLogin) {
-      home =  <Link href={'/'} passHref>
+      notizen = <div></div>
+    } else {
+      notizen =  <Link href={'/'} passHref>
         <div className={styles.nav}>
           <span>
-            Home
+            Notizen
           </span>
         </div>
       </Link>
-    }
+    } 
 
     let username;
 
@@ -156,7 +155,7 @@ class Header extends Component {
                     layout="fill">
                   </Image>
               </div>
-             {home}
+             {notizen}
               <Link href={'/getting-started'} passHref>
                 <div className={styles.nav}>
                   <span>

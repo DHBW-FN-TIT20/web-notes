@@ -1,29 +1,33 @@
 .isSaving {
-    color: white;
-    /* background-color: green; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .isSaved {
     color: rgb(104, 179, 104);
-    /* background-color: green; */
 }
 
 .isNotSaved {
-    color: white;
-    /* background-color: red; */
+    color: red;
 }
 
 .container {
     /* TODO: correct height width and center childs */
-    min-height: 5vh;
-    max-height: 5vh;
-    min-width: 7vw;
-    max-width: 7vw;
-    height: 5vh;
-    width: 5vh;
-    border-radius: 5px;
-    border: white solid 2px;
+    height: 32px;
+    width: 32px;
+    box-sizing: border-box;
+    border: 1px solid rgb(96, 94, 92);
+    border-radius: 2px;
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
     align-items: center;
     text-align: center;
-    margin-top: auto;
+    margin: auto;
+}
+
+.container p {
+    margin: 0;
+    height: inherit;
+    font-size: 25px;
 }

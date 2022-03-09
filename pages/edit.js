@@ -12,7 +12,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 
 /**
- * @class Home Component Class
+ * @class Edit Component Class
  * @component
  */
 class Edit extends Component {
@@ -390,50 +390,58 @@ class Edit extends Component {
             <Header username={FrontEndController.getUsernameFromToken(this.state.currentToken)} hideLogin={this.state.isLoggedIn} hideLogout={!this.state.isLoggedIn} />
           </header>
 
-          <main>
-            <div className={styles.contentOne}>
-              <div className={styles.nameAndSaveIndicator}>
-                <TextField
-                  className={styles.titleInput}
-                  label={"Title " + infoString}
-                  onChange={(e, newValue) => {
-                    this.setState({ title: newValue })
-                    this.autoSave.handleChange()
-                  }}
-                  placeholder={"Titel..."}
-                  value={this.state.title}
-                  onFocus={event => {
-                    event.target.select();
-                    setTimeout(() => { event.target.setSelectionRange(0, event.target.value.length); }, 0);
-                  }}
-                  componentRef={(textField) => { this.TitleField = textField }}
-                  disabled={this.state.isReadOnly}
-                />
-                <SavingIndicator
-                  className={styles.savingIndicator}
-                  isSaving={this.state.isSaving}
-                  isSaved={this.state.isSaved}
-                  notSaveMessage={"Not saved yet!"}
-                />
+          <div className="scrollBody">
+            <main>
+              <div className={styles.content}>
+                <div className={styles.nameAndSaveIndicator}>
+                  <div className={styles.titleText}>
+                    {"Titel " + infoString}
+                  </div>
+                  <div>
+                    {/* Empty grid element */}
+                  </div>
+                  <TextField
+                    onChange={(e, newValue) => {
+                      this.setState({ title: newValue })
+                      this.autoSave.handleChange()
+                    }}
+                    placeholder={"Titel..."}
+                    value={this.state.title}
+                    onFocus={event => {
+                      event.target.select();
+                      setTimeout(() => { event.target.setSelectionRange(0, event.target.value.length); }, 0);
+                    }}
+                    componentRef={(textField) => { this.TitleField = textField }}
+                    disabled={this.state.isReadOnly}
+                  />
+                  <SavingIndicator
+                    className={styles.savingIndicator}
+                    isSaving={this.state.isSaving}
+                    isSaved={this.state.isSaved}
+                  />
+                </div>
+                <this.Editor />
               </div>
-              <this.Editor />
-              <div hidden={this.state.isSharedNote}>
-                <label>Diese Notiz teilen mit...</label>
-                <TagPicker
-                  onResolveSuggestions={this.filterSuggestedTags}
-                  getTextFromItem={(item) => { return item.name }}
-                  pickerSuggestionsProps={{ suggestionsHeaderText: 'Vorgeschlagene Personen', noResultsFoundText: 'Keine Personen gefunden', }}
-                  onChange={this.handlePersonPickerChange}
-                  selectedItems={this.state.selectedUserTags}
-                  disabled={this.state.isReadOnly}
-                />
+              <div className={styles.content}>
+                <div hidden={this.state.isSharedNote}>
+                  <label>Diese Notiz teilen mit...</label>
+                  <TagPicker
+                    onResolveSuggestions={this.filterSuggestedTags}
+                    getTextFromItem={(item) => { return item.name }}
+                    pickerSuggestionsProps={{ suggestionsHeaderText: 'Vorgeschlagene Personen', noResultsFoundText: 'Keine Personen gefunden', }}
+                    onChange={this.handlePersonPickerChange}
+                    selectedItems={this.state.selectedUserTags}
+                    disabled={this.state.isReadOnly}
+                    className={styles.sharedPicker}
+                  />
+                </div>
               </div>
-            </div>
-          </main>
+            </main>
 
-          <footer>
-            <Footer />
-          </footer>
+            <footer>
+              <Footer />
+            </footer>
+          </div>
         </div>
       )
     }
