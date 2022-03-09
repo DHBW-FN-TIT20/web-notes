@@ -391,6 +391,7 @@ class Edit extends Component {
                     setTimeout(() => { event.target.setSelectionRange(0, event.target.value.length); }, 0);
                   }}
                   componentRef={(textField) => { this.TitleField = textField }}
+                  disabled={this.state.isReadOnly}
                 />
                 <SavingIndicator
                   className={styles.savingIndicator}

@@ -273,15 +273,16 @@ export class BackEndController {
       // return a undefined object as noteID to indicate that the note was not saved
       return undefined;
     }
+    
+    const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
+
+    if (user === undefined) {
+      return undefined;
+    }
 
     if (note.id === undefined) {
       // create new note
       console.log("create new note");
-      const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
-
-      if (user === undefined) {
-        return undefined;
-      }
 
       const addedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.addNote(user.id, note.inUse))[0];
       console.log("addedNote: ", addedNote);
@@ -307,7 +308,7 @@ export class BackEndController {
       console.log("note.sharedUserIDs: ", note.sharedUserIDs);
 
       // TODO: @schuler-henry evaluate success of update
-      if (note.sharedUserIDs !== undefined) {
+      if (note.sharedUserIDs !== undefined && savedNote.ownerID === user.id) {
         console.log(this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.deleteUserNoteRelation(undefined, note.id)));
         if (note.sharedUserIDs.length > 0) {
           console.log(this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.addUserNoteRelation(note.sharedUserIDs, note.id)));
