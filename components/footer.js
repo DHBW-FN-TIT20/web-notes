@@ -7,7 +7,10 @@ import styles from '../styles/Footer.module.css'
 // @ts-ignore
 import GitHubIcon from '../public/GitHub.png'
 // @ts-ignore
+import WebNotesIcon from '../public/Logo.png'
+// @ts-ignore
 import DevChatIcon from '../public/Dev-Chat.png'
+import { FrontEndController } from '../controller/frontEndController'
 
 /** 
  * @class Footer Component Class
@@ -36,15 +39,15 @@ class Footer extends Component {
         <div className={styles.footer}>
           <div className={styles.footerElement}>
             <h4>
-              Social Media
+              Quellcode
             </h4>
             <div className={styles.socialMedia}>
-              <Link 
+              <Link
                 href={'https://github.com/DHBW-FN-TIT20/web-notes'}
                 passHref>
-                <div>
-                  <Image 
-                    src={GitHubIcon} 
+                <div className={styles.icon}>
+                  <Image
+                    src={GitHubIcon}
                     objectFit='contain'
                     height={40}
                     width={40}
@@ -56,15 +59,28 @@ class Footer extends Component {
           </div>
           <div className={styles.footerElement}>
             <h4>
-              Projects
+              Projekte
             </h4>
-            <div className={styles.socialMedia}>
-              <Link 
+            <div className={styles.projects}>
+              <Link
+                href={'https://web-notes.vercel.app'}
+                passHref>
+                <div className={styles.icon}>
+                  <Image
+                    src={WebNotesIcon}
+                    objectFit='contain'
+                    height={40}
+                    width={40}
+                    alt='WebNotes Icon'
+                  />
+                </div>
+              </Link>
+              <Link
                 href={'https://dev-chat.me'}
                 passHref>
-                <div>
-                  <Image 
-                    src={DevChatIcon} 
+                <div className={styles.icon}>
+                  <Image
+                    src={DevChatIcon}
                     objectFit='contain'
                     height={40}
                     width={40}
@@ -76,17 +92,45 @@ class Footer extends Component {
           </div>
           <div className={styles.footerElement}>
             <h4>
-              Contact
+              Kontakt
             </h4>
-            <Link 
-              href={"/impressum"}>
-              Impressum
-            </Link>
+            <div className={styles.contact}>
+              <Link
+                href={"/impressum"}>
+                Impressum
+              </Link>
+            </div>
           </div>
           <div className={styles.footerElement}>
             <h4>
               Account
             </h4>
+            <div className={styles.account}>
+              <div hidden={this.props.isLoggedIn}>
+                <Link
+                  href={"/login"}>
+                  Login
+                </Link>
+              </div>
+              <div hidden={this.props.isLoggedIn}>
+                <Link
+                  href={"/register"}>
+                  Registrieren
+                </Link>
+              </div>
+              <div hidden={!this.props.isLoggedIn}>
+                <Link
+                  href={"/profile"}>
+                  Passwort ändern
+                </Link>
+              </div>
+              <div hidden={!this.props.isLoggedIn} onClick={() => { FrontEndController.logoutUser() }}>
+                <Link
+                  href={"/"}>
+                  Ausloggen
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>

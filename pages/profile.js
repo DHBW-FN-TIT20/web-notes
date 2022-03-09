@@ -246,7 +246,7 @@ class Profile extends Component {
             </main >
 
             <footer>
-              <Footer />
+              <Footer isLoggedIn={this.state.isLoggedIn}/>
             </footer>
           </div>
         </div >
