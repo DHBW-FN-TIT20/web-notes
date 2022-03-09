@@ -49,7 +49,17 @@ class Edit extends Component {
     // set up beforunload listener
     window.addEventListener('beforeunload', async (ev) => {
       if (!this.state.isReadOnly) {
-        FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+        await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+      }
+      FrontEndController.removeCurrentNoteID();
+    });
+
+    // set up listen on cmd+s and strg+s 
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "s" && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        this.autoSave.stop();
+        this.autoSave.save();
       }
     });
 
@@ -71,7 +81,7 @@ class Edit extends Component {
       FrontEndController.setCurrentNoteID(currentNote.id);
       this.isNoteNew = true;
     } else {
-      currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);
+      currentNote = await FrontEndController.getNoteByID(noteID);
     }
 
     // setup editor
@@ -97,8 +107,9 @@ class Edit extends Component {
    */
   async componentWillUnmount() {
     if (!this.state.isReadOnly) {
-      FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+      await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
     }
+    FrontEndController.removeCurrentNoteID();
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
@@ -256,21 +267,7 @@ class Edit extends Component {
       if (this.autoSave.timeout === null) {
         this.autoSave.timeout = setTimeout(async () => {
           if (this.editorInstance !== null) {
-            this.setState({ isSaving: true, isSaved: false });
-
-            // save the note
-            const noteToSave = {
-              id: FrontEndController.getCurrentNoteID(),
-              title: this.state.title,
-              content: this.editorInstance.getData(),
-              inUse: true,
-              sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
-            }
-            let isSaved = await FrontEndController.saveNote(noteToSave)
-
-            this.autoSave.dataWasChanged = false;
-            this.autoSave.stop();
-            this.setState({ isSaved: isSaved, isSaving: false });
+           await this.autoSave.save();
           }
         }, 2000);
       }
@@ -299,6 +296,27 @@ class Edit extends Component {
       }
       this.autoSave.dataWasChanged = true;
       this.setState({ isSaved: false });
+    },
+
+    /**
+     * This method saves the current note.
+     */
+    save: async () => {
+      this.setState({ isSaving: true, isSaved: false });
+
+      // save the note
+      const noteToSave = {
+        id: FrontEndController.getCurrentNoteID(),
+        title: this.state.title,
+        content: this.editorInstance.getData(),
+        inUse: true,
+        sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
+      }
+      let isSaved = await FrontEndController.saveNote(noteToSave)
+
+      this.autoSave.dataWasChanged = false;
+      this.autoSave.stop();
+      this.setState({ isSaved: isSaved, isSaving: false });
     }
   }
 
@@ -394,6 +412,7 @@ class Edit extends Component {
                       setTimeout(() => { event.target.setSelectionRange(0, event.target.value.length); }, 0);
                     }}
                     componentRef={(textField) => { this.TitleField = textField }}
+                    disabled={this.state.isReadOnly}
                   />
                   <SavingIndicator
                     className={styles.savingIndicator}

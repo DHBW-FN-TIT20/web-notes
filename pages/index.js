@@ -25,7 +25,16 @@ class Notizen extends Component {
     };
     this.noteListColumns = [
       { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true },
-      { key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true },
+      { 
+        key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true,
+        onRender: (item) => {
+          const date = new Date(item.modifiedAt);
+          if (String(date) == "Invalid Date") {
+            return "";
+          }
+          return (`${date.toLocaleString("de-DE", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })}`);
+        }
+      },
       {
         key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true,
         onRender: (item) => {
@@ -66,6 +75,7 @@ class Notizen extends Component {
     this.setState({ isLoading: true });
     await this.getNoteList();
     this.setState({ isLoading: false });
+    FrontEndController.freeNote();
   }
 
   /**

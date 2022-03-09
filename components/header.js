@@ -124,6 +124,7 @@ class Header extends Component {
             </div>
             <div className={styles.logoSchrift}>
               <Image 
+                onClick={() => { router.push('/') }}
                 src={LogoSchrift}
                 alt='Logo_Schrift_Weiss.png missing.'
                 objectFit='contain'
@@ -136,6 +137,7 @@ class Header extends Component {
               id="menu">
               <div className={styles.navLogo}>
                 <Image 
+                  onClick={() => { router.push('/') }}
                   src={Logo}
                   alt='Logo_Schrift_Weiss.png missing.'
                   objectFit='contain'
@@ -145,6 +147,7 @@ class Header extends Component {
               </div>
               <div className={styles.navLogoSchrift}>
                   <Image 
+                    onClick={() => { router.push('/') }}
                     src={LogoSchrift}
                     alt='Logo_Schrift_Weiss.png missing.'
                     objectFit='contain'
