@@ -54,6 +54,15 @@ class Edit extends Component {
       FrontEndController.removeCurrentNoteID();
     });
 
+    // set up listen on cmd+s and strg+s 
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "s" && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        this.autoSave.stop();
+        this.autoSave.save();
+      }
+    });
+
     // get initial data
     let noteID = FrontEndController.getCurrentNoteID();
     let currentNote = undefined;
@@ -258,21 +267,7 @@ class Edit extends Component {
       if (this.autoSave.timeout === null) {
         this.autoSave.timeout = setTimeout(async () => {
           if (this.editorInstance !== null) {
-            this.setState({ isSaving: true, isSaved: false });
-
-            // save the note
-            const noteToSave = {
-              id: FrontEndController.getCurrentNoteID(),
-              title: this.state.title,
-              content: this.editorInstance.getData(),
-              inUse: true,
-              sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
-            }
-            let isSaved = await FrontEndController.saveNote(noteToSave)
-
-            this.autoSave.dataWasChanged = false;
-            this.autoSave.stop();
-            this.setState({ isSaved: isSaved, isSaving: false });
+           await this.autoSave.save();
           }
         }, 2000);
       }
@@ -301,6 +296,27 @@ class Edit extends Component {
       }
       this.autoSave.dataWasChanged = true;
       this.setState({ isSaved: false });
+    },
+
+    /**
+     * This method saves the current note.
+     */
+    save: async () => {
+      this.setState({ isSaving: true, isSaved: false });
+
+      // save the note
+      const noteToSave = {
+        id: FrontEndController.getCurrentNoteID(),
+        title: this.state.title,
+        content: this.editorInstance.getData(),
+        inUse: true,
+        sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
+      }
+      let isSaved = await FrontEndController.saveNote(noteToSave)
+
+      this.autoSave.dataWasChanged = false;
+      this.autoSave.stop();
+      this.setState({ isSaved: isSaved, isSaving: false });
     }
   }
 
