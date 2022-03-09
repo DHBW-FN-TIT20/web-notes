@@ -92,17 +92,15 @@ class Impressum extends Component {
           <main>
             <div className={styles.content}>
               <h1>Impressum</h1>
-              <h2>Verantwortlich</h2>
-              <p>Dummy</p>
+
+              <h2>Angaben gem&auml;&szlig; &sect; 5 TMG</h2>
+              <p>Johannes Brandenburger<br />
+                Kirchstr. 16<br />
+                88512 Mengen</p>
+
               <h2>Kontakt</h2>
-              <p>
-                Dummy <br />
-                Fallenbrunnen 2 <br />
-                Friedrichshafen <br />
-                <br />
-                Telefon: &#43;49 1234 56789 <br />
-                E-Mail: test&#64;outlook.de <br />
-              </p>
+              <p>Telefon: +49 152 25366286<br />
+                E-Mail: johannes@brandenburger.dev</p>
             </div>
           </main>
 
