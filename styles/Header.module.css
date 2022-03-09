@@ -35,6 +35,7 @@
   position: relative;
   height: 30pt;
   align-self: center;
+  cursor: pointer;
 }
 
 .menu
@@ -95,12 +96,14 @@
   height: 30pt;
   align-self: center;
   display: none;
+  cursor: pointer;
 }
 
 .navLogoSchrift {
   position: relative;
   height: 50pt;
   width: 100%;
+  cursor: pointer;
 }
 
 .pcSpacing {
@@ -153,6 +156,7 @@
 
   .logoSchrift {
     display: none;
+    cursor: pointer;
   }
 
   .menu {
@@ -176,6 +180,7 @@
     margin: 0 20px;
     align-self: center;
     justify-self: center;
+    cursor: pointer;
   }
 
   .nav {
