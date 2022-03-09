@@ -58,7 +58,7 @@ button {
   font-size: 14pt;
   width: 100%;
   background-color: transparent;
-  color: white;
+  color: black;
   padding: 5pt 10pt;
   border: solid;
   border-color: #2A2A2A;
@@ -73,11 +73,15 @@ button:hover {
   transition: 0.3s;
 }
 
+button:not(:hover) {
+  transition: 0.3s;
+}
+
 .formularInput {
   font-size: 14pt;
   width: 100%;
   background-color: transparent;
-  color: white;
+  /* color: white; */
   padding: 5pt 10pt;
   border: solid;
   border-color: #2A2A2A;

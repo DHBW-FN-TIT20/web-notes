@@ -3,24 +3,27 @@
   min-height: 4000px;
 }
 
-.contentOne {
-  padding: 8pt;
+.content {
+  padding: 10pt;
+  overflow-x: hidden;
 }
 
 .nameAndSaveIndicator {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 1fr;
+  grid-template-columns: auto min-content;
+  grid-template-rows: auto min-content;
   grid-column-gap: 4px;
-  grid-row-gap: 0px;
   margin-bottom: 3px;
 }
 
-.titleInput {
-  grid-area: 1 / 1 / 2 / 5;
+.titleText {
+  padding-bottom: 3px;
 }
+
 .savingIndicator {
-  grid-area: 1 / 5 / 2 / 6;
+  margin: 0;
+  padding: 0;
+  background-color: green;
 }
 
 .centerScreen {
@@ -28,5 +31,11 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  min-height: 100vh;
+  min-height: inherit;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+.sharedPicker {
+  background-color: rgb(255, 255, 255);
 }

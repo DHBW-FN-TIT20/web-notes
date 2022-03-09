@@ -72,7 +72,7 @@ class Register extends Component {
     if (await FrontEndController.isPasswordValid(password)) {
       this.setState({ passwordReqMessage: "" })
     } else {
-      this.setState({ passwordReqMessage: "check password requirements" })
+      this.setState({ passwordReqMessage: "überprüfe die Passwortanforderungen" })
     }
   }
 
@@ -117,7 +117,7 @@ class Register extends Component {
       if (await FrontEndController.isUsernameValid(this.state.username)) {
         this.setState({ usernameReqMessage: "" })
       } else {
-        this.setState({ usernameReqMessage: "check username requirements" })
+        this.setState({ usernameReqMessage: "überprüfe die Benutzernamensanforderung" })
       }
     }
 
@@ -126,9 +126,9 @@ class Register extends Component {
      */
     const updateFeedbackMessage = async (doesExist, password, confirmPassword) => {
       if (doesExist) {
-        this.setState({ feedbackMessage: "Username not available." })
+        this.setState({ feedbackMessage: "Benutzername ist nicht verfügbar." })
       } else if (password !== undefined && password !== confirmPassword) {
-        this.setState({ feedbackMessage: "Passwords do not match." })
+        this.setState({ feedbackMessage: "Passwörter stimmen nicht überein." })
       } else {
         this.setState({ feedbackMessage: "" })
       }
@@ -170,7 +170,7 @@ class Register extends Component {
                 </div>
                 <input
                   type="password"
-                  placeholder="Password..."
+                  placeholder="Passwort..."
                   className='formularInput'
                   onChange={async (e) => {
                     this.setState({ password: e.target.value });
@@ -185,7 +185,7 @@ class Register extends Component {
                 </div>
                 <input
                   type="password"
-                  placeholder="Confirm password..."
+                  placeholder="Passwort bestätigen..."
                   className='formularInput'
                   onChange={async (e) => {
                     this.setState({ confirmPassword: e.target.value });

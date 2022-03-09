@@ -122,7 +122,7 @@ class Login extends Component {
                   onKeyDown={loginEnter} />
                 <input
                   type="password"
-                  placeholder="Password..."
+                  placeholder="Passwort..."
                   className='formularInput'
                   onChange={(e) => this.setState({ password: e.target.value })}
                   value={this.state.password}

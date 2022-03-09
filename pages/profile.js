@@ -25,7 +25,8 @@ class Profile extends Component {
       newPasswordConfirm: "",
       isInputValidForChangePassword: false,
       passwordReqMessage: "",
-      updatedPasswordMessage: ""
+      updatedPasswordMessage: "",
+      feedbackMessage: "",
     }
   }
 
@@ -97,29 +98,64 @@ class Profile extends Component {
 
     let isInputValidForChangePassword = false;
     let passwordReqMessage = "";
+    let feedbackMessage = "";
 
-    // evaluate input values and set the feedback
-    if (oldPassword.length > 0 && newPassword.length > 0 && checkPasswordOnRegex(newPassword) !== "") {
-      passwordReqMessage = "Das Passwort erfüllt die Anforderungen nicht.";
-    }
-    if (oldPassword.length > 0 && newPassword.length > 0 && newPasswordConfirm.length > 0) {
-      if (checkPasswordOnRegex(newPassword) !== "") {
-        passwordReqMessage = "Das Passwort erfüllt die Anforderungen nicht.";
-      } else if (newPassword === newPasswordConfirm) {
-        isInputValidForChangePassword = true;
-      } else {
-        isInputValidForChangePassword = false;
-        passwordReqMessage = "Die Passwörter stimmen nicht überein.";
+    if (newPassword.length > 0) {
+      if (!await FrontEndController.isPasswordValid(newPassword)) {
+        passwordReqMessage = "überprüfe die Passwortanforderungen"
       }
-    } else {
-      isInputValidForChangePassword = false;
-      // passwordReqMessage = "Bitte füllen Sie alle Felder aus.";
     }
+
+    if (newPassword.length > 0 && newPasswordConfirm.length > 0) {
+      if (newPassword !== newPasswordConfirm) {
+        feedbackMessage = "Die neuen Passwörter stimmen nicht überein."
+      }
+    }
+
+
+    // // evaluate input values and set the feedback
+    // if (oldPassword.length > 0 && newPassword.length > 0) {
+    //   if (checkPasswordOnRegex(newPassword) !== "") {
+    //     passwordReqMessage = "Das Passwort erfüllt die Anforderungen nicht.";
+    //   } else if (newPassword === newPasswordConfirm) {
+    //     isInputValidForChangePassword = true;
+    //     feedbackMessage = "";
+    //   } else {
+    //     isInputValidForChangePassword = false;
+    //     feedbackMessage = "Die Passwörter stimmen nicht überein.";
+    //   }
+    // } else {
+    //   isInputValidForChangePassword = false;
+    //   // passwordReqMessage = "Bitte füllen Sie alle Felder aus.";
+    // }
 
     // apply the feedback and the input values to the state
-    this.setState({ [event.target.name]: event.target.value, isInputValidForChangePassword: isInputValidForChangePassword, passwordReqMessage: passwordReqMessage, updatedPasswordMessage: "" });
+    this.setState({ [event.target.name]: event.target.value, isInputValidForChangePassword: isInputValidForChangePassword, passwordReqMessage: passwordReqMessage, updatedPasswordMessage: "", feedbackMessage: feedbackMessage });
   }
 
+  /**
+   * This method checks for enter key press in event and calls the changePasswordVerification method.
+   * @param {any} event Button-Press event
+   */
+  changeEnter = async (event) => {
+    if (event.key.toLowerCase() === "enter") {
+      event.preventDefault();
+      this.changePassword();
+    }
+  }
+
+  /**
+   * This method registers the user with the currently entered credentials. If the registration was successfull, it routes to root, else all fields are cleared.
+   */
+  changePasswordVerification = async () => {
+    if (this.state.newPassword === this.state.newPasswordConfirm && this.state.usernameReqMessage === "" && this.state.passwordReqMessage === "") {
+      if (await FrontEndController.changePassword(this.state.oldPassword, this.state.newPassword)) {
+        // Do sth for success
+      }
+      this.setState({ oldPassword: "", newPassword: "", newPasswordConfirm: "" });
+      document.getElementById("userInput")?.focus();
+    }
+  }
 
   /**
    * Generates the JSX Output for the Client
@@ -168,25 +204,48 @@ class Profile extends Component {
                 </table> */}
 
                 <div>
-                  <h2>Passwort ändern</h2>
+
                   <div className={styles.fieldDiv}>
-                    <label className={styles.fieldLabel}>Altes Passwort:</label>
-                    <input className={styles.fieldInput} type="password" name="oldPassword" onChange={this.changedInput} value={this.state.oldPassword} />
-                    <label className={styles.fieldLabel}>Neues Passwort:</label>
-                    <input className={styles.fieldInput} type="password" name="newPassword" onChange={this.changedInput} value={this.state.newPassword} />
-                    <label className={styles.fieldLabel}>Neues Passwort wiederholen:</label>
-                    <input className={styles.fieldInput} type="password" name="newPasswordConfirm" onChange={this.changedInput} value={this.state.newPasswordConfirm} />
+                    <h2>Passwort ändern</h2>
+                    <input
+                      type="password"
+                      placeholder="Altes Passwort..."
+                      id='userInput'
+                      className='formularInput'
+                      name="oldPassword"
+                      onChange={this.changedInput}
+                      value={this.state.oldPassword}
+                      onKeyDown={this.changeEnter} />
+                    <input
+                      type="password"
+                      placeholder="Neues Passwort..."
+                      className='formularInput'
+                      name="newPassword"
+                      onChange={this.changedInput}
+                      value={this.state.newPassword}
+                      onKeyDown={this.changeEnter} />
                     <div hidden={this.state.passwordReqMessage === ""} className={styles.inputRequirements}>
                       {this.state.passwordReqMessage}
                     </div>
+                    <input
+                      type="password"
+                      placeholder="Neues Passwort bestätigen..."
+                      className='formularInput'
+                      name="newPasswordConfirm"
+                      onChange={this.changedInput}
+                      value={this.state.newPasswordConfirm}
+                      onKeyDown={this.changeEnter} />
+                    <div hidden={this.state.feedbackMessage === ""} className={styles.error} >
+                      {this.state.feedbackMessage}
+                    </div>
                     <button disabled={!this.state.isInputValidForChangePassword} onClick={this.changePassword}>Passwort ändern</button>
-
                     <p className={styles.showReq}>
                       <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
                         show requirements
                       </a>
                     </p>
-
+                  </div>
+                  <div>
                     <div hidden={!this.state.showRequirements} className={styles.requirementsDiv}>
                       <h2>Username</h2>
                       <ul>

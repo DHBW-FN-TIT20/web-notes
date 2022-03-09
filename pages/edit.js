@@ -374,11 +374,15 @@ class Edit extends Component {
 
           <div className="scrollBody">
             <main>
-              <div className={styles.contentOne}>
+              <div className={styles.content}>
                 <div className={styles.nameAndSaveIndicator}>
+                  <div className={styles.titleText}>
+                    {"Titel " + infoString}
+                  </div>
+                  <div>
+                    {/* Empty grid element */}
+                  </div>
                   <TextField
-                    className={styles.titleInput}
-                    label={"Title " + infoString}
                     onChange={(e, newValue) => {
                       this.setState({ title: newValue })
                       this.autoSave.handleChange()
@@ -395,10 +399,11 @@ class Edit extends Component {
                     className={styles.savingIndicator}
                     isSaving={this.state.isSaving}
                     isSaved={this.state.isSaved}
-                    notSaveMessage={"Not saved yet!"}
                   />
                 </div>
                 <this.Editor />
+              </div>
+              <div className={styles.content}>
                 <div hidden={this.state.isSharedNote}>
                   <label>Diese Notiz teilen mit...</label>
                   <TagPicker
@@ -408,6 +413,7 @@ class Edit extends Component {
                     onChange={this.handlePersonPickerChange}
                     selectedItems={this.state.selectedUserTags}
                     disabled={this.state.isReadOnly}
+                    className={styles.sharedPicker}
                   />
                 </div>
               </div>

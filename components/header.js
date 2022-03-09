@@ -30,8 +30,7 @@ class Header extends Component {
 
     if (this.props.hideLogout) {
       notizen = <div></div>
-    } 
-    if (this.props.hideLogin) {
+    } else {
       notizen =  <Link href={'/'} passHref>
         <div className={styles.nav}>
           <span>
@@ -39,7 +38,7 @@ class Header extends Component {
           </span>
         </div>
       </Link>
-    }
+    } 
 
     let username;
 
