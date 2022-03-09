@@ -94,7 +94,7 @@ class Edit extends Component {
 
   /**
    * This method is called just bevor the component is unmounted.
-   * It is used to remove the storage event listener and to save the note (it was probably saved bevor).
+   * It is used to remove the storage event listener and to save the note (it was probably saved bevor). 
    */
   async componentWillUnmount() {
     if (!this.state.isReadOnly) {
