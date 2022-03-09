@@ -273,7 +273,7 @@ export class BackEndController {
       // return a undefined object as noteID to indicate that the note was not saved
       return undefined;
     }
-    
+
     const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
 
     if (user === undefined) {
@@ -359,7 +359,7 @@ export class BackEndController {
         content: note.content,
         inUse: note.inUse,
         isShared: false,
-        sharedUserIDs: await this.getSharedUserIDFromNoteID(note.id)
+        sharedUserIDs: []
       });
     }
 
@@ -382,6 +382,70 @@ export class BackEndController {
     const sortedNotes = allNotes.sort((a, b) => (b.modifiedAt.getTime() - a.modifiedAt.getTime()));
 
     return sortedNotes;
+  }
+
+
+  /**
+   * Gets get all notes which are related to the user from the database
+   * @param {string} userToken
+   */
+  async getNoteByID(userToken, id) {
+    const isUserValid = await this.isUserTokenValid(userToken);
+
+    if (!isUserValid) {
+      // return a empty array to indicate that the user is not valid
+      return [];
+    }
+
+    const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
+
+    if (user === undefined) {
+      return [];
+    }
+
+    const ownNotes = this.databaseModel.getNoteFromResponse(await this.databaseModel.selectNoteTable(id, undefined, user.id));
+
+    const sharedNotes = this.databaseModel.getSharedNoteFromResponse(await this.databaseModel.selectUserNoteRelationTable(user.id));
+
+    /**
+     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}[]}
+     */
+    const ownNotesWithSharedAttribute = [];
+
+    for (const note of ownNotes) {
+      ownNotesWithSharedAttribute.push({
+        id: note.id,
+        title: note.title,
+        ownerID: note.ownerID,
+        modifiedAt: note.modifiedAt,
+        content: note.content,
+        inUse: note.inUse,
+        isShared: false,
+        sharedUserIDs: await this.getSharedUserIDFromNoteID(note.id)
+      });
+    }
+
+    console.log("ownNotesWithSharedAttribute: ", ownNotesWithSharedAttribute);
+
+    const sharedNotesWithSharedAttribute = sharedNotes.map(note => ({
+      id: note.id,
+      title: note.title,
+      ownerID: note.ownerID,
+      modifiedAt: note.modifiedAt,
+      content: note.content,
+      inUse: note.inUse,
+      isShared: true,
+      /**
+       * @type {number[]}
+       */
+      sharedUserIDs: []
+    }));
+
+    const allNotes = ownNotesWithSharedAttribute.concat(sharedNotesWithSharedAttribute);
+
+    const oneNote = allNotes.filter(note => note.id === id)[0];
+
+    return oneNote;
   }
 
   /**

@@ -347,6 +347,29 @@ export class FrontEndController {
     return data.notes;
   }
 
+  /**
+   * This method is used to get get a note by its id.
+   * @param {number} noteID id of the note
+   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}>} Array of all notes of the current user
+   */
+  static async getNoteByID(noteID) {
+
+    const response = await fetch('./api/notes/get_note_by_id', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userToken: FrontEndController.getUserToken(),
+        id: noteID
+      })
+    });
+
+    const data = await response.json();
+
+    return data.note;
+  }
+
 
   /**
    * This method checks if there is still a noteID in the local storage.

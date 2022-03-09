@@ -81,7 +81,7 @@ class Edit extends Component {
       FrontEndController.setCurrentNoteID(currentNote.id);
       this.isNoteNew = true;
     } else {
-      currentNote = (await FrontEndController.getNotes()).find(note => note.id === noteID);
+      currentNote = await FrontEndController.getNoteByID(noteID);
     }
 
     // setup editor
