@@ -78,7 +78,7 @@ class Register extends Component {
 
   /**
    * Generates the JSX Output for the Client
-   * @returns JSX Output
+   * @returns {JSX.Element} JSX Output
    */
   render() {
     /**

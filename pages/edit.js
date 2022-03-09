@@ -7,7 +7,7 @@ import styles from '../styles/Edit.module.css'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import SavingIndicator from '../components/SavingIndicator'
-import { initializeIcons, IBasePicker, ITag, IInputProps, IBasePickerSuggestionsProps, Spinner, SpinnerSize, DetailsList, DefaultButton, PrimaryButton, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX, TagPicker } from '@fluentui/react'
+import { initializeIcons, ITag, TextField, TagPicker } from '@fluentui/react'
 import BeatLoader from "react-spinners/BeatLoader";
 
 
@@ -41,6 +41,8 @@ class Edit extends Component {
    * It is used to set up all the editing components and to load the note.
    */
   async componentDidMount() {
+
+    // check if the user is logged in
     this.updateLoginState();
 
     // set up the storage event listener
@@ -69,14 +71,7 @@ class Edit extends Component {
 
     // check if there is a noteID if not a new note is created
     if (!noteID) {
-      currentNote = {
-        content: "",
-        title: "Neue Notiz",
-        id: undefined,
-        inUse: false,
-        isShared: false,
-        sharedUserIDs: [],
-      }
+      currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: false, isShared: false, sharedUserIDs: [], }
       currentNote.id = await FrontEndController.saveNote(currentNote);
       FrontEndController.setCurrentNoteID(currentNote.id);
       this.isNoteNew = true;
@@ -96,6 +91,7 @@ class Edit extends Component {
     // update the state
     this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared, isReadOnly: currentNote.inUse });
 
+    // if the note is new focus the title field
     if (this.isNoteNew) {
       this.TitleField.focus();
     }
@@ -138,6 +134,7 @@ class Edit extends Component {
     // get all user tags of the current note
     const selectedUserTags = allUserTags.filter(userTag => sharedUserIDs.includes(userTag.key));
 
+    // update the state
     this.setState({ allUserTags: allUserTags, selectedUserTags: selectedUserTags });
   }
 
@@ -157,6 +154,7 @@ class Edit extends Component {
   /**
    * This functional component renders the Editor.
    * If the editor is not loaded yet, it renders "Loading..."
+   * @returns {JSX.Element} The Editor
    */
   Editor = () => {
     return (
@@ -169,26 +167,24 @@ class Edit extends Component {
   /**
    * This method sets up the editor.
    * @param {string} content The HTML content of the note
+   * @param {boolean} readOnly If the note is currently read only
    */
   setupEditor(content, readOnly) {
     if (window !== undefined) {
-      console.log("Loading Editor...");
 
+      // load the editor from the components folder
       let CKEditor = require("@ckeditor/ckeditor5-react").CKEditor
       let CustomEditor = require("../components/custom_editor")
 
+      // set up the editor (overwrite the previously assigned loading component)
       this.Editor = () => {
         return (
           <div>
             <CKEditor className={styles.ckEditor}
               disabled={readOnly}
-              type=""
-              name="editor1"
               editor={CustomEditor}
-              onChange={(event, editor) => {
-                this.autoSave.handleChange();
-              }}
-              key="ckeditor"
+              onChange={this.autoSave.handleChange}
+              data={content}
               onReady={(editor) => {
                 this.editorInstance = editor;
                 editor.editing.view.change((writer) => {
@@ -207,12 +203,10 @@ class Edit extends Component {
                   editor.focus();
                 }
               }}
-              data={content}
             />
           </div>
         )
       }
-      this.editorIsLoaded = true;
     }
   }
 
@@ -222,7 +216,6 @@ class Edit extends Component {
    */
   handlePersonPickerChange = (items) => {
     this.setState({ selectedUserTags: items })
-    console.log("Selected User Tags: ", items)
     this.autoSave.handleChange();
   }
 
@@ -233,18 +226,18 @@ class Edit extends Component {
    * @returns {ITag[]} The filtered tags
    */
   filterSuggestedTags = (filterText, tagList) => {
-    return filterText
-      ? this.state.allUserTags.filter(
-        tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !this.listContainsTagList(tag, tagList),
-      )
-      : [];
+    if (filterText) {
+      return this.state.allUserTags.filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !this.listContainsTagList(tag, tagList));
+    } else {
+      return [];
+    }
   };
 
   /**
    * This method checks whether a tag is already in the selected tag list.
    * @param {ITag} tag The tag to check
    * @param {ITag[]} tagList The already selected tags
-   * @returns True if the tag is in the tagList
+   * @returns {boolean} True if the tag is already in the list, false otherwise
    */
   listContainsTagList = (tag, tagList) => {
     if (!tagList || !tagList.length || tagList.length === 0) {
@@ -267,7 +260,7 @@ class Edit extends Component {
       if (this.autoSave.timeout === null) {
         this.autoSave.timeout = setTimeout(async () => {
           if (this.editorInstance !== null) {
-           await this.autoSave.save();
+            await this.autoSave.save();
           }
         }, 2000);
       }
@@ -322,13 +315,13 @@ class Edit extends Component {
 
   /**
     * Generates the JSX Output for the Client
-    * @returns JSX Output
+    * @returns {JSX.Element} JSX Output
     */
   render() {
 
-    const { router } = this.props
-
     if (this.state.isLoggedIn === undefined) {
+
+      // if the user is not logged in, display a blank page and wait for the redirect to the getting-started page
       return (
         <div>
           <Head>
@@ -344,6 +337,7 @@ class Edit extends Component {
       )
     } else if (this.state.isLoading) {
 
+      // while the editor is loading, show a loading screen
       return (
         <div>
           <Head>
@@ -368,8 +362,8 @@ class Edit extends Component {
 
     } else {
 
+      // if the note is currently being edited by another user, show a message next to the title
       let infoString = "";
-
       if (this.state.isReadOnly && this.state.isSharedNote) {
         infoString = "(Geteilte Notiz: Geschützt, da gerade ein anderer Nutzer diese Notiz bearbeitet)";
       } else if (this.state.isReadOnly && !this.state.isSharedNote) {
@@ -378,6 +372,7 @@ class Edit extends Component {
         infoString = "(Geteilte Notiz)";
       }
 
+      // when the editor is loaded, show the editor
       return (
         <div>
           <Head>
@@ -400,6 +395,10 @@ class Edit extends Component {
                   <div>
                     {/* Empty grid element */}
                   </div>
+
+
+                  {/* TITLE: */}
+
                   <TextField
                     onChange={(e, newValue) => {
                       this.setState({ title: newValue })
@@ -409,20 +408,31 @@ class Edit extends Component {
                     value={this.state.title}
                     onFocus={event => {
                       event.target.select();
-                      setTimeout(() => { event.target.setSelectionRange(0, event.target.value.length); }, 0);
+                      setTimeout(() => { event.target.setSelectionRange(0, event.target.value.length); }, 1);
                     }}
                     componentRef={(textField) => { this.TitleField = textField }}
                     disabled={this.state.isReadOnly}
                   />
+
+                  {/* SAVING INDICATOR: */}
+
                   <SavingIndicator
                     className={styles.savingIndicator}
                     isSaving={this.state.isSaving}
                     isSaved={this.state.isSaved}
                   />
                 </div>
+
+
+                {/* EDITOR: */}
+
                 <this.Editor />
               </div>
               <div className={styles.content}>
+
+
+                {/* SHARED WITH: */}
+
                 <div hidden={this.state.isSharedNote}>
                   <label>Diese Notiz teilen mit...</label>
                   <TagPicker

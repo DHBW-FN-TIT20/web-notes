@@ -23,9 +23,13 @@ class Notizen extends Component {
       noteList: [],
       searchString: "",
     };
+
+    // define the columns for the note list with custom render functions
     this.noteListColumns = [
-      { key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true },
-      { 
+      {
+        key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true
+      },
+      {
         key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true,
         onRender: (item) => {
           const date = new Date(item.modifiedAt);
@@ -53,12 +57,7 @@ class Notizen extends Component {
           const maxElements = 5;
           let previewContent = splitHTMLintoElements(item.content, maxElements).join("");
           return (
-            <div
-              className={styles.previewLine}
-              dangerouslySetInnerHTML={{
-                __html: previewContent
-              }}
-            >
+            <div className={styles.previewLine} dangerouslySetInnerHTML={{ __html: previewContent }}>
             </div>
           )
         }
@@ -70,11 +69,19 @@ class Notizen extends Component {
    * This method is called when the component is mounted.
    */
   async componentDidMount() {
+
+    // check if the user is logged in
     this.updateLoginState();
     window.addEventListener('storage', this.storageTokenListener)
+
+    // get the note list
     this.setState({ isLoading: true });
-    await this.getNoteList();
-    this.setState({ isLoading: false });
+    const notes = await FrontEndController.getNotes();
+
+    // update the state
+    this.setState({ isLoading: false, noteList: notes });
+
+    // if there is still a note id in the local storage, free the note
     FrontEndController.freeNote();
   }
 
@@ -84,20 +91,6 @@ class Notizen extends Component {
    */
   componentWillUnmount() {
     window.removeEventListener('storage', this.storageTokenListener)
-  }
-
-  /**
-   * This method is used to load the notes from the backend.
-   */
-  async getNoteList() {
-
-    // get the note list from backend
-    let notes = await FrontEndController.getNotes();
-
-    // update the state
-    console.log(notes);
-    this.setState({ noteList: notes });
-
   }
 
   /**
@@ -131,6 +124,7 @@ class Notizen extends Component {
    * @param {any} ev The event that triggered the method
    */
   onActiveItemChanged = (item, index, ev) => {
+    
     // open the note
     if (item.id !== -1 || item.id === undefined) {
       FrontEndController.setCurrentNoteID(item.id);
@@ -156,11 +150,9 @@ class Notizen extends Component {
 
   /**
    * Generates the JSX Output for the Client
-   * @returns JSX Output
+   * @returns {JSX.Element} JSX Output
    */
   render() {
-
-    const { router } = this.props
 
     // filter the list of notes according to the search string
     let filteredNoteList = [];

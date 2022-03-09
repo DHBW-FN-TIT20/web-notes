@@ -60,11 +60,9 @@ class GettingStarted extends Component {
 
   /**
    * Generates the JSX Output for the Client
-   * @returns JSX Output
+   * @returns {JSX.Element} JSX Output
    */
   render() {
-
-    const { router } = this.props
 
     if (this.state.isLoggedIn === undefined) {
       return (

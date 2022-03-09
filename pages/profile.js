@@ -193,15 +193,6 @@ class Profile extends Component {
             <main>
               <div className={styles.content}>
                 <h1>Username: {FrontEndController.getUsernameFromToken(FrontEndController.getUserToken())}</h1>
-                {/* <h2>Information</h2>
-                <table>
-                  <thead>
-                    <tr>
-                      <td>ID:</td>
-                      <td>{this.state.currentUser?.id || "unavailable"}</td>
-                    </tr>
-                  </thead>
-                </table> */}
 
                 <div>
 

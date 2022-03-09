@@ -46,7 +46,6 @@ class Impressum extends Component {
 
   /**
    * This method updates the isLoggedIn state and currentToken state according to the current token in local storage.
-   * @returns Nothing
    */
   async updateLoginState() {
     let currentToken = FrontEndController.getUserToken();
@@ -59,7 +58,7 @@ class Impressum extends Component {
 
   /**
    * Generates the JSX Output for the Client
-   * @returns JSX Output
+   * @returns {JSX.Element} JSX Output
    */
   render() {
     if (this.state.isLoggedIn === undefined) {
