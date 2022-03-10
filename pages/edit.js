@@ -23,6 +23,7 @@ class Edit extends Component {
   constructor(props) {
     super(props)
     this.isNoteNew = false;
+    this.currentUsername = "";
     this.state = {
       isLoggedIn: undefined,
       currentToken: "",
@@ -45,9 +46,6 @@ class Edit extends Component {
 
     // check if the user is logged in
     this.updateLoginState();
-
-    // check if there is still an open note
-    await FrontEndController.freeNote();
 
     // set up the storage event listener
     window.addEventListener('storage', this.storageTokenListener)
@@ -72,8 +70,8 @@ class Edit extends Component {
 
       // set the note as new
       this.isNoteNew = true;
-      this.props.router.replace(this.props.router.pathname);
-      currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: false, isShared: false, sharedUserIDs: [] };
+      this.props.router.replace(this.props.router.pathname); 
+      currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: this.currentUsername, isShared: false, sharedUserIDs: [] };
     } else {
 
       // get the note id from the url parameter 
@@ -102,16 +100,18 @@ class Edit extends Component {
       return;
     }
 
-    console.log("currentNote in edit.componentDidMount: ", currentNote, "isNoteNew:", this.isNoteNew);
+    // check if the note should be read only or not
+    this.currentUsername = FrontEndController.getUsernameFromToken(FrontEndController.getUserToken());
+    const readOnly = (currentNote.inUse !== this.currentUsername) && (currentNote.inUse !== "");
 
     // setup editor
-    this.setupEditor(currentNote.content, currentNote.inUse);
+    this.setupEditor(currentNote.content, readOnly);
 
     // setup user tag picker
     await this.setupUserTagPicker(currentNote.sharedUserIDs);
 
     // update the state
-    this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared, isReadOnly: currentNote.inUse });
+    this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared, isReadOnly: readOnly });
 
     // if the note is new focus the title field
     if (this.isNoteNew) {
@@ -319,13 +319,13 @@ class Edit extends Component {
 
       if (this.isNoteNew) {
 
-        // add a new note 
-        const newNoteToSave = { title: this.state.title, content: this.editorInstance.getData(), sharedUserIDs: this.state.selectedUserTags.map(tag => {return tag.key}), inUse: true, };
+        // add a new note
+        const newNoteToSave = { title: this.state.title, content: this.editorInstance.getData(), sharedUserIDs: this.state.selectedUserTags.map(tag => {return tag.key}), inUse: this.currentUsername, };
         console.log("Saving new note...", newNoteToSave);
         const noteID = await FrontEndController.saveNote(newNoteToSave);
         isSaved = noteID ? true : false;
         FrontEndController.setCurrentNoteID(noteID);
-        this.isNoteNew = false; //TODO: maybe change to isSave
+        this.isNoteNew = false; 
 
       } else {
 
@@ -336,7 +336,7 @@ class Edit extends Component {
           id: FrontEndController.getCurrentNoteID(),
           title: this.state.title,
           content: this.editorInstance.getData(),
-          inUse: true,
+          inUse: this.currentUsername,
           sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
         }
         isSaved = (await FrontEndController.saveNote(noteToSave)) ? true : false;

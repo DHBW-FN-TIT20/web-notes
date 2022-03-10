@@ -83,8 +83,8 @@ class Notizen extends Component {
     // update the state
     this.setState({ isLoading: false, noteList: notes });
 
-    // if there is still a note id in the local storage, free the note
-    FrontEndController.freeNote();
+    // // if there is still a note id in the local storage, free the note
+    // FrontEndController.freeNote();
   }
 
   /**

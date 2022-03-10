@@ -261,7 +261,7 @@ export class BackEndController {
 
   /**
    * Saves the String to the Database
-   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: boolean, sharedUserIDs: number[] | undefined}} note 
+   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: string, sharedUserIDs: number[] | undefined}} note 
    * @param {string} userToken
    */
   async saveNote(note, userToken) {
@@ -302,6 +302,12 @@ export class BackEndController {
       if (currentNote === undefined) {
         return undefined;
       }
+
+      // check if the user is allowed to edit the note
+      if ((currentNote.inUse !== this.getUsernameFromToken(userToken)) && (currentNote.inUse !== "")) {
+        return undefined;
+      }
+
       const noteToSave = currentNote;
       noteToSave.title = note.title;
       noteToSave.modifiedAt = new Date();
@@ -350,7 +356,7 @@ export class BackEndController {
     const sharedNotes = this.databaseModel.getSharedNoteFromResponse(await this.databaseModel.selectUserNoteRelationTable(user.id));
 
     /**
-     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}[]}
+     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}[]}
      */
     const ownNotesWithSharedAttribute = [];
 
@@ -412,7 +418,7 @@ export class BackEndController {
     const sharedNotes = this.databaseModel.getSharedNoteFromResponse(await this.databaseModel.selectUserNoteRelationTable(user.id));
 
     /**
-     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}[]}
+     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}[]}
      */
     const ownNotesWithSharedAttribute = [];
 
