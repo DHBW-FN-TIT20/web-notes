@@ -92,7 +92,7 @@ class Header extends Component {
               id={styles.menuIcon}
               onClick={() => {
                 if (this.isVisible) {
-                  console.log("Hide")
+                  // console.log("Hide")
                   document.getElementById("menu").classList.remove(`${styles.showHeader}`)
                   // rotation elements for menu icon
                   document.getElementById("spanOne").classList.remove(`${styles.span}`)
@@ -100,10 +100,10 @@ class Header extends Component {
                   document.getElementById("spanTwo").classList.remove(`${styles.spanTwo}`)
                   document.getElementById("spanThree").classList.remove(`${styles.span}`)
                   document.getElementById("spanThree").classList.remove(`${styles.spanThree}`)
-                  console.log(document.documentElement.scrollHeight)
+                  // console.log(document.documentElement.scrollHeight)
                   this.isVisible = false;
                 } else {
-                  console.log("Show")
+                  // console.log("Show")
                   document.getElementById("menu").classList.add(`${styles.showHeader}`)
                   // rotation elements for menu icon
                   document.getElementById("spanOne").classList.add(`${styles.span}`)
@@ -113,7 +113,7 @@ class Header extends Component {
                   document.getElementById("spanThree").classList.add(`${styles.spanThree}`)
                   this.isVisible = true;
                 }
-                console.log()
+                // console.log()
               }}>
               <span id="spanOne"></span>
               <span id="spanTwo"></span>

@@ -142,11 +142,11 @@ export class FrontEndController {
 
     if (data.userToken === "") {
       localStorage.removeItem(this.userTokenName);
-      console.log("Login failed");
+      // console.log("Login failed");
       return false;
     }
     localStorage.setItem(this.userTokenName, data.userToken);
-    console.log("Login successfull");
+    // console.log("Login successfull");
     return true;
   }
 
@@ -294,8 +294,6 @@ export class FrontEndController {
    */
   static async saveNote(note) {
 
-    console.log("FrontEndController.saveNote()", note);
-
     const response = await fetch('./api/notes/save_note', {
       method: 'POST',
       headers: {
@@ -308,7 +306,6 @@ export class FrontEndController {
     });
 
     const data = await response.json();
-    console.log("data: ", data);
     return data.noteID;
   }
 
@@ -380,7 +377,6 @@ export class FrontEndController {
    * @returns {Promise<number>} ID of the created note
    */
   static async addNewNote() {
-    console.log("FrontEndController.addNewNote()");
     const currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: this.getUsernameFromToken(this.getUserToken()), isShared: false, sharedUserIDs: [], }
     const nodeID = await this.saveNote(currentNote);
     return nodeID;

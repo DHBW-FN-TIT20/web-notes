@@ -14,7 +14,5 @@ export default async function isPasswordValidHandler(req, res) {
 
   const isValid = BACK_END_CONTROLLER.isPasswordValid(password);
 
-  console.log(password, isValid)
-
   res.status(200).json({ wasSuccessfull: isValid })
 }

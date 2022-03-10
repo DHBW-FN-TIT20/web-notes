@@ -322,15 +322,13 @@ class Edit extends Component {
 
         // add a new note
         const newNoteToSave = { title: this.state.title, content: this.editorInstance.getData(), sharedUserIDs: this.state.selectedUserTags.map(tag => {return tag.key}), inUse: this.currentUsername, };
-        console.log("Saving new note...", newNoteToSave);
+        // console.log("Saving new note...", newNoteToSave);
         const noteID = await FrontEndController.saveNote(newNoteToSave);
         isSaved = noteID ? true : false;
         FrontEndController.setCurrentNoteID(noteID);
         this.isNoteNew = false; 
 
       } else {
-
-        console.log("Saving existing note...");
 
         // save the note
         const noteToSave = {
