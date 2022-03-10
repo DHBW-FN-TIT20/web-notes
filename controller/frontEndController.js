@@ -294,7 +294,7 @@ export class FrontEndController {
    */
   static async saveNote(note) {
 
-    console.log(note);
+    console.log("FrontEndController.saveNote()", note);
 
     const response = await fetch('./api/notes/save_note', {
       method: 'POST',
@@ -319,8 +319,13 @@ export class FrontEndController {
     });
   }
 
+
+  /**
+   * 
+   * @param {number} noteID 
+   */
   static async setNoteNotInUse(noteID) {
-    this.saveNote({
+    await this.saveNote({
       id: noteID,
       inUse: false
     });
@@ -382,6 +387,18 @@ export class FrontEndController {
       this.setNoteNotInUse(localStorageNoteID);
       this.removeCurrentNoteID();
     }
+  }
+
+
+  /**
+   * This method creates a new note.
+   * @returns {Promise<number>} ID of the created note
+   */
+  static async addNewNote() {
+    console.log("FrontEndController.addNewNote()");
+    const currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: true, isShared: false, sharedUserIDs: [], }
+    const nodeID = await this.saveNote(currentNote);
+    return nodeID;
   }
 
   //#endregion

@@ -265,7 +265,7 @@ export class BackEndController {
    * @param {string} userToken
    */
   async saveNote(note, userToken) {
-    console.log("saveNote")
+    console.log("saveNote", note);
     const isUserValid = await this.isUserTokenValid(userToken);
 
     if (!isUserValid) {
@@ -284,11 +284,15 @@ export class BackEndController {
       // create new note
       console.log("create new note");
 
-      const addedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.addNote(user.id, note.inUse))[0];
+      const addedNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.addNote(user.id, note.inUse, note.title, note.content))[0];
       console.log("addedNote: ", addedNote);
 
       if (addedNote === undefined) {
         return undefined;
+      }
+
+      if (note.sharedUserIDs.length > 0) {
+        console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.addUserNoteRelation(note.sharedUserIDs, addedNote.id)));
       }
 
       return addedNote.id;

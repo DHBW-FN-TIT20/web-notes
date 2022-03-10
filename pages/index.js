@@ -8,6 +8,7 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX, ShimmeredDetailsList } from '@fluentui/react';
 import splitHTMLintoElements from '../shared/split_HTML_into_elements'
+import { BeatLoader } from 'react-spinners'
 
 /**
  * @class Notizen Component Class
@@ -22,6 +23,7 @@ class Notizen extends Component {
       isLoading: false,
       noteList: [],
       searchString: "",
+      isCreatingNewNote: false,
     };
 
     // define the columns for the note list with custom render functions
@@ -124,14 +126,13 @@ class Notizen extends Component {
    * @param {any} ev The event that triggered the method
    */
   onActiveItemChanged = (item, index, ev) => {
-    
+
     // open the note
     if (item.id !== -1 || item.id === undefined) {
       FrontEndController.setCurrentNoteID(item.id);
-      this.props.router.push(`/edit`);
+      this.props.router.push(`/edit?id=${item.id}`);
     } else {
-      FrontEndController.removeCurrentNoteID();
-      this.props.router.push(`/edit`);
+      this.addNewNote();
     }
   }
 
@@ -146,6 +147,16 @@ class Notizen extends Component {
     } else {
       this.setState({ searchString: "" });
     }
+  }
+
+  /**
+   * This method adds a new note and redirects the user to the editor.
+   */
+  async addNewNote() {
+    // this.setState({ isCreatingNewNote: true });
+    // const nodeID = await FrontEndController.addNewNote();
+    // FrontEndController.setCurrentNoteID(nodeID);
+    this.props.router.push(`/edit?new=true`);
   }
 
   /**

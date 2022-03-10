@@ -185,13 +185,15 @@ export class DatabaseModel {
    * This method creates a new note.
    * @param {number} ownerID
    * @param {boolean} inUse
+   * @param {string} title
+   * @param {string} content
    * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
    */
-  async addNote(ownerID, inUse) {
+  async addNote(ownerID, inUse, title, content) {
     const addedNote = await DatabaseModel.CLIENT
       .from('Note')
       .insert([
-        { ownerID: ownerID, inUse: inUse },
+        { ownerID: ownerID, inUse: inUse, title: title, content: content },
       ]);
 
     return addedNote;
