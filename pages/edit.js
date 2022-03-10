@@ -89,8 +89,6 @@ class Edit extends Component {
           return;
         }
 
-        console.log("currentNote in edit.componentDidMount: ", currentNote);
-
         // write current note id to local storage
         FrontEndController.setCurrentNoteID(currentNote.id);
 
@@ -103,6 +101,8 @@ class Edit extends Component {
       this.props.router.push("/");
       return;
     }
+
+    console.log("currentNote in edit.componentDidMount: ", currentNote, "isNoteNew:", this.isNoteNew);
 
     // setup editor
     this.setupEditor(currentNote.content, currentNote.inUse);
@@ -349,6 +349,9 @@ class Edit extends Component {
   }
 
   async leaveNote() {
+
+    console.log("leaving note...", this.state.isReadOnly);
+
     if (!this.state.isReadOnly && FrontEndController.getCurrentNoteID()) {
       await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
     }
