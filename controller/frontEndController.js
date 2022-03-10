@@ -384,5 +384,17 @@ export class FrontEndController {
     }
   }
 
+
+  /**
+   * This method creates a new note.
+   * @returns {Promise<number>} ID of the created note
+   */
+  static async addNewNote() {
+    console.log("FrontEndController.addNewNote()");
+    const currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: false, isShared: false, sharedUserIDs: [], }
+    const nodeID = await this.saveNote(currentNote);
+    return nodeID;
+  }
+
   //#endregion
 }

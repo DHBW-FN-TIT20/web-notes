@@ -18,6 +18,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 class Edit extends Component {
   editorInstance = null;
   TitleField = null;
+  noteID = null;
 
   constructor(props) {
     super(props)
@@ -41,7 +42,7 @@ class Edit extends Component {
    * It is used to set up all the editing components and to load the note.
    */
   async componentDidMount() {
-    
+
     // check if the user is logged in
     this.updateLoginState();
 
@@ -53,10 +54,7 @@ class Edit extends Component {
 
     // set up beforunload listener
     window.addEventListener('beforeunload', async (ev) => {
-      if (!this.state.isReadOnly) {
-        await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
-      }
-      FrontEndController.removeCurrentNoteID();
+      this.leaveNote();
     });
 
     // set up listen on cmd+s and strg+s 
@@ -68,25 +66,40 @@ class Edit extends Component {
       }
     });
 
-    // get initial data
-    let noteID = FrontEndController.getCurrentNoteID();
-    let currentNote = undefined;
-
-    // check if there is a noteID if not a new note is created
-    if (!noteID) {
-      currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: false, isShared: false, sharedUserIDs: [], }
-      currentNote.id = await FrontEndController.saveNote(currentNote);
-      FrontEndController.setCurrentNoteID(currentNote.id);
+    // check the url if the note is new
+    let currentNote;
+    if (this.props.router.query.new) {
       this.isNoteNew = true;
+      this.props.router.replace(this.props.router.pathname);
+      currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: false, isShared: false, sharedUserIDs: [] };
     } else {
-      currentNote = await FrontEndController.getNoteByID(noteID);
+
+      if (!this.props.router.query.id || isNaN(this.props.router.query.id)) {
+        this.props.router.push("/");
+      } else {
+        currentNote = await FrontEndController.getNoteByID(Number(this.props.router.query.id));
+        this.props.router.replace(this.props.router.pathname);
+        if (!currentNote) {
+          this.props.router.push("/");
+          return;
+        }
+
+        FrontEndController.setCurrentNoteID(currentNote.id);
+        FrontEndController.setNoteInUse(currentNote.id);
+      }
+    }
+
+    if (currentNote === undefined) {
+      alert("The note you are trying to edit does not exist anymore.");
+      this.props.router.push("/");
+      return;
     }
 
     // setup editor
     this.setupEditor(currentNote.content, currentNote.inUse);
 
-    // change the InUse state of the note
-    FrontEndController.setNoteInUse(currentNote.id);
+    // // change the InUse state of the note
+    // FrontEndController.setNoteInUse(currentNote.id);
 
     // setup user tag picker
     await this.setupUserTagPicker(currentNote.sharedUserIDs);
@@ -105,10 +118,7 @@ class Edit extends Component {
    * It is used to remove the storage event listener and to save the note (it was probably saved bevor).
    */
   async componentWillUnmount() {
-    if (!this.state.isReadOnly) {
-      await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
-    }
-    FrontEndController.removeCurrentNoteID();
+    this.leaveNote();
     window.removeEventListener('storage', this.storageTokenListener)
   }
 
@@ -299,22 +309,46 @@ class Edit extends Component {
      */
     save: async () => {
       this.setState({ isSaving: true, isSaved: false });
+      let isSaved = false;
 
-      // save the note
-      const noteToSave = {
-        id: FrontEndController.getCurrentNoteID(),
-        title: this.state.title,
-        content: this.editorInstance.getData(),
-        inUse: true,
-        sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
+      if (this.isNoteNew) {
+
+        // add a new note 
+        const newNoteToSave = { title: this.state.title, content: this.editorInstance.getData(), sharedUserIDs: this.state.selectedUserTags.map(tag => {return tag.key}), inUse: true, };
+        console.log("Saving new note...", newNoteToSave);
+        const noteID = await FrontEndController.saveNote(newNoteToSave);
+        isSaved = noteID ? true : false;
+        FrontEndController.setCurrentNoteID(noteID);
+        this.isNoteNew = false; //TODO: maybe change to isSave
+
+      } else {
+
+        console.log("Saving existing note...");
+
+        // save the note
+        const noteToSave = {
+          id: FrontEndController.getCurrentNoteID(),
+          title: this.state.title,
+          content: this.editorInstance.getData(),
+          inUse: true,
+          sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
+        }
+        isSaved = (await FrontEndController.saveNote(noteToSave)) ? true : false;
       }
-      let isSaved = await FrontEndController.saveNote(noteToSave)
 
       this.autoSave.dataWasChanged = false;
       this.autoSave.stop();
       this.setState({ isSaved: isSaved, isSaving: false });
     }
   }
+
+  async leaveNote() {
+    if (!this.state.isReadOnly && FrontEndController.getCurrentNoteID()) {
+      await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
+    }
+    FrontEndController.removeCurrentNoteID();
+  }
+
 
   /**
     * Generates the JSX Output for the Client
