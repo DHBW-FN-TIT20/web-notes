@@ -69,14 +69,19 @@ class Edit extends Component {
     // check the url if the note is new
     let currentNote;
     if (this.props.router.query.new) {
+
+      // set the note as new
       this.isNoteNew = true;
       this.props.router.replace(this.props.router.pathname);
       currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: false, isShared: false, sharedUserIDs: [] };
     } else {
 
+      // get the note id from the url parameter 
       if (!this.props.router.query.id || isNaN(this.props.router.query.id)) {
         this.props.router.push("/");
       } else {
+
+        // get the note
         currentNote = await FrontEndController.getNoteByID(Number(this.props.router.query.id));
         this.props.router.replace(this.props.router.pathname);
         if (!currentNote) {
@@ -84,8 +89,13 @@ class Edit extends Component {
           return;
         }
 
+        console.log("currentNote in edit.componentDidMount: ", currentNote);
+
+        // write current note id to local storage
         FrontEndController.setCurrentNoteID(currentNote.id);
-        FrontEndController.setNoteInUse(currentNote.id);
+
+        // set the currentnote in use
+        await FrontEndController.setNoteInUse(currentNote.id);
       }
     }
 
@@ -96,9 +106,6 @@ class Edit extends Component {
 
     // setup editor
     this.setupEditor(currentNote.content, currentNote.inUse);
-
-    // change the InUse state of the note
-    FrontEndController.setNoteInUse(currentNote.id);
 
     // setup user tag picker
     await this.setupUserTagPicker(currentNote.sharedUserIDs);

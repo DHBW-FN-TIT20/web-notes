@@ -294,7 +294,7 @@ export class FrontEndController {
    */
   static async saveNote(note) {
 
-    console.log(note);
+    console.log("FrontEndController.saveNote()", note);
 
     const response = await fetch('./api/notes/save_note', {
       method: 'POST',
@@ -391,7 +391,7 @@ export class FrontEndController {
    */
   static async addNewNote() {
     console.log("FrontEndController.addNewNote()");
-    const currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: false, isShared: false, sharedUserIDs: [], }
+    const currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: true, isShared: false, sharedUserIDs: [], }
     const nodeID = await this.saveNote(currentNote);
     return nodeID;
   }
