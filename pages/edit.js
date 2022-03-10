@@ -54,7 +54,7 @@ class Edit extends Component {
 
     // set up beforunload listener
     window.addEventListener('beforeunload', async (ev) => {
-      this.leaveNote();
+      await this.leaveNote();
     });
 
     // set up listen on cmd+s and strg+s 
@@ -124,7 +124,7 @@ class Edit extends Component {
    * It is used to remove the storage event listener and to save the note (it was probably saved bevor).
    */
   async componentWillUnmount() {
-    this.leaveNote();
+    await this.leaveNote();
     window.removeEventListener('storage', this.storageTokenListener)
   }
 

@@ -319,8 +319,13 @@ export class FrontEndController {
     });
   }
 
+
+  /**
+   * 
+   * @param {number} noteID 
+   */
   static async setNoteNotInUse(noteID) {
-    this.saveNote({
+    await this.saveNote({
       id: noteID,
       inUse: false
     });
