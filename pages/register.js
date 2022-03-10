@@ -233,7 +233,7 @@ class Register extends Component {
             </main>
 
             <footer>
-              <Footer />
+              <Footer isLoggedIn={!this.state.isNotLoggedIn}/>
             </footer>
           </div>
         </div>

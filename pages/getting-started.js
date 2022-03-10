@@ -16,6 +16,7 @@ class GettingStarted extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      isLoggedIn: undefined,
     };
     this.linkToDHBW = "https://www.ravensburg.dhbw.de/startseite";
     this.linkToTIT20 = "https://github.com/DHBW-FN-TIT20"
@@ -172,7 +173,7 @@ class GettingStarted extends Component {
             </main>
 
             <footer>
-              <Footer />
+              <Footer isLoggedIn={this.state.isLoggedIn}/>
             </footer>
           </div>
         </div>
