@@ -129,8 +129,8 @@ export class DatabaseModel {
 
   /**
    * This method extracts note objects from the database response
-   * @param {PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>} dbResponse Response of Database
-   * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}[]} List of user objects.
+   * @param {PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}>} dbResponse Response of Database
+   * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}[]} List of user objects.
    */
   getNoteFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
@@ -152,8 +152,8 @@ export class DatabaseModel {
    * @param {string} title Filter title
    * @param {number} ownerID Filter ownerID
    * @param {Date} modifiedAt Filter modified
-   * @param {boolean} inUse Filter in use
-   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
+   * @param {string} inUse Filter in use
+   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}>>} DB result as list of note objects
    */
   async selectNoteTable(id = undefined, title = undefined, ownerID = undefined, modifiedAt = undefined, inUse = undefined) {
     let idColumnName = "";
@@ -184,10 +184,10 @@ export class DatabaseModel {
   /**
    * This method creates a new note.
    * @param {number} ownerID
-   * @param {boolean} inUse
+   * @param {string} inUse
    * @param {string} title
    * @param {string} content
-   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
+   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}>>} DB result as list of note objects
    */
   async addNote(ownerID, inUse, title, content) {
     const addedNote = await DatabaseModel.CLIENT
@@ -202,8 +202,8 @@ export class DatabaseModel {
   /**
    * This method updates a note.
    * @param {number} noteID NoteID of note to update
-   * @param {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}} note Modified note (containing updated values)
-   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
+   * @param {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}} note Modified note (containing updated values)
+   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}>>} DB result as list of note objects
    */
   async updateNote(noteID, note) {
     const updatedNote = await DatabaseModel.CLIENT
@@ -217,7 +217,7 @@ export class DatabaseModel {
   /**
    * This method deletes a note.
    * @param {number} id
-   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}>>} DB result as list of note objects
+   * @returns {Promise<PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}>>} DB result as list of note objects
    */
   async deleteNote(id) {
     const deletedNote = DatabaseModel.CLIENT
@@ -234,8 +234,8 @@ export class DatabaseModel {
 
   /**
    * This method extracts shared-note objects from the database response
-   * @param {PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>} dbResponse Response of Database
-   * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}[]} List of user objects.
+   * @param {PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}}>} dbResponse Response of Database
+   * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}[]} List of user objects.
    */
   getSharedNoteFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
@@ -275,7 +275,7 @@ export class DatabaseModel {
   /**
    * This is a universal select function for the UserNoteRelation database to get the shared notes
    * @param {number} userID Filter userID
-   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean}}>>} DB result as list of note objects
+   * @returns {Promise<PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}}>>} DB result as list of note objects
    */
   async selectUserNoteRelationTable(userID = undefined) {
     let userIDColumnName = "";

@@ -289,7 +289,7 @@ export class FrontEndController {
 
   /**
    * This method is used to save a note to the database. If no note.id is given, a new note is created.
-   * @param {{id?: number, title?: string, content?: string, inUse: boolean, isShared?: boolean, sharedUserIDs?: number[]}} note note which should be saved
+   * @param {{id?: number, title?: string, content?: string, inUse: string, isShared?: boolean, sharedUserIDs?: number[]}} note note which should be saved
    * @returns {Promise<number>} returns the id of the saved note
    */
   static async saveNote(note) {
@@ -315,7 +315,7 @@ export class FrontEndController {
   static async setNoteInUse(noteID) {
     this.saveNote({
       id: noteID,
-      inUse: true
+      inUse: this.getUsernameFromToken(this.getUserToken())
     });
   }
 
@@ -327,13 +327,13 @@ export class FrontEndController {
   static async setNoteNotInUse(noteID) {
     await this.saveNote({
       id: noteID,
-      inUse: false
+      inUse: ""
     });
   }
 
   /**
    * This method is used to get all notes which are related to the user.
-   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}[]>} Array of all notes of the current user
+   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}[]>} Array of all notes of the current user
    */
   static async getNotes() {
 
@@ -355,7 +355,7 @@ export class FrontEndController {
   /**
    * This method is used to get get a note by its id.
    * @param {number} noteID id of the note
-   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean, sharedUserIDs: number[]}>} Array of all notes of the current user
+   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}>} Array of all notes of the current user
    */
   static async getNoteByID(noteID) {
 
@@ -376,18 +376,18 @@ export class FrontEndController {
   }
 
 
-  /**
-   * This method checks if there is still a noteID in the local storage.
-   * If this is the case, the note is set to not in use and the noteID is removed from the local storage.
-   * The function is called, when entering the note overview.
-   */
-  static async freeNote() {
-    const localStorageNoteID = this.getCurrentNoteID();
-    if (localStorageNoteID) {
-      this.setNoteNotInUse(localStorageNoteID);
-      this.removeCurrentNoteID();
-    }
-  }
+  // /**
+  //  * This method checks if there is still a noteID in the local storage.
+  //  * If this is the case, the note is set to not in use and the noteID is removed from the local storage.
+  //  * The function is called, when entering the note overview.
+  //  */
+  // static async freeNote() {
+  //   const localStorageNoteID = this.getCurrentNoteID();
+  //   if (localStorageNoteID) {
+  //     this.setNoteNotInUse(localStorageNoteID);
+  //     this.removeCurrentNoteID();
+  //   }
+  // }
 
 
   /**
@@ -396,7 +396,7 @@ export class FrontEndController {
    */
   static async addNewNote() {
     console.log("FrontEndController.addNewNote()");
-    const currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: true, isShared: false, sharedUserIDs: [], }
+    const currentNote = { content: "", title: "Neue Notiz", id: undefined, inUse: this.getUsernameFromToken(this.getUserToken()), isShared: false, sharedUserIDs: [], }
     const nodeID = await this.saveNote(currentNote);
     return nodeID;
   }
