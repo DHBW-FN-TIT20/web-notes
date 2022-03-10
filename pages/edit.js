@@ -90,7 +90,6 @@ class Edit extends Component {
     }
 
     if (currentNote === undefined) {
-      alert("The note you are trying to edit does not exist anymore.");
       this.props.router.push("/");
       return;
     }
@@ -98,8 +97,8 @@ class Edit extends Component {
     // setup editor
     this.setupEditor(currentNote.content, currentNote.inUse);
 
-    // // change the InUse state of the note
-    // FrontEndController.setNoteInUse(currentNote.id);
+    // change the InUse state of the note
+    FrontEndController.setNoteInUse(currentNote.id);
 
     // setup user tag picker
     await this.setupUserTagPicker(currentNote.sharedUserIDs);
