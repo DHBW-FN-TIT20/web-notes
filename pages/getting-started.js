@@ -70,7 +70,7 @@ class GettingStarted extends Component {
         <div>
           <Head>
             <title>Willkommen bei WEB-NOTES</title>
-            <meta name="description" content="Welcome page." />
+            <meta name="description" content="Getting-Started" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
@@ -84,7 +84,7 @@ class GettingStarted extends Component {
         <div>
           <Head>
             <title>Willkommen bei WEB-NOTES</title>
-            <meta name="description" content="Welcome page." />
+            <meta name="description" content="Getting-Started" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 

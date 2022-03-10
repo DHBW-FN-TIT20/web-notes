@@ -389,7 +389,7 @@ class Edit extends Component {
         <div>
           <Head>
             <title>Loading...</title>
-            <meta name="description" content="Loading..." />
+            <meta name="description" content="Laden..." />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
@@ -400,7 +400,7 @@ class Edit extends Component {
           <main>
             <div className={styles.centerScreen}>
               <BeatLoader />
-              <div>{"Setting up the editor... "}</div>
+              <div>{"Editor wird vorbereitet... "}</div>
             </div>
           </main>
 
@@ -424,7 +424,7 @@ class Edit extends Component {
         <div>
           <Head>
             <title>Editor</title>
-            <meta name="description" content="Welcome page." />
+            <meta name="description" content="Editor" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 

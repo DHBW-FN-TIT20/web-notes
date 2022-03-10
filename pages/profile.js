@@ -88,7 +88,7 @@ class Profile extends Component {
    * It evaluates the input and sets the feedback state accordingly.
    * @param {any} event the change event
    */
-   changedInput = async (event) => {
+  changedInput = async (event) => {
 
     // get all input values
     const oldPassword = event.target.name === "oldPassword" ? event.target.value : this.state.oldPassword;
@@ -179,7 +179,7 @@ class Profile extends Component {
           <div className="scrollBody">
             <main>
               <div className={styles.content}>
-                <h1>Username: {FrontEndController.getUsernameFromToken(FrontEndController.getUserToken())}</h1>
+                <h1>Benutzername: {FrontEndController.getUsernameFromToken(FrontEndController.getUserToken())}</h1>
 
                 <div>
 
@@ -219,23 +219,24 @@ class Profile extends Component {
                     <button disabled={!this.state.isInputValidForChangePassword} onClick={this.changePassword}>Passwort ändern</button>
                     <p className={styles.showReq}>
                       <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
-                        show requirements
+                        {this.state.showRequirements ? "Verberge Anforderungen" : "Zeige Anforderungen"}
                       </a>
                     </p>
                   </div>
                   <div>
                     <div hidden={!this.state.showRequirements} className={styles.requirementsDiv}>
-                      <h2>Username</h2>
+                      <h2>Benutzername</h2>
                       <ul>
-                        <li>4-16 characters</li>
-                        <li>only letters and numbers</li>
-                        <li>keyword &ldquo;admin&ldquo; is not allowed</li>
+                        <li>4-16 Zeichen</li>
+                        <li>nur Zahlen und Buchstaben</li>
+                        <li>Zeichenfolge &ldquo;admin&ldquo; ist nicht erlaubt</li>
                       </ul>
                       <h2>Password</h2>
                       <ul>
-                        <li>min. 8 characters</li>
-                        <li>min. 1 number, 1 lowercase, 1 uppercase</li>
-                        <li>min. 1 of: ! * # , ; ? + - _ . = ~ ^ % ( ) &#123; &#125; | : &ldquo; /</li>
+                        <li>min. 8 Zeichen</li>
+                        <li>min. 1 Zahl, 1 Kleinbuchstabe, 1 Großbuchstabe</li>
+                        <li>min. 1 der folgenden Zeichen: ! * # , ; ? + - _ . = ~ ^ % ( ) &#123; &#125; | : &ldquo; /</li>
+                        <li>nur Zahlen, Buchstaben und die oben genennten Sonderzeichen</li>
                       </ul>
                     </div>
                   </div>
@@ -246,7 +247,7 @@ class Profile extends Component {
             </main >
 
             <footer>
-              <Footer isLoggedIn={this.state.isLoggedIn}/>
+              <Footer isLoggedIn={this.state.isLoggedIn} />
             </footer>
           </div>
         </div >

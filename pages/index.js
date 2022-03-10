@@ -213,7 +213,7 @@ class Notizen extends Component {
         <div>
           <Head>
             <title>WEB-NOTES</title>
-            <meta name="description" content="Welcome page." />
+            <meta name="description" content="Notizen" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
@@ -227,7 +227,7 @@ class Notizen extends Component {
         <div>
           <Head>
             <title>WEB-NOTES</title>
-            <meta name="description" content="Welcome page." />
+            <meta name="description" content="Notizen" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 

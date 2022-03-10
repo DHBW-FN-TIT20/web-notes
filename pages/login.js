@@ -99,7 +99,7 @@ class Login extends Component {
         <div>
           <Head>
             <title>Login</title>
-            <meta name="description" content="Login page." />
+            <meta name="description" content="Login" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
@@ -113,7 +113,7 @@ class Login extends Component {
                 <h1>Login</h1>
                 <input
                   type="text"
-                  placeholder="Username..."
+                  placeholder="Benutzername..."
                   id='userInput'
                   className='formularInput'
                   autoFocus
@@ -128,23 +128,22 @@ class Login extends Component {
                   value={this.state.password}
                   onKeyDown={loginEnter} />
                 <div hidden={!this.state.credentialsInfo} className={styles.error} >
-                  Credentials incorrect!
+                  Ungültige Anmeldedaten!
                 </div>
                 <button onClick={loginVerification}>
                   Login
                 </button>
                 <p>
-                  Or&nbsp;
+                  Oder stattdessen&nbsp;
                   <a onClick={() => router.push("/register")}>
-                    register
+                    registrieren
                   </a>
-                  &nbsp;instead.
                 </p>
               </div>
             </main>
 
             <footer>
-              <Footer isLoggedIn={!this.state.isNotLoggedIn}/>
+              <Footer isLoggedIn={!this.state.isNotLoggedIn} />
             </footer>
           </div>
         </div>
@@ -154,7 +153,7 @@ class Login extends Component {
         <div>
           <Head>
             <title>Login</title>
-            <meta name="description" content="Login page." />
+            <meta name="description" content="Login" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
         </div>

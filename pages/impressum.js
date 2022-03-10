@@ -66,7 +66,7 @@ class Impressum extends Component {
         <div>
           <Head>
             <title>Impressum</title>
-            <meta name="description" content="Impressum page." />
+            <meta name="description" content="Impressum" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
@@ -80,7 +80,7 @@ class Impressum extends Component {
         <div>
           <Head>
             <title>Impressum</title>
-            <meta name="description" content="Impressum page." />
+            <meta name="description" content="Impressum" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
