@@ -27,7 +27,9 @@
 }
 
 .centerScreen {
-  display: flex;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 20px;
   justify-content: center;
   align-items: center;
   text-align: center;
