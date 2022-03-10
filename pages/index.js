@@ -17,6 +17,7 @@ import { BeatLoader } from 'react-spinners'
 class Notizen extends Component {
   constructor(props) {
     super(props)
+    this.updateNoteListInterval = null;
     this.state = {
       isLoggedIn: undefined,
       currentToken: "",
@@ -64,6 +65,17 @@ class Notizen extends Component {
           )
         }
       },
+      {
+        key: "inUse", name: "Gerade geöffnet von", fieldName: "inUse", minWidth: 300, maxWidth: 200, isResizable: true,
+        onRender: (item) => {
+          if (item.inUse === undefined || item.inUse === "") {
+            return (`-`)
+          } else {
+            return (`${item.inUse}`)
+          }
+        }
+      },
+
     ];
   }
 
@@ -80,11 +92,14 @@ class Notizen extends Component {
     this.setState({ isLoading: true });
     const notes = await FrontEndController.getNotes();
 
+    // set timeinterval to update the note list
+    this.updateNoteListInterval = setInterval(async () => {
+      const notes = await FrontEndController.getNotes();
+      this.setState({ noteList: notes });
+    }, 4000);
+
     // update the state
     this.setState({ isLoading: false, noteList: notes });
-
-    // // if there is still a note id in the local storage, free the note
-    // FrontEndController.freeNote();
   }
 
   /**
@@ -92,7 +107,9 @@ class Notizen extends Component {
    * It is used to remove the storage event listener.
    */
   componentWillUnmount() {
-    window.removeEventListener('storage', this.storageTokenListener)
+    window.removeEventListener('storage', this.storageTokenListener);
+    clearInterval(this.updateNoteListInterval);
+    this.updateNoteListInterval = null;
   }
 
   /**
