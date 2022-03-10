@@ -7,6 +7,7 @@ const BACK_END_CONTROLLER = new BackEndController();
  * Api Route to register a user
  * @param req the request object
  * @param res the response object
+ * @category API
  */
 export default async function registerHandler(req, res) {
   const username = req.body.username;

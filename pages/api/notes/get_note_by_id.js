@@ -7,6 +7,7 @@ const BACK_END_CONTROLLER = new BackEndController();
  * Api Route to get a note by its id
  * @param req the request object
  * @param res the response object
+ * @category API
  */
 async function getNoteByIDHandler(req, res) {
   const id = req.body.id;

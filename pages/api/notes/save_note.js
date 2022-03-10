@@ -7,6 +7,7 @@ const BACK_END_CONTROLLER = new BackEndController();
  * Api Route to save the note to the database
  * @param req the request object
  * @param res the response object
+ * @category API
  */
 async function saveNoteHandler(req, res) {
   const note = req.body.note;

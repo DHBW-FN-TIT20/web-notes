@@ -7,6 +7,7 @@ const BACK_END_CONTROLLER = new BackEndController();
  * Api Route to verify a user token
  * @param req the request object
  * @param res the response object
+ * @category API
  */
 export default async function verifyTokenHandler(req, res) {
   const token = req.body.token;

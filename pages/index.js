@@ -24,7 +24,6 @@ class Notizen extends Component {
       isLoading: false,
       noteList: [],
       searchString: "",
-      isCreatingNewNote: false,
     };
 
     // define the columns for the note list with custom render functions
@@ -98,6 +97,14 @@ class Notizen extends Component {
       this.setState({ noteList: notes });
     }, 4000);
 
+    // set up listen on cmd+n and strg+n 
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "n" && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        this.addNewNote();
+      }
+    });
+
     // update the state
     this.setState({ isLoading: false, noteList: notes });
   }
@@ -170,9 +177,6 @@ class Notizen extends Component {
    * This method adds a new note and redirects the user to the editor.
    */
   async addNewNote() {
-    // this.setState({ isCreatingNewNote: true });
-    // const nodeID = await FrontEndController.addNewNote();
-    // FrontEndController.setCurrentNoteID(nodeID);
     this.props.router.push(`/edit?new=true`);
   }
 

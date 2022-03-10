@@ -7,6 +7,7 @@ const BACK_END_CONTROLLER = new BackEndController();
  * Api Route to get all notes which are related to the user from the database
  * @param req the request object
  * @param res the response object
+ * @category API
  */
 async function getNotesHandler(req, res) {
   const userToken = req.body.userToken;

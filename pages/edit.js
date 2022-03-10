@@ -95,6 +95,7 @@ class Edit extends Component {
       }
     }
 
+    // if the currentNote is undefined, redirect to the home page
     if (currentNote === undefined) {
       this.props.router.push("/");
       return;
@@ -348,10 +349,10 @@ class Edit extends Component {
     }
   }
 
+  /**
+   * This method sets the note on not in use on leaving the page.
+   */
   async leaveNote() {
-
-    console.log("leaving note...", this.state.isReadOnly);
-
     if (!this.state.isReadOnly && FrontEndController.getCurrentNoteID()) {
       await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
     }
