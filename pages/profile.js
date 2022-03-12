@@ -65,7 +65,7 @@ class Profile extends Component {
       this.setState({ isLoggedIn: true, currentToken: currentToken })
     } else {
       const { router } = this.props
-      router.push("/login")
+      router.push("/")
     }
   }
 
