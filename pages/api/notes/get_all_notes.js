@@ -9,11 +9,10 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  * @category API
  */
-async function getNotesHandler(req, res) {
+export default async function getNotesHandler(req, res) {
   const userToken = req.body.userToken;
 
   const notes = await BACK_END_CONTROLLER.getNotes(userToken);
 
   res.status(200).json({ notes: notes });
 };
-export default getNotesHandler;

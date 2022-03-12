@@ -335,6 +335,41 @@ export class BackEndController {
   }
 
   /**
+   * This method deletes a note from the database
+   * @param {number} noteID The ID of the note to delete
+   * @param {string} userToken The token of the user who wants to delete the note
+   * @returns 
+   */
+  async deleteNote(noteID, userToken) {
+
+    // check if the user is valid
+    const isUserValid = await this.isUserTokenValid(userToken);
+    if (!isUserValid) {
+      return false;
+    }
+
+    // get the user
+    const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
+    if (user === undefined) {
+      return false;
+    }
+
+    // get the note
+    const noteToDelete = this.databaseModel.getNoteFromResponse(await this.databaseModel.selectNoteTable(noteID))[0];
+    if (noteToDelete === undefined) {
+      return false;
+    }
+
+    // check if the note itself has to be deleted or just the relation
+    const isOwner = noteToDelete.ownerID === user.id;
+    if (isOwner) {
+      return this.databaseModel.evaluateSuccess(await this.databaseModel.deleteNote(noteID));
+    }
+    
+    return this.databaseModel.evaluateSuccess(await this.databaseModel.deleteUserNoteRelation(user.id, noteID));
+  }
+
+  /**
    * Gets get all notes which are related to the user from the database
    * @param {string} userToken
    */

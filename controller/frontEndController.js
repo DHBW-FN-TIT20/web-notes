@@ -383,5 +383,22 @@ export class FrontEndController {
     return nodeID;
   }
 
+
+  static async deleteNote() {
+    const response = await fetch('./api/notes/delete_note', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userToken: FrontEndController.getUserToken(),
+        id: this.getCurrentNoteID()
+      })
+    });
+
+    const data = await response.json();
+    return data.wasSuccessfull;
+  }
+
   //#endregion
 }

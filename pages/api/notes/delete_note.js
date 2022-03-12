@@ -4,16 +4,16 @@ import { BackEndController } from "../../../controller/backEndController";
 const BACK_END_CONTROLLER = new BackEndController();
 
 /**
- * Api Route to save the note to the database
+ * Api Route to delete the note from the database
  * @param req the request object
  * @param res the response object
  * @category API
  */
 export default async function saveNoteHandler(req, res) {
-  const note = req.body.note;
+  const noteID = req.body.id;
   const userToken = req.body.userToken;
 
-  const noteID = await BACK_END_CONTROLLER.saveNote(note, userToken);
+  const wasSuccessfull = await BACK_END_CONTROLLER.deleteNote(noteID, userToken);
 
-  res.status(200).json({ noteID: noteID });
+  res.status(200).json({ wasSuccessfull: wasSuccessfull });
 };

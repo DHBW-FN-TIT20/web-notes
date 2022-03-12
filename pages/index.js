@@ -74,7 +74,6 @@ class Notizen extends Component {
           }
         }
       },
-
     ];
   }
 
@@ -95,7 +94,7 @@ class Notizen extends Component {
     this.updateNoteListInterval = setInterval(async () => {
       const notes = await FrontEndController.getNotes();
       this.setState({ noteList: notes });
-    }, 4000);
+    }, 2000);
 
     // set up listen on cmd+n and strg+n 
     document.addEventListener("keydown", (event) => {

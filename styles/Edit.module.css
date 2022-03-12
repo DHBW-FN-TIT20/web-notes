@@ -10,7 +10,7 @@
 
 .nameAndSaveIndicator {
   display: grid;
-  grid-template-columns: auto min-content;
+  grid-template-columns: auto min-content min-content;
   grid-template-rows: auto min-content;
   grid-column-gap: 4px;
   margin-bottom: 3px;
@@ -23,7 +23,33 @@
 .savingIndicator {
   margin: 0;
   padding: 0;
-  background-color: green;
+}
+
+.deleteButton {
+  height: 32px;
+  width: 32px;
+  display: flex;
+  box-sizing: border-box;
+  border: 1px solid rgb(96, 94, 92);
+  border-radius: 2px;
+  background-color: rgb(255, 255, 255);
+  justify-content: center;
+  align-items: center;
+}
+
+.deleteButton:hover {
+  background-color: rgb(255, 255, 255);
+  transition: 0s;
+  color: black;
+}
+
+.deleteIcon:hover {
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+
+.deleteIcon:not(:hover) {
+  transition: 0.3s;
 }
 
 .centerScreen {

@@ -9,7 +9,10 @@ import Footer from '../components/footer'
 import SavingIndicator from '../components/SavingIndicator'
 import { initializeIcons, ITag, TextField, TagPicker } from '@fluentui/react'
 import BeatLoader from "react-spinners/BeatLoader";
+import { Icon } from '@fluentui/react/lib/Icon';
 
+
+initializeIcons();
 
 /**
  * @class Edit Component Class
@@ -57,7 +60,7 @@ class Edit extends Component {
 
     // set up listen on cmd+s and strg+s 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "s" && (event.metaKey || event.ctrlKey)) {
+      if (event.key === "s" && (event.metaKey || event.ctrlKey) && !this.state.isSaved) {
         event.preventDefault();
         this.autoSave.stop();
         this.autoSave.save();
@@ -357,6 +360,26 @@ class Edit extends Component {
     FrontEndController.removeCurrentNoteID();
   }
 
+  /**
+   * This method is called when the user clicks on the delete button.
+   * It asks the user if he really wants to delete the note.
+   * If the user confirms, the note is deleted.
+   */
+  handleDeleteNote = async () =>{
+
+    // ask the user if he really wants to delete the note
+    if (!confirm("Willst du diese Notiz wirklich löschen?")) return;
+
+    // delete the note
+    if (!await FrontEndController.deleteNote()) { 
+      alert("Die Notiz konnte nicht gelöscht werden.");
+      return;
+    }
+
+    // navigate to the note list page
+    this.props.router.push("/");
+  }
+
 
   /**
     * Generates the JSX Output for the Client
@@ -440,6 +463,9 @@ class Edit extends Component {
                   <div>
                     {/* Empty grid element */}
                   </div>
+                  <div>
+                    {/* Empty grid element */}
+                  </div>
 
 
                   {/* TITLE: */}
@@ -466,8 +492,12 @@ class Edit extends Component {
                     isSaving={this.state.isSaving}
                     isSaved={this.state.isSaved}
                   />
+                  <div>
+                    <button className={styles.deleteButton} onClick={this.handleDeleteNote}>
+                      <Icon iconName="delete" className={styles.deleteIcon}/>
+                    </button>
+                  </div>
                 </div>
-
 
                 {/* EDITOR: */}
 
