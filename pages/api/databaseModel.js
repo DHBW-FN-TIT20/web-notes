@@ -1,6 +1,10 @@
 // @ts-check
 import { createClient, PostgrestResponse } from '@supabase/supabase-js'
 
+/**
+ * DataBase Model to Connect BackendController with Supabase DB
+ * @category API
+ */
 export class DatabaseModel {
   //#region Variables
   static CLIENT;

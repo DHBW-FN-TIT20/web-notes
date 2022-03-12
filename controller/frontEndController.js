@@ -2,7 +2,8 @@
 import jwt from 'jsonwebtoken'
 
 /**
- * This is the Frontend Controller of web-notes
+ * This is the Frontend Controller of WebNotes
+ * @category Controller
  */
 export class FrontEndController {
   static userTokenName = "webnotes.auth.token";

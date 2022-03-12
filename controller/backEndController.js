@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 
 /**
  * Backend Controller of WebNotes
+ * @category Controller
  */
 export class BackEndController {
   //#region Variables
@@ -396,8 +397,9 @@ export class BackEndController {
 
 
   /**
-   * Gets get all notes which are related to the user from the database
+   * Gets get all notes which are related to the user from the database by note iD
    * @param {string} userToken
+   * @param {number} id note ID
    */
   async getNoteByID(userToken, id) {
     const isUserValid = await this.isUserTokenValid(userToken);
