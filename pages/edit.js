@@ -136,7 +136,7 @@ class Edit extends Component {
    * This method checks whether the event contains a change in the user-token. If it does, it updates the login state.
    * @param {any} event Event triggered by an EventListener
    */
-  storageTokenListener = async (event) => {
+   async storageTokenListener(event){
     if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
@@ -179,7 +179,7 @@ class Edit extends Component {
    * If the editor is not loaded yet, it renders "Loading..."
    * @returns {JSX.Element} The Editor
    */
-  Editor = () => {
+  Editor(){
     return (
       <div>
         Loading...
@@ -237,7 +237,7 @@ class Edit extends Component {
    * This method handles the change of the person tag picker.
    * @param {ITag[]} items The currently selected items
    */
-  handlePersonPickerChange = (items) => {
+  handlePersonPickerChange(items){
     this.setState({ selectedUserTags: items })
     this.autoSave.handleChange();
   }
@@ -248,7 +248,7 @@ class Edit extends Component {
    * @param {ITag[]} tagList The already selected tags
    * @returns {ITag[]} The filtered tags
    */
-  filterSuggestedTags = (filterText, tagList) => {
+  filterSuggestedTags(filterText, tagList){
     if (filterText) {
       return this.state.allUserTags.filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !this.listContainsTagList(tag, tagList));
     } else {
@@ -262,7 +262,7 @@ class Edit extends Component {
    * @param {ITag[]} tagList The already selected tags
    * @returns {boolean} True if the tag is already in the list, false otherwise
    */
-  listContainsTagList = (tag, tagList) => {
+  listContainsTagList(tag, tagList){
     if (!tagList || !tagList.length || tagList.length === 0) {
       return false;
     }
@@ -365,7 +365,7 @@ class Edit extends Component {
    * It asks the user if he really wants to delete the note.
    * If the user confirms, the note is deleted.
    */
-  handleDeleteNote = async () =>{
+   async handleDeleteNote(){
 
     // ask the user if he really wants to delete the note
     if (!confirm("Willst du diese Notiz wirklich löschen?")) return;
