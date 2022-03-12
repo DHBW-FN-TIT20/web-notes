@@ -99,7 +99,7 @@ class Login extends Component {
       return (
         <div>
           <Head>
-            <title>Login</title>
+            <title>Einloggen</title>
             <meta name="description" content="Login" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
@@ -111,7 +111,7 @@ class Login extends Component {
           <div className="scrollBody">
             <main className={styles.field}>
               <div className={styles.fieldDiv}>
-                <h1>Login</h1>
+                <h1>Einloggen</h1>
                 <input
                   type="text"
                   placeholder="Benutzername..."
@@ -132,10 +132,10 @@ class Login extends Component {
                   Ungültige Anmeldedaten!
                 </div>
                 <button onClick={loginVerification}>
-                  Login
+                  einloggen
                 </button>
                 <p>
-                  Oder stattdessen&nbsp;
+                  Stattdessen&nbsp;
                   <a onClick={() => router.push("/register")}>
                     registrieren
                   </a>
@@ -153,7 +153,7 @@ class Login extends Component {
       return (
         <div>
           <Head>
-            <title>Login</title>
+            <title>Einloggen</title>
             <meta name="description" content="Login" />
             <link rel="icon" href="/favicon.ico" />
           </Head>

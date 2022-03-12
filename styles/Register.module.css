@@ -45,17 +45,7 @@
 }
 
 .flexBox {
-  display: flex;
   width: 100%;
-}
-
-.loginInstead {
-  align-self: flex-start;
-}
-
-.showReq {
-  align-self: flex-end;
-  margin-left: auto;
 }
 
 .requirementsDiv {
@@ -103,17 +93,32 @@
   .fieldDiv, .requirementsDiv {
     width: 60vw;
   }
+
+  .flexBox {
+    display: flex;
+  }
+
+  .loginInstead {
+    align-self: flex-start;
+  }
+  
+  .showReq {
+    align-self: flex-end;
+    margin-left: auto;
+  }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
   .fieldDiv, .requirementsDiv {
-    width: 40vw;
+    width: 50vw;
     max-width: 600px;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-  
+  .fieldDiv, .requirementsDiv {
+    width: 40vw;
+  }
 }

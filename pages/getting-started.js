@@ -148,7 +148,7 @@ class GettingStarted extends Component {
                     <ul>
                       <li>Klicke in der Navigationsmenü auf den Reiter &quot;Notizen&quot;.</li>
                       <li>Du siehst eine Tabelle mit deinen eigenen, sowie deinen geteilten Notizen.</li>
-                      <li>Klicke auf die zu bearbeitende Notiz. (Hast du noch keine Notiz erstellt, folge <Link href="#createNote">Schritt 2)</Link>.</li>
+                      <li>Klicke auf die zu bearbeitende Notiz. (Hast du noch keine Notiz erstellt, folge <Link href="#createNote">Schritt 2</Link>).</li>
                       <li>Nach einer kurzen Ladezeit öffnet sich auch schon der Editor.</li>
                       <li>Wird die geöffnete Notiz bereits von einem anderen Benutzer bearbeitet, so kannst du leider keine Veränderungen an der Notiz vornehmen.</li>
                     </ul>

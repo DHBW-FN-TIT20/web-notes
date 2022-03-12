@@ -72,7 +72,7 @@ class Register extends Component {
     if (await FrontEndController.isPasswordValid(password)) {
       this.setState({ passwordReqMessage: "" })
     } else {
-      this.setState({ passwordReqMessage: "überprüfe die Passwortanforderungen" })
+      this.setState({ passwordReqMessage: "überprüfe die Anforderungen für das Passwort" })
     }
   }
 
@@ -118,7 +118,7 @@ class Register extends Component {
       if (await FrontEndController.isUsernameValid(this.state.username)) {
         this.setState({ usernameReqMessage: "" })
       } else {
-        this.setState({ usernameReqMessage: "überprüfe die Benutzernamensanforderung" })
+        this.setState({ usernameReqMessage: "überprüfe die Anforderungen für den Benutzernamen" })
       }
     }
 
@@ -139,7 +139,7 @@ class Register extends Component {
       return (
         <div>
           <Head>
-            <title>Register</title>
+            <title>Registrieren</title>
             <meta name="description" content="Register" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
@@ -151,7 +151,7 @@ class Register extends Component {
           <div className="scrollBody">
             <main className={styles.field}>
               <div className={styles.fieldDiv}>
-                <h1>Register</h1>
+                <h1>Registrieren</h1>
                 <input
                   type="text"
                   placeholder="Benutzername..."
@@ -200,18 +200,18 @@ class Register extends Component {
                 <button onClick={async () => {
                   registerVerification()
                 }}>
-                  Register
+                  registrieren
                 </button>
                 <div className={styles.flexBox}>
                   <p className={styles.loginInstead}>
-                    Oder stattdessen&nbsp;
+                    Stattdessen&nbsp;
                     <a onClick={() => { router.push("/login") }}>
                       einloggen
                     </a>
                   </p>
                   <p className={styles.showReq}>
                     <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
-                      {this.state.showRequirements ? "Verberge Anforderungen" : "Zeige Anforderungen"}
+                      {this.state.showRequirements ? "Anforderungen verbergen" : "Anforderungen anzeigen"}
                     </a>
                   </p>
                 </div>
@@ -243,7 +243,7 @@ class Register extends Component {
       return (
         <div>
           <Head>
-            <title>Register</title>
+            <title>Registrieren</title>
             <meta name="description" content="Register page." />
             <link rel="icon" href="/favicon.ico" />
           </Head>

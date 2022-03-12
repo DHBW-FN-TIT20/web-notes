@@ -69,12 +69,14 @@
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
   .fieldDiv {
-    width: 40vw;
+    width: 50vw;
     max-width: 600px;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-  
+  .fieldDiv {
+    width: 40vw;
+  }
 }
