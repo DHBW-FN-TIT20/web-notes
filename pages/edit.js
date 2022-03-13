@@ -237,7 +237,7 @@ class Edit extends Component {
    * This method handles the change of the person tag picker.
    * @param {ITag[]} items The currently selected items
    */
-  handlePersonPickerChange(items) {
+  handlePersonPickerChange = (items) => {
     this.setState({ selectedUserTags: items })
     this.autoSave.handleChange();
   }
@@ -248,7 +248,7 @@ class Edit extends Component {
    * @param {ITag[]} tagList The already selected tags
    * @returns {ITag[]} The filtered tags
    */
-  filterSuggestedTags(filterText, tagList) {
+  filterSuggestedTags = (filterText, tagList) => {
     if (filterText) {
       return this.state.allUserTags.filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 && !this.listContainsTagList(tag, tagList));
     } else {
@@ -262,7 +262,7 @@ class Edit extends Component {
    * @param {ITag[]} tagList The already selected tags
    * @returns {boolean} True if the tag is already in the list, false otherwise
    */
-  listContainsTagList(tag, tagList) {
+  listContainsTagList = (tag, tagList) => {
     if (!tagList || !tagList.length || tagList.length === 0) {
       return false;
     }
@@ -275,6 +275,7 @@ class Edit extends Component {
   autoSave = {
     timeout: null,
     dataWasChanged: false,
+    haveToSaveAgain: false,
 
     /**
      * This method starts the timer for the auto-saving.
@@ -311,6 +312,11 @@ class Edit extends Component {
         this.autoSave.start();
       }
       this.autoSave.dataWasChanged = true;
+
+      if (this.state.isSaving) {
+        this.autoSave.haveToSaveAgain = true;
+      }
+
       this.setState({ isSaved: false });
     },
 
@@ -346,7 +352,13 @@ class Edit extends Component {
 
       this.autoSave.dataWasChanged = false;
       this.autoSave.stop();
-      this.setState({ isSaved: isSaved, isSaving: false });
+
+      if (this.autoSave.haveToSaveAgain) {
+        this.autoSave.haveToSaveAgain = false;
+        this.autoSave.save();
+      } else {
+        this.setState({ isSaved: isSaved, isSaving: false });
+      }
     }
   }
 
@@ -365,7 +377,7 @@ class Edit extends Component {
    * It asks the user if he really wants to delete the note.
    * If the user confirms, the note is deleted.
    */
-  async handleDeleteNote() {
+  handleDeleteNote = async () => {
 
     // ask the user if he really wants to delete the note
     if (!confirm("Willst du diese Notiz wirklich löschen?")) return;
@@ -533,6 +545,5 @@ class Edit extends Component {
   }
 
 }
-
 
 export default withRouter(Edit)
