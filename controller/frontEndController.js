@@ -235,9 +235,10 @@ export class FrontEndController {
   }
 
 
+
   /**
    * This method gets all the users from the database
-   * @returns {Promise<{id: number, name: string}[]>} Array of all users
+   * @returns {Promise<Array.<{id: number, name: string}>>} Array of all users
    */
   static async getAllUsers() {
     const response = await fetch('./api/users/get_all_users', {
@@ -290,7 +291,7 @@ export class FrontEndController {
 
   /**
    * This method is used to save a note to the database. If no note.id is given, a new note is created.
-   * @param {{id?: number, title?: string, content?: string, inUse: string, isShared?: boolean, sharedUserIDs?: number[]}} note note which should be saved
+   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: string | undefined, isShared: boolean | undefined, sharedUserIDs: number[] | undefined}} note note which should be saved
    * @returns {Promise<number>} returns the id of the saved note
    */
   static async saveNote(note) {
@@ -313,7 +314,11 @@ export class FrontEndController {
   static async setNoteInUse(noteID) {
     this.saveNote({
       id: noteID,
-      inUse: this.getUsernameFromToken(this.getUserToken())
+      inUse: this.getUsernameFromToken(this.getUserToken()),
+      title: undefined,
+      content: undefined,
+      isShared: undefined,
+      sharedUserIDs: undefined
     });
   }
 
@@ -325,13 +330,17 @@ export class FrontEndController {
   static async setNoteNotInUse(noteID) {
     await this.saveNote({
       id: noteID,
-      inUse: ""
+      inUse: "",
+      title: undefined,
+      content: undefined,
+      isShared: undefined,
+      sharedUserIDs: undefined
     });
   }
 
   /**
    * This method is used to get all notes which are related to the user.
-   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}[]>} Array of all notes of the current user
+   * @returns {Promise<Array.<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}>>} Array of all notes of the current user
    */
   static async getNotes() {
 

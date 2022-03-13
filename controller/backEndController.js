@@ -338,10 +338,9 @@ export class BackEndController {
    * This method deletes a note from the database
    * @param {number} noteID The ID of the note to delete
    * @param {string} userToken The token of the user who wants to delete the note
-   * @returns 
+   * @returns {Promise<boolean>} true if delete was Sucessful
    */
   async deleteNote(noteID, userToken) {
-
     // check if the user is valid
     const isUserValid = await this.isUserTokenValid(userToken);
     if (!isUserValid) {

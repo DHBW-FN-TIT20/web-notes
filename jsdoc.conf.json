@@ -3,7 +3,8 @@
       "allowUnknownTags": [
         "component",
         "category",
-        "subcategory"
+        "subcategory",
+        "type"
       ],
       "dictionaries": [
         "jsdoc",

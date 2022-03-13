@@ -41,7 +41,7 @@ export class DatabaseModel {
   /**
    * This mehtod extracts user object from db response
    * @param {PostgrestResponse<{id: number, name: string, password: string}>} dbResponse Response of Database
-   * @returns {{id: number, name: string, password: string}[]} List of user objects.
+   * @returns {Array.<{id: number, name: string, password: string}>} List of user objects.
    */
   getUserFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
@@ -134,7 +134,7 @@ export class DatabaseModel {
   /**
    * This method extracts note objects from the database response
    * @param {PostgrestResponse<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}>} dbResponse Response of Database
-   * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}[]} List of user objects.
+   * @returns {Array.<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}>} List of user objects.
    */
   getNoteFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
@@ -239,7 +239,7 @@ export class DatabaseModel {
   /**
    * This method extracts shared-note objects from the database response
    * @param {PostgrestResponse<{noteID: number, userID: number, Note: {id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}}>} dbResponse Response of Database
-   * @returns {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}[]} List of user objects.
+   * @returns {Array.<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string}>} List of user objects.
    */
   getSharedNoteFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
@@ -260,7 +260,7 @@ export class DatabaseModel {
   /**
    * This method extracts user-note relations from the databse response
    * @param {PostgrestResponse<{noteID: number, userID: number}>} dbResponse Response of Database
-   * @returns {{noteID: number, userID: number}[]} List of user objects.
+   * @returns {Array.<{noteID: number, userID: number}>} List of user objects.
    */
   getSharedUserNoteRelationFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {

@@ -144,7 +144,7 @@ class Notizen extends Component {
 
   /**
    * This method is called when the user clicks on a item in the details list. It redirects the user to the corresponding note.
-   * @param {{ id: number; title: string; ownerID: number; modifiedAt: Date; content: string; inUse: boolean; isShared: boolean }} item The item that was clicked
+   * @param {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: boolean, isShared: boolean }} item The item that was clicked
    * @param {number} index The index of the item in the list
    * @param {any} ev The event that triggered the method
    */
