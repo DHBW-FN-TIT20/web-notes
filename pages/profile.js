@@ -192,32 +192,32 @@ class Profile extends Component {
                       id='userInput'
                       className='formularInput'
                       name="oldPassword"
-                      onChange={this.changedInput}
+                      onChange={(event) => { this.changedInput(event) }}
                       value={this.state.oldPassword}
-                      onKeyDown={this.changeEnter} />
+                      onKeyDown={(event) => { this.changeEnter }} />
                     <input
                       type="password"
                       placeholder="Neues Passwort..."
                       className='formularInput'
                       name="newPassword"
-                      onChange={this.changedInput}
+                      onChange={(event) => { this.changedInput(event) }}
                       value={this.state.newPassword}
-                      onKeyDown={this.changeEnter} />
+                      onKeyDown={(event) => { this.changeEnter }} />
                     <input
                       type="password"
                       placeholder="Neues Passwort bestätigen..."
                       className='formularInput'
                       name="newPasswordConfirm"
-                      onChange={this.changedInput}
+                      onChange={(event) => { this.changedInput(event) }}
                       value={this.state.newPasswordConfirm}
-                      onKeyDown={this.changeEnter} />
+                      onKeyDown={(event) => { this.changeEnter }} />
                     <div hidden={this.state.feedbackMessage === ""} className={styles.error} >
                       {this.state.feedbackMessage}
                     </div>
                     <div hidden={this.state.updatedPasswordMessage === ""} className={styles.success}>
                       {this.state.updatedPasswordMessage}
                     </div>
-                    <button disabled={!this.state.isInputValidForChangePassword} onClick={this.changePassword}>Passwort ändern</button>
+                    <button disabled={!this.state.isInputValidForChangePassword} onClick={() => { this.changePassword }}>Passwort ändern</button>
                     <p className={styles.showReq}>
                       <a onClick={() => { this.setState({ showRequirements: !this.state.showRequirements }) }}>
                         {this.state.showRequirements ? "Verberge Anforderungen" : "Zeige Anforderungen"}
