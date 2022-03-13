@@ -57,7 +57,6 @@ class Profile extends Component {
 
   /**
    * This method updates the isLoggedIn state and currentToken state according to the current token in local storage.
-   * @returns Nothing
    */
   async updateLoginState() {
     let currentToken = FrontEndController.getUserToken();

@@ -163,7 +163,6 @@ class Edit extends Component {
 
   /**
    * This method updates the isLoggedIn state and currentToken state according to the current token in local storage.
-   * @returns Nothing
    */
   async updateLoginState() {
     let currentToken = FrontEndController.getUserToken();
@@ -330,7 +329,14 @@ class Edit extends Component {
       if (this.isNoteNew) {
 
         // add a new note
-        const newNoteToSave = { title: this.state.title, content: this.editorInstance.getData(), sharedUserIDs: this.state.selectedUserTags.map(tag => { return tag.key }), inUse: this.currentUsername, };
+        const newNoteToSave = { 
+          title: this.state.title,
+          content: this.editorInstance.getData(),
+          sharedUserIDs: this.state.selectedUserTags.map(tag => { return tag.key }),
+          inUse: this.currentUsername,
+          id: undefined,
+          isShared: false
+        };
         const noteID = await FrontEndController.saveNote(newNoteToSave);
         isSaved = noteID ? true : false;
         FrontEndController.setCurrentNoteID(noteID);
@@ -345,6 +351,7 @@ class Edit extends Component {
           content: this.editorInstance.getData(),
           inUse: this.currentUsername,
           sharedUserIDs: this.state.selectedUserTags.map(userTag => { return userTag.key }),
+          isShared: false
         }
         isSaved = (await FrontEndController.saveNote(noteToSave)) ? true : false;
       }
