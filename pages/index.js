@@ -122,7 +122,7 @@ class Notizen extends Component {
    * This method checks whether the event contains a change in the user-token. If it does, it updates the login state.
    * @param {any} event Event triggered by an EventListener
    */
-  storageTokenListener = async (event) => {
+  async storageTokenListener(event) {
     if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
@@ -148,8 +148,7 @@ class Notizen extends Component {
    * @param {number} index The index of the item in the list
    * @param {any} ev The event that triggered the method
    */
-  onActiveItemChanged = (item, index, ev) => {
-
+  onActiveItemChanged(item, index, ev) {
     // open the note
     if (item.id !== -1 || item.id === undefined) {
       FrontEndController.setCurrentNoteID(item.id);
@@ -164,7 +163,7 @@ class Notizen extends Component {
    * @param {any} event 
    * @param {string} newValue 
    */
-  handleSearchChange = (event, newValue) => {
+  handleSearchChange(event, newValue) {
     if (newValue) {
       this.setState({ searchString: newValue });
     } else {

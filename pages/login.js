@@ -42,7 +42,7 @@ class Login extends Component {
    * This method checks whether the event contains a change in the user-token. If it does, it verifys the token and routes to root on success.
    * @param {any} event Event triggered by an EventListener
    */
-  storageTokenListener = async (event) => {
+  async storageTokenListener(event) {
     if (event.key === FrontEndController.userTokenName) {
       this.checkLoginState();
     }

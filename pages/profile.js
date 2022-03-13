@@ -49,7 +49,7 @@ class Profile extends Component {
    * This method checks whether the event contains a change in the user-token. If it does, it updates the login state.
    * @param {any} event Event triggered by an EventListener
    */
-  storageTokenListener = async (event) => {
+  async storageTokenListener(event) {
     if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
@@ -73,7 +73,7 @@ class Profile extends Component {
    * This method is used to handle the event when the user clicks on the change password button.
    * It triggers the changePassword method of the FrontEndController.
    */
-  changePassword = async () => {
+  async changePassword() {
     this.setState({ feedbackMessage: "" })
     const changedPasswordSuccessfully = await FrontEndController.changePassword(this.state.oldPassword, this.state.newPassword);
 
@@ -89,7 +89,7 @@ class Profile extends Component {
    * It evaluates the input and sets the feedback state accordingly.
    * @param {any} event the change event
    */
-  changedInput = async (event) => {
+  async changedInput(event) {
 
     // get all input values
     const oldPassword = event.target.name === "oldPassword" ? event.target.value : this.state.oldPassword;
@@ -125,7 +125,7 @@ class Profile extends Component {
    * This method checks for enter key press in event and calls the changePasswordVerification method.
    * @param {any} event Button-Press event
    */
-  changeEnter = async (event) => {
+  async changeEnter(event) {
     if (event.key.toLowerCase() === "enter") {
       event.preventDefault();
       this.changePassword();
@@ -135,7 +135,7 @@ class Profile extends Component {
   /**
    * This method registers the user with the currently entered credentials. If the registration was successfull, it routes to root, else all fields are cleared.
    */
-  changePasswordVerification = async () => {
+  async changePasswordVerification() {
     if (this.state.newPassword === this.state.newPasswordConfirm && this.state.usernameReqMessage === "" && this.state.feedbackMessage === "") {
       if (await FrontEndController.changePassword(this.state.oldPassword, this.state.newPassword)) {
         // Do sth for success

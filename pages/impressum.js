@@ -38,7 +38,7 @@ class Impressum extends Component {
    * This method checks whether the event contains a change in the user-token. If it does, it updates the login state.
    * @param {any} event Event triggered by an EventListener
    */
-  storageTokenListener = async (event) => {
+  async storageTokenListener(event) {
     if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }
