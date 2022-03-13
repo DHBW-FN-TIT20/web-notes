@@ -310,6 +310,10 @@ export class FrontEndController {
     return data.noteID;
   }
 
+  /**
+   * This function writes the username in the inUse field of the note to make it read only for other users.
+   * @param {number} noteID ID of the note which should be made read only
+   */
   static async setNoteInUse(noteID) {
     this.saveNote({
       id: noteID,
@@ -319,8 +323,8 @@ export class FrontEndController {
 
 
   /**
-   * 
-   * @param {number} noteID 
+   * This function removes the username from the inUse field of a note to make it available for other users
+   * @param {number} noteID ID of the note which should be made available
    */
   static async setNoteNotInUse(noteID) {
     await this.saveNote({
