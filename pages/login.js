@@ -86,7 +86,7 @@ class Login extends Component {
      * This method logs the user in with the currently entered credentials. If the login was successfull, it routes to root, else all fields are cleared.
      */
     const loginVerification = async () => {
-      this.setState({credentialsInfo: ""});
+      this.setState({ credentialsInfo: "" });
       if (await FrontEndController.loginUser(this.state.username, this.state.password)) {
         router.push("/");
       } else {

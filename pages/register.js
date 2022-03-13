@@ -101,7 +101,7 @@ class Register extends Component {
      * This method registers the user with the currently entered credentials. If the registration was successfull, it routes to root, else all fields are cleared.
      */
     const registerVerification = async () => {
-      this.setState({feedbackMessage: ""});
+      this.setState({ feedbackMessage: "" });
       if (this.state.password === this.state.confirmPassword && this.state.usernameReqMessage === "" && this.state.passwordReqMessage === "" && !this.state.doesUserExist) {
         if (await FrontEndController.registerUser(this.state.username, this.state.password)) {
           router.push("/");

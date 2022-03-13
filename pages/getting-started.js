@@ -97,12 +97,12 @@ class GettingStarted extends Component {
               <div className={styles.content}>
                 <h1>Willkommen bei WebNotes!</h1>
                 <p>
-                  Mit WebNotes kannst du Notizen erstellen, bearbeiten und mit anderen Nutzern Teilen. <br/>
-                  <br/>
-                  Die Bearbeitung der Notizen erfolgt komplett in deinem Browser und deine Änderungen werden automatisch gespeichert. Du kannst deine Notizen außerdem formatieren und als PDF-Dokument exportieren.<br/>
-                  <br/>
-                  Starte jetzt und teile deine Notizen mit deinen Freunden oder deiner Familie.<br/>
-                  <br/>
+                  Mit WebNotes kannst du Notizen erstellen, bearbeiten und mit anderen Nutzern Teilen. <br />
+                  <br />
+                  Die Bearbeitung der Notizen erfolgt komplett in deinem Browser und deine Änderungen werden automatisch gespeichert. Du kannst deine Notizen außerdem formatieren und als PDF-Dokument exportieren.<br />
+                  <br />
+                  Starte jetzt und teile deine Notizen mit deinen Freunden oder deiner Familie.<br />
+                  <br />
                   Du kannst dir <Link href={'/register'}>hier</Link> kostenlos einen Account erstellen und direkt loslegen!
                 </p>
               </div>
@@ -124,7 +124,7 @@ class GettingStarted extends Component {
                     <ul>
                       <li>Klicke in der Navigationsmenü auf den &quot;Login&quot; Knopf.</li>
                       <li>Klicke auf den &quot;registrieren&quot; Link unterhalb der Eingabefelder.</li>
-                      <li>Fülle das angezeigte Formular aus. <br/>Über den Link unterhalb der Eingabefelder kannst du dir dafür die Vorgaben anzeigen lassen.</li>
+                      <li>Fülle das angezeigte Formular aus. <br />Über den Link unterhalb der Eingabefelder kannst du dir dafür die Vorgaben anzeigen lassen.</li>
                       <li>Hast du das Formular erfolgreich ausgefüllt und über den &quot;Registrieren&quot; Knopf bestätigt, wirst du automatisch eingeloggt.</li>
                       <li>Über den &quot;Logout&quot; Knopf in der Navigationsmenü kannst du dich später wieder ausloggen.</li>
                     </ul>
@@ -173,7 +173,7 @@ class GettingStarted extends Component {
             </main>
 
             <footer>
-              <Footer isLoggedIn={this.state.isLoggedIn}/>
+              <Footer isLoggedIn={this.state.isLoggedIn} />
             </footer>
           </div>
         </div>

@@ -1,10 +1,10 @@
-  /**
-   * This function splits the HTML input into a list of elements
-   * @param {string} html The HTML string to be split into elements
-   * @param {number} maxStringElements The maximum number of displayed elements.
-   * @returns {string[]} The array of elements
-   */
-  export default function splitHTMLintoElements(html, maxStringElements) {
+/**
+ * This function splits the HTML input into a list of elements
+ * @param {string} html The HTML string to be split into elements
+ * @param {number} maxStringElements The maximum number of displayed elements.
+ * @returns {string[]} The array of elements
+ */
+export default function splitHTMLintoElements(html, maxStringElements) {
   let elements = [];
   let currentElement = "";
 

@@ -74,7 +74,7 @@ class Profile extends Component {
    * It triggers the changePassword method of the FrontEndController.
    */
   changePassword = async () => {
-    this.setState({feedbackMessage: ""})
+    this.setState({ feedbackMessage: "" })
     const changedPasswordSuccessfully = await FrontEndController.changePassword(this.state.oldPassword, this.state.newPassword);
 
     if (!changedPasswordSuccessfully) {

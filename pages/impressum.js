@@ -89,23 +89,23 @@ class Impressum extends Component {
           </header>
 
           <div className="scrollBody">
-          <main>
-            <div className={styles.content}>
-              <h1>Impressum</h1>
+            <main>
+              <div className={styles.content}>
+                <h1>Impressum</h1>
 
-              <h2>Angaben gem&auml;&szlig; &sect; 5 TMG</h2>
-              <p>Johannes Brandenburger<br />
-                Kirchstr. 16<br />
-                88512 Mengen</p>
+                <h2>Angaben gem&auml;&szlig; &sect; 5 TMG</h2>
+                <p>Johannes Brandenburger<br />
+                  Kirchstr. 16<br />
+                  88512 Mengen</p>
 
-              <h2>Kontakt</h2>
-              <p>Telefon: +49 152 25366286<br />
-                E-Mail: johannes@brandenburger.dev</p>
-            </div>
-          </main>
+                <h2>Kontakt</h2>
+                <p>Telefon: +49 152 25366286<br />
+                  E-Mail: johannes@brandenburger.dev</p>
+              </div>
+            </main>
 
             <footer>
-              <Footer isLoggedIn={this.state.isLoggedIn}/>
+              <Footer isLoggedIn={this.state.isLoggedIn} />
             </footer>
           </div>
         </div>

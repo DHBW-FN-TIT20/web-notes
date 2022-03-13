@@ -251,7 +251,7 @@ class Notizen extends Component {
             </main>
 
             <footer>
-              <Footer isLoggedIn={this.state.isLoggedIn}/>
+              <Footer isLoggedIn={this.state.isLoggedIn} />
             </footer>
           </div>
         </div>
