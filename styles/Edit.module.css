@@ -16,6 +16,10 @@
   margin-bottom: 3px;
 }
 
+.nameAndSaveIndicatorDisabled {
+  grid-template-columns: auto min-content min-content;
+}
+
 .titleText {
   padding-bottom: 3px;
 }
