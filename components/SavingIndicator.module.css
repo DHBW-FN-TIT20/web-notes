@@ -14,6 +14,7 @@
 
 .container {
     /* TODO: correct height width and center childs */
+    display: flex;
     height: 32px;
     width: 32px;
     box-sizing: border-box;
@@ -29,5 +30,9 @@
 .container p {
     margin: 0;
     height: inherit;
+    font-size: 25px;
+}
+
+.icon {
     font-size: 25px;
 }

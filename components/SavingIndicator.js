@@ -39,7 +39,7 @@ class SavingIndicator extends Component {
     } else if (!this.props.isSaving && this.props.isSaved) {
       return (
         <div className={`${styles.isSaved} ${styles.container}`}>
-          <Icon iconName="Checkmark" />
+          <Icon iconName="Checkmark" className={styles.icon}/>
         </div>
       )
     } else {
