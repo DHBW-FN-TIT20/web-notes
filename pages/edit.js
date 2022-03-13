@@ -180,8 +180,6 @@ class Edit extends Component {
       // if the note is not found (deleted), redirect to the home page
       if (!note) {
 
-        console.log("auto: Note not found");
-
         // delete the interval
         clearInterval(this.autoCheckInterval);
         this.autoCheckInterval = null;
@@ -189,6 +187,7 @@ class Edit extends Component {
         // redirect to the home page
         this.isDeleted = true;
         this.props.router.push("/");
+        alert("Die Notiz wurde von einem anderen Benutzer gelöscht.");
         return;
       }
 
