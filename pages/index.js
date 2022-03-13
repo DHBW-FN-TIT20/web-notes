@@ -236,12 +236,12 @@ class Notizen extends Component {
           <div className="scrollBody">
             <main>
               <div className={styles.contentOne}>
-                <TextField onChange={this.handleSearchChange} placeholder={"Suchen..."} disabled={this.state.isLoading} />
+                <TextField onChange={(event, newValue) => { this.handleSearchChange(event, newValue) }} placeholder={"Suchen..."} disabled={this.state.isLoading} />
                 <ShimmeredDetailsList className={styles.detailsList}
                   items={filteredNoteList}
                   columns={this.noteListColumns}
                   setKey="set"
-                  onActiveItemChanged={this.onActiveItemChanged}
+                  onActiveItemChanged={(item, index, ev) => { this.onActiveItemChanged(item, index, ev) }}
                   selectionMode={SelectionMode.none}
                   enableShimmer={this.state.isLoading}
                   shimmerLines={7}

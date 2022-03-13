@@ -512,7 +512,7 @@ class Edit extends Component {
                     </button>
                   </div>
                   <div>
-                    <button className={this.state.isReadOnly ? styles.iconDisabledButton : styles.iconButton} onClick={this.handleDeleteNote} disabled={this.state.isReadOnly || this.isNoteNew}>
+                    <button className={this.state.isReadOnly ? styles.iconDisabledButton : styles.iconButton} onClick={() => { this.handleDeleteNote() }} disabled={this.state.isReadOnly || this.isNoteNew}>
                       <Icon iconName="delete" className={this.state.isReadOnly ? styles.iconDisabled : styles.icon} />
                     </button>
                   </div>
@@ -536,10 +536,10 @@ class Edit extends Component {
                 <div hidden={this.state.isSharedNote}>
                   <label>Diese Notiz teilen mit...</label>
                   <TagPicker
-                    onResolveSuggestions={this.filterSuggestedTags}
+                    onResolveSuggestions={(filter, selectedItems) => { return this.filterSuggestedTags(filter, selectedItems) }}
                     getTextFromItem={(item) => { return item.name }}
                     pickerSuggestionsProps={{ suggestionsHeaderText: 'Vorgeschlagene Personen', noResultsFoundText: 'Keine Personen gefunden', }}
-                    onChange={this.handlePersonPickerChange}
+                    onChange={(items) => { this.handlePersonPickerChange(items) }}
                     selectedItems={this.state.selectedUserTags}
                     disabled={this.state.isReadOnly}
                     className={styles.sharedPicker}
