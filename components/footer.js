@@ -124,11 +124,12 @@ class Footer extends Component {
                   Passwort ändern
                 </Link>
               </div>
-              <div hidden={!this.props.isLoggedIn} onClick={() => { FrontEndController.logoutUser() }}>
-                <Link
-                  href={"/"}>
+              <div hidden={!this.props.isLoggedIn} onClick={() => { 
+                FrontEndController.logoutUser() 
+                location.reload()}}>
+                <p className="link">
                   Ausloggen
-                </Link>
+                </p>
               </div>
             </div>
           </div>

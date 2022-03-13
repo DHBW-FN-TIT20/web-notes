@@ -331,7 +331,6 @@ class Edit extends Component {
 
         // add a new note
         const newNoteToSave = { title: this.state.title, content: this.editorInstance.getData(), sharedUserIDs: this.state.selectedUserTags.map(tag => { return tag.key }), inUse: this.currentUsername, };
-        // console.log("Saving new note...", newNoteToSave);
         const noteID = await FrontEndController.saveNote(newNoteToSave);
         isSaved = noteID ? true : false;
         FrontEndController.setCurrentNoteID(noteID);
@@ -478,7 +477,9 @@ class Edit extends Component {
                   <div>
                     {/* Empty grid element */}
                   </div>
-
+                  <div>
+                    {/* Empty grid element */}
+                  </div>
 
                   {/* TITLE: */}
 
@@ -497,18 +498,29 @@ class Edit extends Component {
                     disabled={this.state.isReadOnly}
                   />
 
-                  {/* SAVING INDICATOR: */}
+                  {/* BUTTONS: */}
 
+                  <div>
+                    <button className={this.state.isReadOnly ? styles.iconDisabledButton : styles.iconButton} disabled={this.state.isReadOnly} onClick={async () => {
+                      if (!this.isNoteNew) {
+                        this.autoSave.stop();
+                        await this.autoSave.save();
+                      }
+                      this.props.router.push("/");
+                    }}>
+                      <Icon iconName="SaveAndClose" className={this.state.isReadOnly ? styles.iconDisabled : styles.icon} />
+                    </button>
+                  </div>
+                  <div>
+                    <button className={this.state.isReadOnly ? styles.iconDisabledButton : styles.iconButton} onClick={this.handleDeleteNote} disabled={this.state.isReadOnly || this.isNoteNew}>
+                      <Icon iconName="delete" className={this.state.isReadOnly ? styles.iconDisabled : styles.icon} />
+                    </button>
+                  </div>
                   <SavingIndicator
-                    className={styles.savingIndicator}
+                    className={this.state.isReadOnly ? styles.savingIndicatorDisabled : styles.savingIndicator}
                     isSaving={this.state.isSaving}
                     isSaved={this.state.isSaved}
                   />
-                  <div>
-                    <button className={styles.deleteButton} onClick={this.handleDeleteNote}>
-                      <Icon iconName="delete" className={styles.deleteIcon} />
-                    </button>
-                  </div>
                 </div>
 
                 {/* EDITOR: */}
