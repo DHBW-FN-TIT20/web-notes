@@ -467,7 +467,7 @@ class Edit extends Component {
           <div className="scrollBody">
             <main>
               <div className={styles.content}>
-                <div className={styles.nameAndSaveIndicator}>
+                <div className={`${styles.nameAndSaveIndicator} ${this.state.isReadOnly ? styles.nameAndSaveIndicatorDisabled : ""}`}>
                   <div className={styles.titleText}>
                     {"Titel " + infoString}
                   </div>
@@ -477,7 +477,7 @@ class Edit extends Component {
                   <div>
                     {/* Empty grid element */}
                   </div>
-                  <div>
+                  <div className={this.state.isReadOnly ? styles.savingIndicatorDisabled : ""}>
                     {/* Empty grid element */}
                   </div>
 
@@ -516,11 +516,12 @@ class Edit extends Component {
                       <Icon iconName="delete" className={this.state.isReadOnly ? styles.iconDisabled : styles.icon} />
                     </button>
                   </div>
+                  <div className={this.state.isReadOnly ? styles.savingIndicatorDisabled : styles.savingIndicator}>
                   <SavingIndicator
-                    className={this.state.isReadOnly ? styles.savingIndicatorDisabled : styles.savingIndicator}
                     isSaving={this.state.isSaving}
                     isSaved={this.state.isSaved}
                   />
+                  </div>
                 </div>
 
                 {/* EDITOR: */}
