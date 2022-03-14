@@ -296,6 +296,8 @@ export class FrontEndController {
    */
   static async saveNote(note) {
 
+    console.log("SAVE NOTE: ", note);
+
     const response = await fetch('./api/notes/save_note', {
       method: 'POST',
       headers: {
