@@ -28,7 +28,6 @@ export class DatabaseModel {
    */
   evaluateSuccess(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
-      console.log("evaluateSuccess: ", dbResponse.error)
       return false;
     }
     return true;
@@ -138,7 +137,7 @@ export class DatabaseModel {
    */
   getNoteFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
-      console.log("getNoteFromResponse: ", dbResponse.error);
+      console.log("getNoteFromResponse: ", dbResponse.error, dbResponse.data);
       return [];
     }
 

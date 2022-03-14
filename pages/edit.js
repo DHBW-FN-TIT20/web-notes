@@ -22,6 +22,7 @@ class Edit extends Component {
   editorInstance = null;
   TitleField = null;
   noteID = null;
+  isDeleted = false;
 
   constructor(props) {
     super(props)
@@ -109,13 +110,17 @@ class Edit extends Component {
     const readOnly = (currentNote.inUse !== this.currentUsername) && (currentNote.inUse !== "");
 
     // setup editor
-    this.setupEditor(currentNote.content, readOnly);
+    this.setupEditor(currentNote.content);
 
     // setup user tag picker
     await this.setupUserTagPicker(currentNote.sharedUserIDs);
 
     // update the state
     this.setState({ isLoading: false, title: currentNote.title, isSharedNote: currentNote.isShared, isReadOnly: readOnly });
+    this.noteID = currentNote.id;
+
+    // setup auto check if note got closed
+    if (readOnly) this.setupAutoUpdate();
 
     // if the note is new focus the title field
     if (this.isNoteNew) {
@@ -128,6 +133,8 @@ class Edit extends Component {
    * It is used to remove the storage event listener and to save the note (it was probably saved bevor).
    */
   async componentWillUnmount() {
+    clearInterval(this.autoCheckInterval);
+    this.autoCheckInterval = null;
     await this.leaveNote();
     window.removeEventListener('storage', this.storageTokenListener)
   }
@@ -162,6 +169,51 @@ class Edit extends Component {
   }
 
   /**
+   * This method sets up a interval which checks if the note was closed by another user.
+   * If so, the note gets opened in write mode.
+   * In addition, changes in the note are fetched and displayed.
+   */
+  setupAutoUpdate() {
+    this.autoCheckInterval = setInterval(async () => {
+
+      // get the current note and update the content of the editor
+      const note = await FrontEndController.getNoteByID(this.noteID);
+
+      // if the note is not found (deleted), redirect to the home page
+      if (!note) {
+
+        // delete the interval
+        clearInterval(this.autoCheckInterval);
+        this.autoCheckInterval = null;
+
+        // redirect to the home page
+        this.isDeleted = true;
+        this.props.router.push("/");
+        alert("Die Notiz wurde von einem anderen Benutzer gelöscht.");
+        return;
+      }
+
+      this.editorInstance.setData(note.content);
+      this.setState({ selectedUserTags: this.state.allUserTags.filter(userTag => note.sharedUserIDs.includes(userTag.key)), title: note.title });
+
+      // check if the note got closed
+      if (note.inUse === "") {
+
+        // delete the interval
+        clearInterval(this.autoCheckInterval);
+        this.autoCheckInterval = null;
+
+        // set the note in use
+        FrontEndController.setCurrentNoteID(note.id);
+        await FrontEndController.setNoteInUse(note.id);
+
+        // update the state
+        this.setState({ isReadOnly: false, isLoading: false });
+      }
+    }, 2000)
+  }
+
+  /**
    * This method updates the isLoggedIn state and currentToken state according to the current token in local storage.
    */
   async updateLoginState() {
@@ -189,9 +241,8 @@ class Edit extends Component {
   /**
    * This method sets up the editor.
    * @param {string} content The HTML content of the note
-   * @param {boolean} readOnly If the note is currently read only
    */
-  setupEditor(content, readOnly) {
+  setupEditor(content) {
     if (window !== undefined) {
 
       // load the editor from the components folder
@@ -203,7 +254,7 @@ class Edit extends Component {
         return (
           <div>
             <CKEditor className={styles.ckEditor}
-              disabled={readOnly}
+              disabled={this.state.isReadOnly}
               editor={CustomEditor}
               onChange={this.autoSave.handleChange}
               data={content}
@@ -323,6 +374,9 @@ class Edit extends Component {
      * This method saves the current note.
      */
     save: async () => {
+
+      if (this.isDeleted) return;
+
       this.setState({ isSaving: true, isSaved: false });
       let isSaved = false;
 
@@ -372,7 +426,7 @@ class Edit extends Component {
    * This method sets the note on not in use on leaving the page.
    */
   async leaveNote() {
-    if (!this.state.isReadOnly && FrontEndController.getCurrentNoteID()) {
+    if (!this.state.isReadOnly && FrontEndController.getCurrentNoteID() && !this.isDeleted) {
       await FrontEndController.setNoteNotInUse(FrontEndController.getCurrentNoteID());
     }
     FrontEndController.removeCurrentNoteID();

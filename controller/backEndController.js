@@ -300,6 +300,7 @@ export class BackEndController {
     } else {
       // save note
       const currentNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.selectNoteTable(note.id))[0];
+      console.log(currentNote);
       if (currentNote === undefined) {
         return undefined;
       }
@@ -318,12 +319,16 @@ export class BackEndController {
 
       console.log("note.sharedUserIDs: ", note.sharedUserIDs);
 
-      // TODO: @schuler-henry evaluate success of update
       if (note.sharedUserIDs !== undefined && savedNote.ownerID === user.id) {
-        console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.deleteUserNoteRelation(undefined, note.id)));
-        if (note.sharedUserIDs.length > 0) {
-          console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.addUserNoteRelation(note.sharedUserIDs, note.id)));
+        const currentSharedUserIDs = (this.databaseModel.getSharedUserNoteRelationFromResponse( await this.databaseModel.selectUserRelationTable(savedNote.id))).map(x => x.userID);
+        const relationsToDelete = currentSharedUserIDs.filter(userID => !note.sharedUserIDs.includes(userID));
+        const relationsToAdd = note.sharedUserIDs.filter(userID => !currentSharedUserIDs.includes(userID));
+        if (relationsToDelete.length > 0) {
+          for (const userID of relationsToDelete) {
+            console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.deleteUserNoteRelation(userID, note.id)));
+          }
         }
+        if (note.sharedUserIDs.length > 0) console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.addUserNoteRelation(relationsToAdd, note.id)));
       }
 
       if (savedNote === undefined) {
@@ -431,22 +436,26 @@ export class BackEndController {
 
 
   /**
-   * Gets get all notes which are related to the user from the database by note iD
+   * Get a note from the database by its ID
    * @param {string} userToken
    * @param {number} id note ID
+   * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}>} note object
    */
   async getNoteByID(userToken, id) {
+
+    console.log("get note by id : ", id);
+
     const isUserValid = await this.isUserTokenValid(userToken);
 
     if (!isUserValid) {
       // return a empty array to indicate that the user is not valid
-      return [];
+      return undefined;
     }
 
     const user = this.databaseModel.getUserFromResponse(await this.databaseModel.selectUserTable(undefined, this.getUsernameFromToken(userToken)))[0];
 
     if (user === undefined) {
-      return [];
+      return undefined;
     }
 
     const ownNotes = this.databaseModel.getNoteFromResponse(await this.databaseModel.selectNoteTable(id, undefined, user.id));
@@ -487,9 +496,12 @@ export class BackEndController {
       sharedUserIDs: []
     }));
 
+    console.log("sharedNotesWithSharedAttribute: ", sharedNotesWithSharedAttribute);
+
     const allNotes = ownNotesWithSharedAttribute.concat(sharedNotesWithSharedAttribute);
 
     const oneNote = allNotes.filter(note => note.id === id)[0];
+    console.log("oneNote: ", oneNote);
 
     return oneNote;
   }
