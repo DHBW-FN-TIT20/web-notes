@@ -1,6 +1,7 @@
 .ckEditor {
   color: black;
-  min-height: 4000px;
+  /* min-height: 4000px; */
+  height: 80vh;
 }
 
 .content {

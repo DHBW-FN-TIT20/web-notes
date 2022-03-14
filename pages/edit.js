@@ -259,8 +259,13 @@ class Edit extends Component {
                 this.editorInstance = editor;
                 editor.editing.view.change((writer) => {
                   writer.setStyle(
+                    "min-height",
+                    "50vh",
+                    editor.editing.view.document.getRoot()
+                  );
+                  writer.setStyle(
                     "height",
-                    "70vh",
+                    "auto",
                     editor.editing.view.document.getRoot()
                   );
                   writer.setStyle(
