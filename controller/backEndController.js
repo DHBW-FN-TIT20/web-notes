@@ -319,12 +319,15 @@ export class BackEndController {
 
       console.log("note.sharedUserIDs: ", note.sharedUserIDs);
 
-      // TODO: @schuler-henry evaluate success of update
       if (note.sharedUserIDs !== undefined && savedNote.ownerID === user.id) {
         const currentSharedUserIDs = (this.databaseModel.getSharedUserNoteRelationFromResponse( await this.databaseModel.selectUserRelationTable(savedNote.id))).map(x => x.userID);
         const relationsToDelete = currentSharedUserIDs.filter(userID => !note.sharedUserIDs.includes(userID));
         const relationsToAdd = note.sharedUserIDs.filter(userID => !currentSharedUserIDs.includes(userID));
-        if (relationsToDelete.length > 0) console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.deleteUserNoteRelation(relationsToDelete, note.id)));
+        if (relationsToDelete.length > 0) {
+          for (const userID of relationsToDelete) {
+            console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.deleteUserNoteRelation(userID, note.id)));
+          }
+        }
         if (note.sharedUserIDs.length > 0) console.log(this.databaseModel.evaluateSuccess(await this.databaseModel.addUserNoteRelation(relationsToAdd, note.id)));
       }
 
@@ -433,7 +436,7 @@ export class BackEndController {
 
 
   /**
-   * Gets get all notes which are related to the user from the database by note iD
+   * Get a note from the database by its ID
    * @param {string} userToken
    * @param {number} id note ID
    * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}>} note object

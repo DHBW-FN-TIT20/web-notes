@@ -13,7 +13,6 @@
 }
 
 .container {
-    /* TODO: correct height width and center childs */
     display: flex;
     height: 32px;
     width: 32px;

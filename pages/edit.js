@@ -182,8 +182,6 @@ class Edit extends Component {
       // if the note is not found (deleted), redirect to the home page
       if (!note) {
 
-        console.log("Note not found", note, this.noteID);
-
         // delete the interval
         clearInterval(this.autoCheckInterval);
         this.autoCheckInterval = null;
@@ -212,7 +210,7 @@ class Edit extends Component {
         // update the state
         this.setState({ isReadOnly: false, isLoading: false });
       }
-    }, 1000)
+    }, 2000)
   }
 
   /**
