@@ -138,7 +138,7 @@ export class DatabaseModel {
    */
   getNoteFromResponse(dbResponse) {
     if (dbResponse.data === null || dbResponse.error !== null || dbResponse.data.length === 0) {
-      console.log("getNoteFromResponse: ", dbResponse.error);
+      console.log("getNoteFromResponse: ", dbResponse.error, dbResponse.data);
       return [];
     }
 
@@ -336,11 +336,27 @@ export class DatabaseModel {
 
   /**
    * This method adds a user-note relation (share note)
-   * @param {number} userID
+   * @param {number | number[]} userID
    * @param {number} noteID
    * @returns {Promise<PostgrestResponse<{noteID: number, userID: number}>>} DB result as list of note-user relations
    */
   async deleteUserNoteRelation(userID, noteID) {
+
+    let relationsToDelete = [];
+    
+    if (Array.isArray(userID)) {
+      let userIDs = userID;
+
+      for (const userID of userIDs) {
+        relationsToDelete.push({ noteID: noteID, userID: userID });
+      }
+
+      const deletedUserNoteRelation = await DatabaseModel.CLIENT
+        .from('UserNoteRelation')
+        .delete(relationsToDelete)
+
+      return deletedUserNoteRelation;
+    }
 
     let userIDColumnName = "";
     if (!(userID === undefined) && !isNaN(userID)) userIDColumnName = "userID";

@@ -133,6 +133,8 @@ class Edit extends Component {
    * It is used to remove the storage event listener and to save the note (it was probably saved bevor).
    */
   async componentWillUnmount() {
+    clearInterval(this.autoCheckInterval);
+    this.autoCheckInterval = null;
     await this.leaveNote();
     window.removeEventListener('storage', this.storageTokenListener)
   }
@@ -179,6 +181,8 @@ class Edit extends Component {
 
       // if the note is not found (deleted), redirect to the home page
       if (!note) {
+
+        console.log("Note not found", note, this.noteID);
 
         // delete the interval
         clearInterval(this.autoCheckInterval);
