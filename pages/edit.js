@@ -565,7 +565,7 @@ class Edit extends Component {
                   {/* BUTTONS: */}
 
                   <div className={this.state.isReadOnly ? styles.disabled : ""}>
-                    <button className={styles.iconButton} disabled={this.state.isReadOnly} onClick={async () => {
+                    <button title='Speichern und schließen' className={styles.iconButton} disabled={this.state.isReadOnly} onClick={async () => {
                       if (!this.isNoteNew) {
                         this.autoSave.stop();
                         await this.autoSave.save();
@@ -576,18 +576,18 @@ class Edit extends Component {
                     </button>
                   </div>
                   <div className={this.state.isReadOnly ? "" : styles.disabled}>
-                    <button className={styles.iconButton} onClick={async () => {
+                    <button title='Verlassen' className={styles.iconButton} onClick={async () => {
                       this.props.router.push("/");
                     }}>
                       <Icon iconName="Leave" className={styles.icon} />
                     </button>
                   </div>
                   <div className={this.state.isReadOnly ? styles.disabled : ""}>
-                    <button className={styles.iconButton} onClick={() => { this.handleDeleteNote() }} disabled={this.state.isReadOnly || this.isNoteNew}>
+                    <button title='Löschen' className={styles.iconButton} onClick={() => { this.handleDeleteNote() }} disabled={this.state.isReadOnly || this.isNoteNew}>
                       <Icon iconName="delete" className={styles.icon} />
                     </button>
                   </div>
-                  <div className={this.state.isReadOnly ? styles.disabled : styles.savingIndicator}>
+                  <div title='Speicherstand' className={this.state.isReadOnly ? styles.disabled : styles.savingIndicator}>
                     <SavingIndicator
                       isSaving={this.state.isSaving}
                       isSaved={this.state.isSaved}
