@@ -176,7 +176,6 @@ class Register extends Component {
                   onChange={async (e) => {
                     this.setState({ password: e.target.value });
                     updateFeedbackMessage(this.state.doesUserExist, e.target.value, this.state.confirmPassword);
-                    // console.log(e.target.value)
                     this.updatePasswordValid(e.target.value);
                   }}
                   value={this.state.password}

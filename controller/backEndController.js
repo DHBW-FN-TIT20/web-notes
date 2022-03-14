@@ -45,7 +45,6 @@ export class BackEndController {
   async isUserTokenValid(token) {
     if (this.isTokenValid(token)) {
       if (await this.handleUserAlreadyExists(this.getUsernameFromToken(token))) {
-        // console.log("user exists")
         return true;
       }
     }
@@ -271,7 +270,6 @@ export class BackEndController {
 
     if (!isUserValid) {
       console.log("user invalid");
-      // return a undefined object as noteID to indicate that the note was not saved
       return undefined;
     }
 

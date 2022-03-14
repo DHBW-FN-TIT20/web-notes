@@ -143,11 +143,9 @@ export class FrontEndController {
 
     if (data.userToken === "") {
       localStorage.removeItem(this.userTokenName);
-      // console.log("Login failed");
       return false;
     }
     localStorage.setItem(this.userTokenName, data.userToken);
-    // console.log("Login successfull");
     return true;
   }
 
