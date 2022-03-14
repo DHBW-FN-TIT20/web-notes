@@ -1,8 +1,8 @@
 # WebNotes
-WebNotes ist ein online Notiz-Tool mit dem Du Notizen erstellen, bearbeiten und mit deinen Freunden teilen kannst.<br/>
+WebNotes ist ein online Notiz-Tool mit dem du Notizen erstellen, bearbeiten und mit deinen Freunden teilen kannst.<br/>
 WebNotes wurde als Teil einer Prüfung im Modul Web Engineering an der [DHBW Friedrichshafen](https://www.ravensburg.dhbw.de/startseite) erstellt.
 
-## Websites
+## Webpages
 | Name | Beschreibung |
 | --- | --- |
 | [web-notes.me](https://web-notes.me) | Liste der eigenen und geteilten Notizen mit Möglichkeit, eine neue Notiz zu erstellen
@@ -11,6 +11,18 @@ WebNotes wurde als Teil einer Prüfung im Modul Web Engineering an der [DHBW Fri
 | [web-notes.me/register](https://web-notes.me/register) | Register |
 | [web-notes.me/edit](https://web-notes.me/edit) | Editor der aktuell geöffneten Notiz (erstellt eine Neue Notiz beim direkten Betreten) |
 | [web-notes.me/profile](https://web-notes.me/profile) | Einsicht und Änderung des Profils |
+
+## Ordnerstruktur
+| Ordner | Inhalt |
+| - | - |
+| [components](./components/) | [CK-Editor](./components/custom_editor/), [Header](./components/header.js), [Footer](./components/footer.js) |
+| [controller](./controller/) | [FrontEndController](./controller/frontEndController.js), [BackEndController](./controller/backEndController.js) |
+| [documents](./documents/) | PSD für das Logo ([mit](./documents/Logo_Schrift.psd) und [ohne](./documents/Logo.psd) Schriftzug) |
+| [pages](./pages/) | Alle [Webpages](#webpages) sowie [API-Routes](./pages/api/) und das [DatabaseModel](./pages/api/databaseModel.js) |
+| [public](./public/) | Sämtliche in der Applikation verwendete Bilder, sowie sonstige Dateien |
+| [readme](./readme/) | Sämtliche in der [README.md](./README.md) verwendete Bilder |
+| [shared](./shared/) | Helper-Funktionen |
+| [styles](./styles/) | Sämtliche CSS-Dateien für die [Webpages](#webpages) |
 
 ## Kompilieren und ausführen
 > Hinweis: Um die Applikation lokal ausführen zu können, muss eine [Supabase](https://supabase.com) Datenbank zur Verfügung gestellt werden (siehe [Datenbank](#datenbank))
