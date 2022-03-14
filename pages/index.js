@@ -30,7 +30,13 @@ class Notizen extends Component {
     // define the columns for the note list with custom render functions
     this.noteListColumns = [
       {
-        key: "title", name: "Name", fieldName: "title", minWidth: 80, maxWidth: 200, isResizable: true
+        key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true, 
+        onRender: (item) => {
+          if (item.id === -1) {
+            return <div className={styles.newNote}>Neue Notiz</div>
+          } 
+          return <div>{item.title}</div>
+        }
       },
       {
         key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true,

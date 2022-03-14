@@ -136,7 +136,7 @@ class Edit extends Component {
     clearInterval(this.autoCheckInterval);
     this.autoCheckInterval = null;
     await this.leaveNote();
-    window.removeEventListener('storage', this.storageTokenListener)
+    window.removeEventListener('storage', this.storageTokenListener);
   }
 
   /**
@@ -154,9 +154,6 @@ class Edit extends Component {
    * @param {number[]} sharedUserIDs The IDs of the users to share the note with
    */
   async setupUserTagPicker(sharedUserIDs) {
-
-    // initialize the icons of Fluent UI
-    initializeIcons();
 
     // get all user as tags
     const allUserTags = (await FrontEndController.getAllUsers()).map(user => { return { key: user.id, name: user.name } });
@@ -561,23 +558,30 @@ class Edit extends Component {
 
                   {/* BUTTONS: */}
 
-                  <div>
-                    <button className={this.state.isReadOnly ? styles.iconDisabledButton : styles.iconButton} disabled={this.state.isReadOnly} onClick={async () => {
+                  <div className={this.state.isReadOnly ? styles.disabled : ""}>
+                    <button className={styles.iconButton} disabled={this.state.isReadOnly} onClick={async () => {
                       if (!this.isNoteNew) {
                         this.autoSave.stop();
                         await this.autoSave.save();
                       }
                       this.props.router.push("/");
                     }}>
-                      <Icon iconName="SaveAndClose" className={this.state.isReadOnly ? styles.iconDisabled : styles.icon} />
+                      <Icon iconName="SaveAndClose" className={styles.icon} />
                     </button>
                   </div>
-                  <div>
-                    <button className={this.state.isReadOnly ? styles.iconDisabledButton : styles.iconButton} onClick={() => { this.handleDeleteNote() }} disabled={this.state.isReadOnly || this.isNoteNew}>
-                      <Icon iconName="delete" className={this.state.isReadOnly ? styles.iconDisabled : styles.icon} />
+                  <div className={this.state.isReadOnly ? "" : styles.disabled}>
+                    <button className={styles.iconButton} onClick={async () => {
+                      this.props.router.push("/");
+                    }}>
+                      <Icon iconName="Leave" className={styles.icon} />
                     </button>
                   </div>
-                  <div className={this.state.isReadOnly ? styles.savingIndicatorDisabled : styles.savingIndicator}>
+                  <div className={this.state.isReadOnly ? styles.disabled : ""}>
+                    <button className={styles.iconButton} onClick={() => { this.handleDeleteNote() }} disabled={this.state.isReadOnly || this.isNoteNew}>
+                      <Icon iconName="delete" className={styles.icon} />
+                    </button>
+                  </div>
+                  <div className={this.state.isReadOnly ? styles.disabled : styles.savingIndicator}>
                     <SavingIndicator
                       isSaving={this.state.isSaving}
                       isSaved={this.state.isSaved}
