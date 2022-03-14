@@ -9,10 +9,12 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  * @category API
  */
-export default async function isUsernameValidHandler(req, res) {
+async function isUsernameValidHandler(req, res) {
   const username = req.body.username;
 
   const isNameValid = BACK_END_CONTROLLER.isUsernameValid(username);
 
   res.status(200).json({ wasSuccessfull: isNameValid })
 }
+
+export default isUsernameValidHandler;

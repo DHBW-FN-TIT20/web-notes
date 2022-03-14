@@ -9,7 +9,7 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  * @category API
  */
-export default async function registerHandler(req, res) {
+async function registerHandler(req, res) {
   const username = req.body.username;
   const password = req.body.password;
 
@@ -17,3 +17,5 @@ export default async function registerHandler(req, res) {
 
   res.status(200).json({ wasSuccessfull: userCreate });
 }
+
+export default registerHandler;

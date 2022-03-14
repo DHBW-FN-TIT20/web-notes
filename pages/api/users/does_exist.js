@@ -9,10 +9,12 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  * @category API
  */
-export default async function doesUserExistHandler(req, res) {
+async function doesUserExistHandler(req, res) {
   const username = req.body.username;
 
   const doesUserExist = await BACK_END_CONTROLLER.handleUserAlreadyExists(username);
 
   res.status(200).json({ wasSuccessfull: doesUserExist })
 }
+
+export default doesUserExistHandler;

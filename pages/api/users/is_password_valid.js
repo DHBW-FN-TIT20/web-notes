@@ -9,10 +9,12 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  * @category API
  */
-export default async function isPasswordValidHandler(req, res) {
+async function isPasswordValidHandler(req, res) {
   const password = req.body.password;
 
   const isValid = BACK_END_CONTROLLER.isPasswordValid(password);
 
   res.status(200).json({ wasSuccessfull: isValid })
 }
+
+export default isPasswordValidHandler;

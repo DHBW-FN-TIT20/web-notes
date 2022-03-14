@@ -9,10 +9,12 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  * @category API
  */
-export default async function getUserHandler(req, res) {
+async function getUserHandler(req, res) {
   const token = req.body.token;
   
   const user = await BACK_END_CONTROLLER.handleGetUserFromToken(token);
 
   res.status(200).json({ user: user })
 }
+
+export default getUserHandler;

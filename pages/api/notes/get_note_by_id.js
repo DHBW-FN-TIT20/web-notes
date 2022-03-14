@@ -9,7 +9,7 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  * @category API
  */
-export default async function getNoteByIDHandler(req, res) {
+async function getNoteByIDHandler(req, res) {
   const id = req.body.id;
   const userToken = req.body.userToken;
 
@@ -17,3 +17,5 @@ export default async function getNoteByIDHandler(req, res) {
 
   res.status(200).json({ note: note });
 };
+
+export default getNoteByIDHandler;

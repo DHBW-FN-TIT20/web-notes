@@ -9,7 +9,7 @@ const BACK_END_CONTROLLER = new BackEndController();
  * @param res the response object
  * @category API
  */
-export default async function changePasswordHandler(req, res) {
+async function changePasswordHandler(req, res) {
   const userToken = req.body.userToken;
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
@@ -18,3 +18,5 @@ export default async function changePasswordHandler(req, res) {
 
   res.status(200).json({ wasSuccessfull: wasSuccessfull });
 }
+
+export default changePasswordHandler;
