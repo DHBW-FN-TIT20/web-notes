@@ -331,6 +331,7 @@ class Edit extends Component {
 
     /**
      * This method starts the timer for the auto-saving.
+     * @category Editor.AutoSave
      */
     start: async () => {
       if (this.autoSave.timeout === null) {
@@ -345,6 +346,7 @@ class Edit extends Component {
     /**
      * This method is called when the user interupts the auto-saving.
      * It clears the timeout.
+     * @category Editor.AutoSave
      */
     stop: () => {
       if (this.autoSave.timeout) {
@@ -355,6 +357,7 @@ class Edit extends Component {
 
     /**
      * This method is called when the user changes the document.
+     * @category Editor.AutoSave
      */
     handleChange: () => {
       if (this.autoSave.dataWasChanged === false) {
@@ -374,6 +377,7 @@ class Edit extends Component {
 
     /**
      * This method saves the current note.
+     * @category Editor.AutoSave
      */
     save: async () => {
 

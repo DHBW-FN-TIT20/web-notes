@@ -4,7 +4,7 @@
         "component",
         "category",
         "subcategory",
-        "type"
+        "ignore"
       ],
       "dictionaries": [
         "jsdoc",
@@ -30,7 +30,7 @@
     ],
     "templates": {
       "better-docs": {
-        "name": "JsDoc Documentation",
+        "name": "WebNotes-JsDoc",
         "title": "DevChat",
         "navLinks": [
           {

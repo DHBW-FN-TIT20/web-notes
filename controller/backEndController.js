@@ -391,9 +391,6 @@ export class BackEndController {
 
     const sharedNotes = this.databaseModel.getSharedNoteFromResponse(await this.databaseModel.selectUserNoteRelationTable(user.id));
 
-    /**
-     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}[]}
-     */
     const ownNotesWithSharedAttribute = [];
 
     for (const note of ownNotes) {
@@ -417,9 +414,6 @@ export class BackEndController {
       content: note.content,
       inUse: note.inUse,
       isShared: true,
-      /**
-       * @type {number[]}
-       */
       sharedUserIDs: []
     }));
 
@@ -458,9 +452,6 @@ export class BackEndController {
 
     const sharedNotes = this.databaseModel.getSharedNoteFromResponse(await this.databaseModel.selectUserNoteRelationTable(user.id));
 
-    /**
-     * @type {{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}[]}
-     */
     const ownNotesWithSharedAttribute = [];
 
     for (const note of ownNotes) {
@@ -486,9 +477,6 @@ export class BackEndController {
       content: note.content,
       inUse: note.inUse,
       isShared: true,
-      /**
-       * @type {number[]}
-       */
       sharedUserIDs: []
     }));
 
@@ -510,9 +498,6 @@ export class BackEndController {
   async getSharedUserIDFromNoteID(noteID) {
     const relations = this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.selectUserRelationTable(noteID));
 
-    /**
-     * @type {number[]}
-     */
     const userIDs = [];
     for (const element of relations) {
       userIDs.push(element.userID);
