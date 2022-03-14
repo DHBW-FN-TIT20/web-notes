@@ -114,20 +114,7 @@ Editor.defaultConfig = {
 			margin_right: '12mm',
 			margin_left: '12mm',
 			page_orientation: 'portrait',
-			// header_html: '<div class="styled">Header content</div>',
-			// footer_html: '<div class="styled-counter"><span class="pageNumber"></span></div>',
-			// header_and_footer_css: '#header, #footer { background: hsl(0, 0%, 95%); } .styled { font-weight: bold; text-align: center; } .styled-counter { font-size: 1em; color: hsl(0, 0%, 60%); }',
 		},
-
-
-		// NOTE: The following option is only needed if we want to have a watermark
-		// dataCallback: ( editor ) => {
-		// 	return `
-		// 		${ editor.getData() }
-		// 		<div class="watermark">web-notes export</div>
-		// 	`;
-		// },
-
 	}
 
 };

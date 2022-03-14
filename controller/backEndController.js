@@ -132,7 +132,6 @@ export class BackEndController {
     return {};
   }
 
-  // TO-DO: API ROUTE mising
   /**
    * This method changes the password from the current user
    * @param {string} token Token to extract username from
@@ -159,7 +158,6 @@ export class BackEndController {
     return false;
   }
 
-  // TO-DO: API ROUTE missing
   /**
    * This method removes a target user from the database
    * @param {string} userToken user token to verificate delete process

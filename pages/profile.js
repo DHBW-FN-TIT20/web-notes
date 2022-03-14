@@ -81,6 +81,7 @@ class Profile extends Component {
     } else {
       this.setState({ isInputValidForChangePassword: false, feedbackMessage: "", oldPassword: "", newPassword: "", newPasswordConfirm: "", updatedPasswordMessage: "Password changed successfully." });
     }
+    document.getElementById("userInput")?.focus();    
   }
 
   /**
@@ -113,7 +114,6 @@ class Profile extends Component {
       }
     } else {
       isInputValidForChangePassword = false;
-      // feedbackMessage = "Bitte füllen Sie alle Felder aus.";
     }
 
     // apply the feedback and the input values to the state
@@ -128,19 +128,6 @@ class Profile extends Component {
     if (event.key.toLowerCase() === "enter") {
       event.preventDefault();
       this.changePassword();
-    }
-  }
-
-  /**
-   * This method registers the user with the currently entered credentials. If the registration was successfull, it routes to root, else all fields are cleared.
-   */
-  async changePasswordVerification() {
-    if (this.state.newPassword === this.state.newPasswordConfirm && this.state.usernameReqMessage === "" && this.state.feedbackMessage === "") {
-      if (await FrontEndController.changePassword(this.state.oldPassword, this.state.newPassword)) {
-        // Do sth for success
-      }
-      this.setState({ oldPassword: "", newPassword: "", newPasswordConfirm: "" });
-      document.getElementById("userInput")?.focus();
     }
   }
 
