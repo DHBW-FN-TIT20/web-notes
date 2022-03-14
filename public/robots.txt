@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://web-notes.vercel.app/sitemap.xml
+Sitemap: https://web-notes.me/sitemap.xml
