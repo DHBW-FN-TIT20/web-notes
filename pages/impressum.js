@@ -9,6 +9,7 @@ import Footer from '../components/footer'
 /**
  * @class Impressum Component Class
  * @component
+ * @category Pages
  */
 class Impressum extends Component {
   constructor(props) {

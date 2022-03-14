@@ -11,6 +11,7 @@ import { checkPasswordOnRegex } from '../shared/check_password_regex'
 /**
  * @class Profile Component Class
  * @component
+ * @category Pages
  */
 class Profile extends Component {
   constructor(props) {

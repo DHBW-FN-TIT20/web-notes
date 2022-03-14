@@ -313,8 +313,8 @@ export class DatabaseModel {
 
   /**
    * This method adds user-note relation (share note)
-   * @param {number | number[]} userID
-   * @param {number} noteID
+   * @param {number | number[]} userID id of user to share note with
+   * @param {number} noteID id of note to share
    * @returns {Promise<PostgrestResponse<{noteID: number, userID: number}>>} DB result as list of note-user relations
    */
   async addUserNoteRelation(userID, noteID) {
@@ -334,9 +334,9 @@ export class DatabaseModel {
   }
 
   /**
-   * This method adds a user-note relation (share note)
-   * @param {number} userID
-   * @param {number} noteID
+   * This method removes a user-note relation (share note)
+   * @param {number} userID id of user to remove relation with
+   * @param {number} noteID id of note to remove relation with
    * @returns {Promise<PostgrestResponse<{noteID: number, userID: number}>>} DB result as list of note-user relations
    */
   async deleteUserNoteRelation(userID, noteID) {

@@ -9,8 +9,9 @@ import Footer from '../components/footer'
 import Link from 'next/link'
 
 /**
- * @class Getting Started Component Class
+ * Getting Started Component Class
  * @component
+ * @category Pages
  */
 class GettingStarted extends Component {
   constructor(props) {
@@ -20,7 +21,9 @@ class GettingStarted extends Component {
     };
     this.linkToDHBW = "https://www.ravensburg.dhbw.de/startseite";
     this.linkToTIT20 = "https://github.com/DHBW-FN-TIT20"
-  }  /**
+  }  
+  
+  /**
    * This method is called when the component is mounted.
    */
   async componentDidMount() {

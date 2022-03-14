@@ -223,8 +223,8 @@ export class BackEndController {
 
   /**
    * This method checks whether a user already exists in the DB.
-   * @param {string} username 
-   * @returns {Promise<boolean>}
+   * @param {string} username username to check
+   * @returns {Promise<boolean>} true if user exists, false if not
    */
   async handleUserAlreadyExists(username) {
     return this.databaseModel.evaluateSuccess(await this.databaseModel.selectUserTable(undefined, username));
@@ -259,8 +259,8 @@ export class BackEndController {
 
   /**
    * Saves the String to the Database
-   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: string, sharedUserIDs: number[] | undefined}} note 
-   * @param {string} userToken
+   * @param {{id: number | undefined, title: string | undefined, content: string | undefined, inUse: string, sharedUserIDs: number[] | undefined}} note Note to save
+   * @param {string} userToken Token to extract username from
    */
   async saveNote(note, userToken) {
     console.log("saveNote", note);
@@ -433,7 +433,7 @@ export class BackEndController {
 
   /**
    * Get a note from the database by its ID
-   * @param {string} userToken
+   * @param {string} userToken The token of the user who wants to get the note
    * @param {number} id note ID
    * @returns {Promise<{id: number, title: string, ownerID: number, modifiedAt: Date, content: string, inUse: string, isShared: boolean, sharedUserIDs: number[]}>} note object
    */
@@ -504,7 +504,7 @@ export class BackEndController {
 
   /**
    * This method returns the userIDs that the note is shared with
-   * @param {number} noteID 
+   * @param {number} noteID The ID of the note
    * @returns {Promise<number[]>} Array of userIDs
    */
   async getSharedUserIDFromNoteID(noteID) {

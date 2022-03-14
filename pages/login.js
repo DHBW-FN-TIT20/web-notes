@@ -10,6 +10,7 @@ import Footer from '../components/footer'
 /**
  * @class Login Component Class
  * @component
+ * @category Pages
  */
 class Login extends Component {
   constructor(props) {
@@ -20,7 +21,6 @@ class Login extends Component {
       password: "",
       credentialsInfo: false,
     }
-
   }
 
   /**

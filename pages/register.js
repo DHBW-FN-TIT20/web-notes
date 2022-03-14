@@ -10,6 +10,7 @@ import Footer from '../components/footer'
 /**
  * @class Register Component Class
  * @component
+ * @category Pages
  */
 class Register extends Component {
   constructor(props) {

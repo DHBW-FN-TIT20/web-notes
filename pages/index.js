@@ -13,6 +13,7 @@ import { BeatLoader } from 'react-spinners'
 /**
  * @class Notizen Component Class
  * @component
+ * @category Pages
  */
 class Notizen extends Component {
   constructor(props) {

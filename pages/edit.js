@@ -15,8 +15,9 @@ import { Icon } from '@fluentui/react/lib/Icon';
 initializeIcons();
 
 /**
- * @class Edit Component Class
+ * Edit Component Class
  * @component
+ * @category Pages
  */
 class Edit extends Component {
   editorInstance = null;

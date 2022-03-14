@@ -55,7 +55,6 @@ export class FrontEndController {
 
   /**
    * This method removes the note id from the local storage
-   * @returns {void}
    */
   static removeCurrentNoteID() {
     localStorage.removeItem(FrontEndController.currentNoteName);
@@ -177,8 +176,8 @@ export class FrontEndController {
 
   /**
    * This method changes the password of the current user
-   * @param {string} oldPassword 
-   * @param {string} newPassword 
+   * @param {string} oldPassword the old password of the user
+   * @param {string} newPassword the new password of the user
    * @returns {Promise<boolean>} True if password was changed, false if not
    */
   static async changePassword(oldPassword, newPassword) {
@@ -394,7 +393,10 @@ export class FrontEndController {
     return nodeID;
   }
 
-
+  /**
+   * This method deletes the current note.
+   * @returns {Promise<boolean>} True if the note was deleted, false if not
+   */
   static async deleteNote() {
     const response = await fetch('./api/notes/delete_note', {
       method: 'POST',
