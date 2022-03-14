@@ -3,6 +3,7 @@
  * @param {string} html The HTML string to be split into elements
  * @param {number} maxStringElements The maximum number of displayed elements.
  * @returns {string[]} The array of elements
+ * @category Helper
  */
 export default function splitHTMLintoElements(html, maxStringElements) {
   let elements = [];

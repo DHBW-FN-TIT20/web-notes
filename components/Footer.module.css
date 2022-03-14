@@ -4,7 +4,6 @@
   padding: 20pt 10vw 40pt 10vw;
   border-top: solid;
   border-color: #00D0FF;
-
   display: grid;
   grid-template-rows: auto auto auto auto;
   row-gap: 20pt;
@@ -17,6 +16,7 @@
 
 .icon {
   width: 40px;
+  cursor: pointer;
 }
 
 .icon:hover {
@@ -26,6 +26,12 @@
 
 .icon:not(:hover) {
   transition: 0.3s;
+}
+
+.code {
+  display: grid;
+  grid-template-columns: min-content;
+  column-gap: 20pt;
 }
 
 .projects {
@@ -50,15 +56,13 @@
 @media only screen and (min-width: 600px) {
   .footer {
     grid-template-columns: 1fr 1fr;
-    column-gap: 20pt;
     grid-template-rows: min-content min-content;
+    column-gap: 20pt;
   }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-  
-}
+@media only screen and (min-width: 768px) {}
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
@@ -71,21 +75,6 @@
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
   .footer {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    column-gap: 9rem;
-    display: grid;
-  }
-  
-  .socialMedia {
-    grid-template-columns: 1fr 1fr 1fr;
-    column-gap: auto;
-    display: grid;
-    margin: 0 auto;
-    justify-items: start;
-  }
-  
-  .socialMedia a:hover {
-    opacity: 80%;
-    transition: 0.3s;
+    column-gap: 8rem;
   }
 }

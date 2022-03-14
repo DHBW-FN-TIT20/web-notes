@@ -4,8 +4,8 @@ import Head from 'next/head'
 import { Component } from 'react'
 import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Register.module.css'
-import Header from '../components/header'
-import Footer from '../components/footer'
+import { Header } from '../components/header'
+import { Footer } from '../components/footer'
 
 /**
  * @class Register Component Class
@@ -47,7 +47,7 @@ class Register extends Component {
    * This method checks whether the event contains a change in the user-token. If it does, it verifys the token and routes to root on success.
    * @param {any} event Event triggered by an EventListener
    */
-  async storageTokenListener(event){
+  async storageTokenListener(event) {
     if (event.key === FrontEndController.userTokenName) {
       this.checkLoginState();
     }

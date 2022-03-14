@@ -3,12 +3,11 @@ import Head from 'next/head'
 import { Component } from 'react'
 import withRouter from 'next/dist/client/with-router'
 import { FrontEndController } from '../controller/frontEndController'
-import styles from '../styles/Notizen.module.css'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import { DetailsList, DetailsListLayoutMode, Selection, IColumn, SelectionMode, TextField, KTP_FULL_PREFIX, ShimmeredDetailsList } from '@fluentui/react';
+import styles from '../styles/Notes.module.css'
+import { Header } from '../components/header'
+import { Footer } from '../components/footer'
+import { SelectionMode, TextField, ShimmeredDetailsList } from '@fluentui/react';
 import splitHTMLintoElements from '../shared/split_HTML_into_elements'
-import { BeatLoader } from 'react-spinners'
 
 /**
  * @class Notizen Component Class
@@ -31,11 +30,11 @@ class Notizen extends Component {
     // define the columns for the note list with custom render functions
     this.noteListColumns = [
       {
-        key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true, 
+        key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true,
         onRender: (item) => {
           if (item.id === -1) {
             return <div className={styles.newNote}>Neue Notiz</div>
-          } 
+          }
           return <div>{item.title}</div>
         }
       },
@@ -52,8 +51,8 @@ class Notizen extends Component {
         onRender: (item) => {
           if (item.id < 0) return "";
           let owner = this.state.allUsers.find(user => user.id === item.ownerID) ? this.state.allUsers.find(user => user.id === item.ownerID).name : "-";
-          if (item.isShared === true) return (<p>{owner}<br />(Geteilte Notiz)</p>);
-          return (<p>Du<br />(Eigene Notiz)</p>);
+          if (item.isShared === true) return (<p className={styles.owner}>{owner}<br />(Geteilte Notiz)</p>);
+          return (<p className={styles.owner}>Du<br />(Eigene Notiz)</p>);
         }
       },
       {

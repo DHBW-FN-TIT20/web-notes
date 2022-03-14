@@ -4,13 +4,12 @@ import { Component } from 'react'
 import withRouter from 'next/dist/client/with-router'
 import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Edit.module.css'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import SavingIndicator from '../components/SavingIndicator'
+import { Header } from '../components/header'
+import { Footer } from '../components/footer'
+import { SavingIndicator } from '../components/SavingIndicator'
 import { initializeIcons, ITag, TextField, TagPicker } from '@fluentui/react'
 import BeatLoader from "react-spinners/BeatLoader";
 import { Icon } from '@fluentui/react/lib/Icon';
-
 
 initializeIcons();
 
@@ -386,7 +385,7 @@ class Edit extends Component {
       if (this.isNoteNew) {
 
         // add a new note
-        const newNoteToSave = { 
+        const newNoteToSave = {
           title: this.state.title,
           content: this.editorInstance.getData(),
           sharedUserIDs: this.state.selectedUserTags.map(tag => { return tag.key }),

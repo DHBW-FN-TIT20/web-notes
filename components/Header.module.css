@@ -18,8 +18,7 @@
   margin: 0 10pt;
 }
 
-.menuIcon span
-{
+.menuIcon span {
   display: flex;
   width: 29px;
   height: 2px;
@@ -29,24 +28,22 @@
   border-radius: 3px;
   z-index: 4;
   transform-origin: 5px 0px;
-  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-              background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-              opacity 0.55s ease;
+  transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+    background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+    opacity 0.55s ease;
 }
 
-.logoSchrift {
+.logoName {
   position: relative;
   height: 30pt;
   align-self: center;
   cursor: pointer;
 }
 
-.menu
-{
+.menu {
   position: absolute;
   width: 90vw;
   height: 100vh;
-  /* min-height: fit-content; */
   box-shadow: 0 0 10px #4e5052;
   margin: 0 0 0 0;
   padding: 0px;
@@ -56,7 +53,7 @@
   -webkit-font-smoothing: antialiased;
   left: -91vw;
   transform: translate(0, 0);
-  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+  transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
   z-index: 3;
 
   display: grid;
@@ -66,7 +63,7 @@
 
 .showHeader {
   transform: translate(100%, 0);
-  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+  transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
 }
 
 .nav {
@@ -102,7 +99,7 @@
   cursor: pointer;
 }
 
-.navLogoSchrift {
+.navLogoName {
   position: relative;
   height: 50pt;
   width: 100%;
@@ -128,6 +125,7 @@
   opacity: 1;
   transform: rotate(45deg) translate(1px, -1px);
 }
+
 .spanTwo {
   opacity: 0;
   transform: rotate(0deg) scale(0.2, 0.2);
@@ -146,9 +144,7 @@
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-
-}
+@media only screen and (min-width: 768px) {}
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
@@ -161,9 +157,8 @@
     display: none;
   }
 
-  .logoSchrift {
+  .logoName {
     display: none;
-    cursor: pointer;
   }
 
   .menu {
@@ -181,7 +176,7 @@
     overflow: hidden;
   }
 
-  .navLogoSchrift {
+  .navLogoName {
     height: 30pt;
     width: 90pt;
     margin: 0 20px;
@@ -213,6 +208,4 @@
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-  
-}
+@media only screen and (min-width: 1200px) {}

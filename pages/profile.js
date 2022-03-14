@@ -4,8 +4,8 @@ import Head from 'next/head'
 import { Component } from 'react'
 import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Profile.module.css'
-import Header from '../components/header'
-import Footer from '../components/footer'
+import { Header } from '../components/header'
+import { Footer } from '../components/footer'
 import { checkPasswordOnRegex } from '../shared/check_password_regex'
 
 /**
@@ -82,7 +82,7 @@ class Profile extends Component {
     } else {
       this.setState({ isInputValidForChangePassword: false, feedbackMessage: "", oldPassword: "", newPassword: "", newPasswordConfirm: "", updatedPasswordMessage: "Password changed successfully." });
     }
-    document.getElementById("userInput")?.focus();    
+    document.getElementById("userInput")?.focus();
   }
 
   /**

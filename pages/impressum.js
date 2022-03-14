@@ -3,8 +3,8 @@ import Head from 'next/head'
 import { Component } from 'react'
 import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/Impressum.module.css'
-import Header from '../components/header'
-import Footer from '../components/footer'
+import { Header } from '../components/header'
+import { Footer } from '../components/footer'
 
 /**
  * @class Impressum Component Class

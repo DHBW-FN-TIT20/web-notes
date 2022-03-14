@@ -4,8 +4,8 @@ import { Component } from 'react'
 import withRouter from 'next/dist/client/with-router'
 import { FrontEndController } from '../controller/frontEndController'
 import styles from '../styles/GettingStarted.module.css'
-import Header from '../components/header'
-import Footer from '../components/footer'
+import { Header } from '../components/header'
+import { Footer } from '../components/footer'
 import Link from 'next/link'
 
 /**
@@ -21,8 +21,8 @@ class GettingStarted extends Component {
     };
     this.linkToDHBW = "https://www.ravensburg.dhbw.de/startseite";
     this.linkToTIT20 = "https://github.com/DHBW-FN-TIT20"
-  }  
-  
+  }
+
   /**
    * This method is called when the component is mounted.
    */
@@ -43,7 +43,7 @@ class GettingStarted extends Component {
    * This method checks whether the event contains a change in the user-token. If it does, it updates the login state.
    * @param {any} event Event triggered by an EventListener
    */
-  async storageTokenListener(event){
+  async storageTokenListener(event) {
     if (event.key === FrontEndController.userTokenName) {
       this.updateLoginState();
     }

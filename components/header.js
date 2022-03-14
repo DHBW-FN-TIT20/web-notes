@@ -1,45 +1,42 @@
 // @ts-check
-import { withRouter } from 'next/router'
 import { Component } from 'react'
-import styles from '../styles/Header.module.css'
+import styles from './Header.module.css'
 import { FrontEndController } from '../controller/frontEndController'
 import Link from 'next/link';
 import Image from 'next/image';
 // @ts-ignore
 import Logo from '../public/Logo.png'
 // @ts-ignore
-import LogoSchrift from '../public/Logo_Schrift_Weiss.png'
+import LogoName from '../public/Logo_Schrift_Weiss.png'
 
 /** 
  * @class Header Component Class
  * @component
+ * @category Components
  */
-class Header extends Component {
+export class Header extends Component {
   isVisible = false;
   /**
    * Generates the JSX Output for the Client
    * @returns JSX Output
    */
   render() {
-    /** 
-     * Initialize Router to navigate to other pages
-     */
-    const { router } = this.props;
-
-    let notizen;
+    // Nav-Bar element for note list
+    let notes;
 
     if (this.props.hideLogout) {
-      notizen = <div></div>
+      notes = <div></div>
     } else {
-      notizen =  <Link href={'/'} passHref>
+      notes = <Link href={'/'} passHref>
         <div className={styles.nav}>
           <span>
             Notizen
           </span>
         </div>
       </Link>
-    } 
+    }
 
+    // Nav-Bar element for profile
     let username;
 
     if (this.props.hideLogout) {
@@ -54,6 +51,7 @@ class Header extends Component {
       </Link>
     }
 
+    // Nav-Bar element for login
     let loginButton;
 
     if (this.props.hideLogin) {
@@ -66,6 +64,7 @@ class Header extends Component {
       </Link>
     }
 
+    // Nav-Bar element for logout
     let logoutButton;
 
     if (this.props.hideLogout) {
@@ -87,13 +86,15 @@ class Header extends Component {
       <div>
         <nav>
           <div className={styles.navBar}>
+            {/* Menu Icon for mobile device view */}
             <div
               className={`${styles.navElement} ${styles.menuIcon}`}
               id={styles.menuIcon}
               onClick={() => {
                 if (this.isVisible) {
+                  // slide side-nav to the left (hide)
                   document.getElementById("menu").classList.remove(`${styles.showHeader}`)
-                  // rotation elements for menu icon
+                  // rotate spans for menu icon (parallel lines)
                   document.getElementById("spanOne").classList.remove(`${styles.span}`)
                   document.getElementById("spanTwo").classList.remove(`${styles.span}`)
                   document.getElementById("spanTwo").classList.remove(`${styles.spanTwo}`)
@@ -101,7 +102,9 @@ class Header extends Component {
                   document.getElementById("spanThree").classList.remove(`${styles.spanThree}`)
                   this.isVisible = false;
                 } else {
+                  // slide side-nav to the right (view)
                   document.getElementById("menu").classList.add(`${styles.showHeader}`)
+                  // rotate spans for menu close icon (x)
                   document.getElementById("spanOne").classList.add(`${styles.span}`)
                   document.getElementById("spanTwo").classList.add(`${styles.span}`)
                   document.getElementById("spanTwo").classList.add(`${styles.spanTwo}`)
@@ -110,44 +113,50 @@ class Header extends Component {
                   this.isVisible = true;
                 }
               }}>
+              {/* Three bars that make up the menu-icon */}
               <span id="spanOne"></span>
               <span id="spanTwo"></span>
               <span id="spanThree"></span>
             </div>
-            <div className={styles.logoSchrift}>
-              <Image 
-                onClick={() => { router.push('/') }}
-                src={LogoSchrift}
-                alt='Logo_Schrift_Weiss.png missing.'
-                objectFit='contain'
-                sizes='fitContent'
-                layout="fill">
-              </Image>
-            </div>
-            <div
-              className={styles.menu}
-              id="menu">
-              <div className={styles.navLogo}>
-                <Image 
-                  onClick={() => { router.push('/') }}
-                  src={Logo}
+            {/* Logo for Top-Nav-Bar in mobile view */}
+            <Link href={'/'} passHref>
+              <div className={styles.logoName}>
+                <Image
+                  src={LogoName}
                   alt='Logo_Schrift_Weiss.png missing.'
                   objectFit='contain'
                   sizes='fitContent'
                   layout="fill">
                 </Image>
               </div>
-              <div className={styles.navLogoSchrift}>
-                  <Image 
-                    onClick={() => { router.push('/') }}
-                    src={LogoSchrift}
+            </Link>
+            {/* Nav-Bar elements (top and left-side) */}
+            <div
+              className={styles.menu}
+              id="menu">
+              <Link href={'/'} passHref>
+                <div className={styles.navLogo}>
+                  <Image
+                    src={Logo}
                     alt='Logo_Schrift_Weiss.png missing.'
                     objectFit='contain'
                     sizes='fitContent'
                     layout="fill">
                   </Image>
-              </div>
-             {notizen}
+                </div>
+              </Link>
+              <Link href={'/'} passHref>
+                <div className={styles.navLogoName}>
+                  <Image
+                    src={LogoName}
+                    alt='Logo_Schrift_Weiss.png missing.'
+                    objectFit='contain'
+                    sizes='fitContent'
+                    layout="fill">
+                  </Image>
+                </div>
+              </Link>
+              {notes}
               <Link href={'/getting-started'} passHref>
                 <div className={styles.nav}>
                   <span>
@@ -163,11 +172,11 @@ class Header extends Component {
                 </div>
               </Link>
               <div className={styles.pcSpacing}>
-                {/* Spacing for View */}
+                {/* Spacing for PC (top bar) View */}
               </div>
               {username}
               <div className={styles.mobileSpacing}>
-                {/* Spacing for View */}
+                {/* Spacing for Mobile (side bar) View */}
               </div>
               <div className={`${styles.nav} ${styles.button}`}>
                 {loginButton}
@@ -180,5 +189,3 @@ class Header extends Component {
     )
   }
 }
-
-export default withRouter(Header);

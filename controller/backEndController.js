@@ -316,7 +316,7 @@ export class BackEndController {
       console.log("note.sharedUserIDs: ", note.sharedUserIDs);
 
       if (note.sharedUserIDs !== undefined && savedNote.ownerID === user.id) {
-        const currentSharedUserIDs = (this.databaseModel.getSharedUserNoteRelationFromResponse( await this.databaseModel.selectUserRelationTable(savedNote.id))).map(x => x.userID);
+        const currentSharedUserIDs = (this.databaseModel.getSharedUserNoteRelationFromResponse(await this.databaseModel.selectUserRelationTable(savedNote.id))).map(x => x.userID);
         const relationsToDelete = currentSharedUserIDs.filter(userID => !note.sharedUserIDs.includes(userID));
         const relationsToAdd = note.sharedUserIDs.filter(userID => !currentSharedUserIDs.includes(userID));
         if (relationsToDelete.length > 0) {
@@ -365,7 +365,7 @@ export class BackEndController {
     if (isOwner) {
       return this.databaseModel.evaluateSuccess(await this.databaseModel.deleteNote(noteID));
     }
-    
+
     return this.databaseModel.evaluateSuccess(await this.databaseModel.deleteUserNoteRelation(user.id, noteID));
   }
 

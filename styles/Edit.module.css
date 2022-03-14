@@ -1,6 +1,5 @@
 .ckEditor {
   color: black;
-  /* min-height: 4000px; */
   height: 80vh;
 }
 
@@ -51,25 +50,6 @@
   transition: 0s;
   color: black;
 }
-
-/* .iconDisabledButton {
-  height: 32px;
-  width: 32px;
-  display: flex;
-  box-sizing: border-box;
-  border: 1px solid rgb(243, 242, 241);
-  border-radius: 2px;
-  background-color: rgb(243, 242, 241);
-  justify-content: center;
-  align-items: center;
-}
-
-.iconDisabledButton:hover {
-  background-color: rgb(243, 242, 241);
-  transition: 0s;
-  color: black;
-  cursor: initial;
-} */
 
 .icon:hover {
   transform: scale(1.1);

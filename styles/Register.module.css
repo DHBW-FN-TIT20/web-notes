@@ -19,9 +19,12 @@
 
 .error {
   animation: fadeIn .5s;
-  -moz-animation: fadeIn .5s; /* Firefox */
-  -webkit-animation: fadeIn .5s; /* Safari and Chrome */
-  -o-animation: fadeIn .5s; /* Opera */
+  -moz-animation: fadeIn .5s;
+  /* Firefox */
+  -webkit-animation: fadeIn .5s;
+  /* Safari and Chrome */
+  -o-animation: fadeIn .5s;
+  /* Opera */
   font-size: 14pt;
   width: 100%;
   background-color: rgb(253, 55, 55);
@@ -36,9 +39,12 @@
 
 .inputRequirements {
   animation: fadeIn .5s;
-  -moz-animation: fadeIn .5s; /* Firefox */
-  -webkit-animation: fadeIn .5s; /* Safari and Chrome */
-  -o-animation: fadeIn .5s; /* Opera */
+  -moz-animation: fadeIn .5s;
+  /* Firefox */
+  -webkit-animation: fadeIn .5s;
+  /* Safari and Chrome */
+  -o-animation: fadeIn .5s;
+  /* Opera */
   color: rgb(253, 55, 55);
   text-align: right;
   margin-top: 0;
@@ -50,9 +56,12 @@
 
 .requirementsDiv {
   animation: fadeIn .5s;
-  -moz-animation: fadeIn .5s; /* Firefox */
-  -webkit-animation: fadeIn .5s; /* Safari and Chrome */
-  -o-animation: fadeIn .5s; /* Opera */
+  -moz-animation: fadeIn .5s;
+  /* Firefox */
+  -webkit-animation: fadeIn .5s;
+  /* Safari and Chrome */
+  -o-animation: fadeIn .5s;
+  /* Opera */
   width: 90vw;
   margin: auto;
   padding: 10pt;
@@ -64,29 +73,53 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-@-moz-keyframes fadeIn { /* Firefox */
-  from { opacity: 0; }
-  to { opacity: 1; }
+@-moz-keyframes fadeIn {
+
+  /* Firefox */
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-@-webkit-keyframes fadeIn { /* Safari and Chrome */
-  from { opacity: 0; }
-  to { opacity: 1; }
+@-webkit-keyframes fadeIn {
+
+  /* Safari and Chrome */
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-@-o-keyframes fadeIn { /* Opera */
-  from { opacity: 0; }
-  to { opacity: 1; }
+@-o-keyframes fadeIn {
+
+  /* Opera */
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-
-}
+@media only screen and (min-width: 600px) {}
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
@@ -101,7 +134,7 @@
   .loginInstead {
     align-self: flex-start;
   }
-  
+
   .showReq {
     align-self: flex-end;
     margin-left: auto;
