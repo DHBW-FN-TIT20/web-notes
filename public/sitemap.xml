@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://web-notes.vercel.app/</loc>
+        <loc>https://web-notes.me/</loc>
         <lastmod>2022-03-14</lastmod>
     </url>
     <url>
-        <loc>https://web-notes.vercel.app/getting-started</loc>
+        <loc>https://web-notes.me/getting-started</loc>
         <lastmod>2022-03-14</lastmod>
     </url>
     <url>
-        <loc>https://web-notes.vercel.app/login</loc>
+        <loc>https://web-notes.me/login</loc>
         <lastmod>2022-03-14</lastmod>
     </url>
     <url>
-        <loc>https://web-notes.vercel.app/register</loc>
+        <loc>https://web-notes.me/register</loc>
         <lastmod>2022-03-14</lastmod>
     </url>
     <url>
-        <loc>https://web-notes.vercel.app/impressum</loc>
+        <loc>https://web-notes.me/impressum</loc>
         <lastmod>2022-03-14</lastmod>
     </url>
 </urlset>
