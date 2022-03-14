@@ -24,33 +24,29 @@ class Notizen extends Component {
       isLoading: false,
       noteList: [],
       searchString: "",
+      allUsers: []
     };
 
     // define the columns for the note list with custom render functions
     this.noteListColumns = [
       {
-        key: "title", name: "Name", fieldName: "title", minWidth: 100, maxWidth: 200, isResizable: true
+        key: "title", name: "Name", fieldName: "title", minWidth: 80, maxWidth: 200, isResizable: true
       },
       {
         key: "modifiedAt", name: "Zuletzt geändert am", fieldName: "modifiedAt", minWidth: 100, maxWidth: 200, isResizable: true,
         onRender: (item) => {
           const date = new Date(item.modifiedAt);
-          if (String(date) == "Invalid Date") {
-            return "";
-          }
+          if (String(date) == "Invalid Date") return ""
           return (`${date.toLocaleString("de-DE", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })}`);
         }
       },
       {
-        key: "type", name: "Art", fieldName: "type", minWidth: 100, maxWidth: 200, isResizable: true,
+        key: "owner", name: "Eigentümer", fieldName: "owner", minWidth: 150, maxWidth: 200, isResizable: true,
         onRender: (item) => {
-          if (item.isShared === true) {
-            return (`Geteilte Notiz`)
-          } else if (item.isShared === false) {
-            return (`Eigene Notiz`)
-          } else {
-            return (``)
-          }
+          if (item.id < 0) return "";
+          let owner = this.state.allUsers.find(user => user.id === item.ownerID) ? this.state.allUsers.find(user => user.id === item.ownerID).name : "-";
+          if (item.isShared === true) return (<p>{owner}<br />(Geteilte Notiz)</p>);
+          return (<p>Du<br />(Eigene Notiz)</p>);
         }
       },
       {
@@ -58,20 +54,15 @@ class Notizen extends Component {
         onRender: (item) => {
           const maxElements = 5;
           let previewContent = splitHTMLintoElements(item.content, maxElements).join("");
-          return (
-            <div className={styles.previewLine} dangerouslySetInnerHTML={{ __html: previewContent }}>
-            </div>
-          )
+          return (<div className={styles.previewLine} dangerouslySetInnerHTML={{ __html: previewContent }}></div>)
         }
       },
       {
-        key: "inUse", name: "Gerade geöffnet von", fieldName: "inUse", minWidth: 300, maxWidth: 200, isResizable: true,
+        key: "inUse", name: "Gerade geöffnet von", fieldName: "inUse", minWidth: 150, maxWidth: 200, isResizable: true,
         onRender: (item) => {
-          if (item.inUse === undefined || item.inUse === "") {
-            return (`-`)
-          } else {
-            return (`${item.inUse}`)
-          }
+          if (item.id < 0) return "";
+          if (item.inUse === undefined || item.inUse === "") return (`-`)
+          return (`${item.inUse}`)
         }
       },
     ];
@@ -104,8 +95,11 @@ class Notizen extends Component {
       }
     });
 
+    // get all user names
+    const allUsers = await FrontEndController.getAllUsers();
+
     // update the state
-    this.setState({ isLoading: false, noteList: notes });
+    this.setState({ isLoading: false, noteList: notes, allUsers: allUsers });
   }
 
   /**
@@ -135,10 +129,10 @@ class Notizen extends Component {
     let currentToken = FrontEndController.getUserToken();
     if (await FrontEndController.verifyUserByToken(currentToken)) {
       this.setState({ isLoggedIn: true, currentToken: currentToken });
-    } else {
-      this.props.router.push('/getting-started');
-      this.setState({ isLoggedIn: false })
+      return;
     }
+    this.props.router.push('/getting-started');
+    this.setState({ isLoggedIn: false })
   }
 
   /**
@@ -152,9 +146,9 @@ class Notizen extends Component {
     if (item.id !== -1 || item.id === undefined) {
       FrontEndController.setCurrentNoteID(item.id);
       this.props.router.push(`/edit?id=${item.id}`);
-    } else {
-      this.addNewNote();
+      return;
     }
+    this.addNewNote();
   }
 
   /**
@@ -165,9 +159,9 @@ class Notizen extends Component {
   handleSearchChange(event, newValue) {
     if (newValue) {
       this.setState({ searchString: newValue });
-    } else {
-      this.setState({ searchString: "" });
+      return;
     }
+    this.setState({ searchString: "" });
   }
 
   /**
