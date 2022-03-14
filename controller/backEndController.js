@@ -16,7 +16,7 @@ export class BackEndController {
 
   //#region Constructor
   constructor() {
-    BackEndController.KEY = process.env.HASH_KEY || '';
+    BackEndController.KEY = process.env.TOKEN_KEY || '';
   }
 
   //#endregion
