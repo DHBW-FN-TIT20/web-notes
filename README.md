@@ -3,7 +3,7 @@ WebNotes ist ein online Notiz-Tool mit dem du Notizen erstellen, bearbeiten und 
 WebNotes wurde als Teil einer Prüfung im Modul Web Engineering an der [DHBW Friedrichshafen](https://www.ravensburg.dhbw.de/startseite) erstellt.
 
 ## Webpages
-| Name | Beschreibung |
+| URL | Inhalt |
 | --- | --- |
 | [web-notes.me](https://web-notes.me) | Liste der eigenen und geteilten Notizen mit Möglichkeit, eine neue Notiz zu erstellen
 | [web-notes.me/getting-started](https://web-notes.me/getting-started) | Einführung in WebNotes |
