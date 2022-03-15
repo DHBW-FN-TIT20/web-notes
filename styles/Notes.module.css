@@ -35,6 +35,10 @@
   margin: 0;
 }
 
+.previewLine img {
+  max-width: 20vw;
+}
+
 .detailsList {
   cursor: pointer;
 }
