@@ -1,4 +1,10 @@
-# WebNotes
+<br/>
+<p align="center">
+<img src="./readme/Logo_Schrift_Weiss.png" alt="Logo missing" width="400">
+</p>
+<br/>
+
+# WebNotes [![Website](https://img.shields.io/website?down_message=Offline&label=Webpage&up_message=Online&url=https%3A%2F%2Fweb-notes.me) ](https://web-notes.me)
 WebNotes ist ein online Notiz-Tool mit dem du Notizen erstellen, bearbeiten und mit deinen Freunden teilen kannst.<br/>
 WebNotes wurde als Teil einer Prüfung im Modul Web Engineering an der [DHBW Friedrichshafen](https://www.ravensburg.dhbw.de/startseite) erstellt.
 
