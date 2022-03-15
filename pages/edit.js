@@ -394,7 +394,7 @@ class Edit extends Component {
           content: this.editorInstance.getData(),
           sharedUserIDs: this.state.selectedUserTags.map(tag => { return tag.key }),
           inUse: this.currentUsername,
-          id: undefined,
+          id: -1,
           isShared: false
         };
         const noteID = await FrontEndController.saveNote(newNoteToSave);

@@ -277,7 +277,7 @@ export class BackEndController {
       return undefined;
     }
 
-    if (note.id === undefined) {
+    if (note.id === -1) {
       // create new note
       console.log("create new note");
 
@@ -293,7 +293,7 @@ export class BackEndController {
       }
 
       return addedNote.id;
-    } else {
+    } else if (note.id !== undefined && note.id !== null) {
       // save note
       const currentNote = this.databaseModel.getNoteFromResponse(await this.databaseModel.selectNoteTable(note.id))[0];
       console.log(currentNote);
