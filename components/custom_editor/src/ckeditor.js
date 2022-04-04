@@ -98,9 +98,9 @@ Editor.defaultConfig = {
 			'mergeTableCells'
 		]
 	},
-	licenseKey: 'ftaKC8uG4JLIlq8GIHuTaiyu7Et0vFwTjS7scuOeh9NknLcbVsfobIIHxybD',
+	licenseKey: 'PuT6ZIK7BTE9CllQfwMa1hra3gse49zwgqYiF4JWa2eg1ispLwGFkEs3cMWn',
 	exportPdf: {
-		tokenUrl: 'https://87398.cke-cs.com/token/dev/859bdd75b1f4c8100b86b285e848c31e00f578624d3231f6d79b59962261?limit=10',
+		tokenUrl: 'https://87398.cke-cs.com/token/dev/ac78a25e1584fd926de97daf42dd9744efd03601f4bf80f1cf14e90d2ec4?limit=10',
 		stylesheets: [
 			'/pdf-export-styles/fonts.css',
 			'EDITOR_STYLES',
